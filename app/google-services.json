@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "859687206762",
+    "project_id": "getwork-95999",
+    "storage_bucket": "getwork-95999.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:859687206762:android:e080461743fdd57510af13",
+        "android_client_info": {
+          "package_name": "android.example.getwork"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "859687206762-h6k2skmi4lld6d2c3i1g4v8kq70qkgpm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "android.example.getwork",
+            "certificate_hash": "3de3752d15b5becd1e793a643195a7875e84c6a7"
+          }
+        },
+        {
+          "client_id": "859687206762-ocon9l622vpi767e9sp20b31jf54rr8f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-pS9cf-QsBJ_fiCq_h4e2XjdSdQhF7QE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "859687206762-ocon9l622vpi767e9sp20b31jf54rr8f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
