@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.CourseFragment"
-    android:padding="15dp">
+    android:orientation="vertical"
+    >
 
     <TextView
         android:id="@+id/courseheading"
@@ -12,6 +13,8 @@
         android:layout_height="wrap_content"
         android:text="Courses"
         android:textSize="20sp"
+        android:layout_margin="15dp"
+        android:layout_marginBottom="20dp"
         android:textColor="@color/black"
         android:textStyle="bold"/>
 
@@ -24,4 +27,4 @@
         />
 
 
-</RelativeLayout>
+</LinearLayout>

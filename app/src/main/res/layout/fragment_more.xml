@@ -18,8 +18,9 @@
 
         <ImageView
             android:id="@+id/userImage"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="20dp"
             app:srcCompat="@drawable/ic_person"
             android:layout_marginRight="20dp"/>
 
@@ -34,16 +35,16 @@
             android:textStyle="bold"
             android:layout_gravity="center_vertical"
             />
+
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/ConnectionBorder"
+    <View
+        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/boundryor"
+        android:layout_height="1dp"
+        android:layout_weight="1"
         android:layout_below="@id/username"
-
-        />
+        android:background="?android:attr/listDivider" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,12 +52,13 @@
         android:orientation="horizontal"
         android:id="@+id/jobs"
         android:layout_below="@id/username"
-        android:layout_marginTop="30dp">
+        >
 
         <ImageView
             android:id="@+id/connectionImage"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/ic_connection"
             android:layout_marginRight="20dp"/>
 
@@ -73,13 +75,13 @@
             />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/connectionBorder"
+    <View
+        android:id="@+id/jobdivider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/boundryor"
+        android:layout_height="1dp"
+        android:layout_weight="1"
         android:layout_below="@id/jobs"
-        />
+        android:background="?android:attr/listDivider" />
 
 
     <LinearLayout
@@ -88,12 +90,13 @@
         android:orientation="horizontal"
         android:layout_below="@id/jobs"
         android:id="@+id/LogOut"
-        android:layout_marginTop="30dp">
+        >
 
         <ImageView
             android:id="@+id/logoutImage"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="24dp"
+            android:layout_marginTop="20dp"
+            android:layout_height="24dp"
             app:srcCompat="@drawable/ic__exit"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="20dp"/>
@@ -111,15 +114,12 @@
             />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/LogoutBorder"
-        android:layout_width="match_parent"
+
+    <ProgressBar
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/boundryor"
-        android:layout_below="@id/LogOut"
-
-        />
-
+        android:id="@+id/fragmentMoreProgressBar"
+        android:layout_centerInParent="true"/>
 
 
 </RelativeLayout>

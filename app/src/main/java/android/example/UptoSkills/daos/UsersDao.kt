@@ -32,9 +32,6 @@ class UsersDao {
     }
 
     fun getUserById(uId: String): Task<DataSnapshot> {
-
-        var checkUser:Query = ref.orderByChild(uId).equalTo(uId)
-
         return ref.child(uId).get()
     }
 

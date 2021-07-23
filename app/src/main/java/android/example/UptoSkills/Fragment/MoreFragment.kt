@@ -9,26 +9,22 @@ import android.view.ViewGroup
 import android.example.UptoSkills.R
 import android.example.UptoSkills.SignInActivity
 import android.example.UptoSkills.UserDetailsActivity
-import android.example.UptoSkills.daos.GoogleUsersDao
 import android.example.UptoSkills.daos.UsersDao
-import android.example.UptoSkills.models.GoogleUser
 import android.example.UptoSkills.models.Users
+import android.example.UptoSkills.singleton.CurUser
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,13 +52,15 @@ class MoreFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var usersDao: UsersDao
     private lateinit var displayName: TextView
+    private lateinit var progressBar: ProgressBar
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_more, container, false)
-
+        progressBar = view.findViewById(R.id.fragmentMoreProgressBar)
+        progressBar.visibility = View.VISIBLE
 
         displayName = view.findViewById(R.id.displayName)
         auth = Firebase.auth
@@ -88,6 +86,7 @@ class MoreFragment : Fragment() {
         profile.setOnClickListener {
 
             var intent = Intent(activity, UserDetailsActivity::class.java)
+            intent.putExtra("username", displayName.text.toString() )
             startActivity(intent)
         }
         return view
@@ -95,23 +94,17 @@ class MoreFragment : Fragment() {
 
     private fun setUpDisplayName() {
         usersDao = UsersDao()
-        var name: String=""
-        GlobalScope.launch(Dispatchers.IO) {
-            usersDao.ref.orderByValue().equalTo(auth.currentUser?.uid).addListenerForSingleValueEvent(object: ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    name = snapshot.child("displayName").value.toString()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
-
-            withContext(Dispatchers.Main){
-                displayName.text = name
+        usersDao.ref.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                displayName.text = snapshot.child(auth.uid.toString()).child("displayName").value.toString()
+                progressBar.visibility = View.GONE
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+                progressBar.visibility = View.GONE
+            }
+
+        })
     }
 
     companion object {

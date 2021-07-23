@@ -11,13 +11,9 @@ import android.widget.TextView;
 
 import androidx.viewpager.widget.PagerAdapter;
 
-public class SliderAdapter : PagerAdapter {
+class SliderAdapter(private val context: Context) : PagerAdapter() {
 
     private lateinit var layoutInflater: LayoutInflater
-    private lateinit var context: Context
-    constructor(context: Context){
-        this.context = context
-    }
 
     //-Arrays
     var slide_images = arrayListOf<Int>(

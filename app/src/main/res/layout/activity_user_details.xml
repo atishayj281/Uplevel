@@ -6,157 +6,187 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".UserDetailsActivity">
-
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/LightningYellow"
-                android:padding="20dp">
-
-                <ImageView
-                    android:id="@+id/profileImage"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/person" />
-
-                <TextView
-                    android:id="@+id/username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/profileImage"
-                    android:fontFamily="@font/baloo2_semibold"
-                    android:text="Atishay Jain"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-                <EditText
-                    android:id="@+id/about"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/username"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/profileImage"
-                    android:fontFamily="@font/baloo2_semibold"
-                    android:text="I am an Android Developer"
-                    android:background="@color/LightningYellow"
-                    android:textSize="14sp" />
-
-
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@color/LightningYellow"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:id="@+id/profileImage"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/person" />
+
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@id/profileImage"
+                        android:fontFamily="@font/baloo2_semibold"
+                        android:text="Atishay Jain"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+
+                    <EditText
+                        android:id="@+id/about"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/username"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@id/profileImage"
+                        android:fontFamily="@font/baloo2_semibold"
+                        android:text="I am an Android Developer"
+                        android:background="@color/LightningYellow"
+                        android:textSize="14sp" />
+
+
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:hint="Full Name">
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/fullName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_person"
-                        android:drawablePadding="10dp"
-                        android:text="Atishay Jain" />
+                        android:layout_marginBottom="10dp"
+                        android:hint="Full Name">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:hint="Mobile No.">
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_person"
+                            android:drawablePadding="10dp"
+                            android:text="Atishay Jain" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mobile"
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_outline_call_24"
-                        android:drawablePadding="10dp"
-                        android:text="7078007955" />
+                        android:layout_marginBottom="10dp"
+                        android:hint="Mobile No.">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/mobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_outline_call_24"
+                            android:drawablePadding="10dp"
+                            android:text="7078007955" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:hint="Highest Education">
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/education"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_education"
-                        android:drawablePadding="10dp"
-                        android:text="B.Tech (CSE)" />
+                        android:layout_marginBottom="10dp"
+                        android:hint="Highest Education">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/education"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_education"
+                            android:drawablePadding="10dp"
+                            android:text="B.Tech (CSE)" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:hint="Current Job">
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/currentJob"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_job"
-                        android:drawablePadding="10dp"
-                        android:text="Android Developer" />
+                        android:layout_marginBottom="10dp"
+                        android:hint="Current Job">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/currentJob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_job"
+                            android:drawablePadding="10dp"
+                            android:text="Android Developer" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="College">
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/college"
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_education"
-                        android:drawablePadding="10dp"
-                        android:text="TMU" />
+                        android:hint="Organisation">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/college"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_education"
+                            android:drawablePadding="10dp"
+                            android:text="TMU" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/submit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:backgroundTint="@color/LightningYellow"
-                    android:text="Submit" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="E-Mail">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_baseline_email_24"
+                            android:drawablePadding="10dp"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:backgroundTint="@color/LightningYellow"
+                        android:text="Submit" />
 
 
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
 
-    </ScrollView>
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/userDetailsProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
+
+
 
 
 </LinearLayout>
