@@ -8,13 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout
 import android.widget.TextView;
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.circularreveal.CircularRevealLinearLayout
 import java.util.ArrayList;
 
-class JobAdapter(val context: Context,val listner: JobItemClicked): RecyclerView.Adapter<JobAdapter.JobViewholder>(){
+class JobAdapter(val context: Context,val listner: JobItemClicked, val itemId: Int): RecyclerView.Adapter<JobAdapter.JobViewholder>(){
 
     private var items = arrayListOf<Job>(Job("1437137", "https://www.amazon.jobs/en/jobs/1437137/software-development-engineer-ii",
     "Software Development Engineer II", "Amazon", "Software Development",
@@ -109,11 +112,11 @@ class JobAdapter(val context: Context,val listner: JobItemClicked): RecyclerView
         var jobtitle = itemview.findViewById<TextView>(R.id.jobname)
         var comapny_name = itemview.findViewById<TextView>(R.id.companyname)
         var jobLocation = itemview.findViewById<TextView>(R.id.jobLoc)
-        var job_box = itemview.findViewById<CardView>(R.id.job_container)
+        var job_box = itemview.findViewById<MaterialCardView>(R.id.job_container)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewholder {
-        var viewHolder = JobViewholder(LayoutInflater.from(parent.context).inflate(R.layout.job_item, parent, false))
+        var viewHolder = JobViewholder(LayoutInflater.from(parent.context).inflate(itemId, parent, false))
 
         viewHolder.job_box.setOnClickListener{
             listner.onJobCLick(items[viewHolder.adapterPosition])

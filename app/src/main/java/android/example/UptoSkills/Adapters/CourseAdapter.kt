@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView
 import java.util.ArrayList;
 
 class CourseAdapter(val context: Context,val listner: CourseItemClicked): RecyclerView.Adapter<CourseAdapter.CourseViewholder>(){
@@ -83,7 +84,7 @@ class CourseAdapter(val context: Context,val listner: CourseItemClicked): Recycl
         var courseCategory: TextView = itemview.findViewById(R.id.CourseCategory)
         var courseName: TextView = itemview.findViewById(R.id.CourseName)
         var courseDescription: TextView = itemview.findViewById(R.id.CourseDescription)
-        var course: CardView = itemview.findViewById(R.id.course)
+        var course: MaterialCardView = itemview.findViewById(R.id.course)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewholder {

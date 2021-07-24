@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textview.MaterialTextView
 
 
 class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogAdapter) : FirestoreRecyclerAdapter<Blog, BlogsAdapter.BLogViewHolder>(
@@ -23,10 +25,10 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
     class BLogViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val posttitle: TextView = itemView.findViewById(R.id.postTitle)
         val postText: TextView = itemView.findViewById(R.id.post)
-        val userText: TextView = itemView.findViewById(R.id.userName)
+        val userText: MaterialTextView = itemView.findViewById(R.id.userName)
         val createdAt: TextView = itemView.findViewById(R.id.createdAt)
         val userImage: ImageView = itemView.findViewById(R.id.userImage)
-        val blog: CardView = itemView.findViewById(R.id.blog)
+        val blog: MaterialCardView = itemView.findViewById(R.id.blog)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BLogViewHolder {
@@ -41,7 +43,10 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
         holder.posttitle.text = model.title
         holder.postText.text = model.text
         holder.userText.text = model.createdBy.displayName
-        Glide.with(holder.userImage.context).load(model.createdBy.imageUrl).circleCrop().into(holder.userImage)
+        if(model.createdBy.imageUrl.isNotEmpty() && model.createdBy.imageUrl != "null"){
+            Glide.with(holder.userImage.context).load(model.createdBy.imageUrl).circleCrop().into(holder.userImage)
+        }
+
         holder.createdAt.text = Utils.getTimeAgo(model.createdAt)
     }
 }

@@ -13,9 +13,10 @@
         android:layout_height="wrap_content"
         android:text="Courses"
         android:textSize="20sp"
-        android:layout_margin="15dp"
-        android:layout_marginBottom="20dp"
+        android:padding="15dp"
         android:textColor="@color/black"
+        android:background="#4EDA44"
+        android:elevation="7dp"
         android:textStyle="bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -23,7 +24,6 @@
         android:layout_height="match_parent"
         android:id="@+id/courseRecyclerview"
         android:layout_below="@id/courseheading"
-        android:layout_marginTop="5dp"
         />
 
 

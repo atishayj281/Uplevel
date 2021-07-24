@@ -4,6 +4,7 @@ import android.content.Intent
 import android.example.UptoSkills.daos.GoogleUsersDao
 import android.example.UptoSkills.databinding.ActivitySignInBinding
 import android.example.UptoSkills.models.GoogleUser
+import android.example.UptoSkills.singleton.CurUser
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -133,7 +135,7 @@ class SignInActivity : AppCompatActivity() {
                 firebaseAuthWithGoogle(account.idToken!!)
 
             } catch (e: ApiException) {
-                Log.d("TAG", "Google Sign in failed")
+                Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -157,32 +159,19 @@ class SignInActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if(user != null) {
-            val dao = GoogleUsersDao()
-            var isExists = true
-            dao.ref.addListenerForSingleValueEvent(object: ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if(!snapshot.child(user.uid).exists()){
-                        isExists = false
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("")
-                }
-
-            })
-
-            if(!isExists){
-                var intent = Intent(this, UserDetailsActivity::class.java)
-                intent.putExtra("id", auth.uid)
-                intent.putExtra("username", auth.currentUser?.displayName)
-                intent.putExtra("userImage", auth.currentUser?.photoUrl)
-                startActivity(intent)
-                finish()
-            }
-            var intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            binding.signInprogressbar.visibility = View.VISIBLE
+            startMainActivity()
         }
     }
+
+    private fun startUserDetailsActivity() {
+        val intent = Intent(this, UserDetailsActivity::class.java)
+        intent.putExtra("id", auth.uid)
+        intent.putExtra("username", auth.currentUser?.displayName)
+        intent.putExtra("userImage", auth.currentUser?.photoUrl)
+        startActivity(intent)
+        finish()
+    }
+
+
 }

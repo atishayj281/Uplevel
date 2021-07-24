@@ -55,7 +55,7 @@ class JobFragment : Fragment(), JobItemClicked {
         progressBar = view.findViewById(R.id.jobProgressBar)
         progressBar.visibility = View.VISIBLE
 
-        adapter = JobAdapter(view.context, this)
+        adapter = JobAdapter(view.context, this, R.layout.job_item)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
         progressBar.visibility = View.GONE

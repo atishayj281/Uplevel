@@ -5,9 +5,8 @@
         android:width="10dp"
         android:height="10dp"/>
 
-    <gradient
-        android:startColor="#fe6c35"
-        android:endColor="#02bda8"/>
+    <solid
+        android:color="#4EDA44"/>
 
 
 </shape>

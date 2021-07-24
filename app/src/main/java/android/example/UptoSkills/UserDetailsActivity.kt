@@ -36,7 +36,7 @@ class UserDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.userDetailsProgressBar.visibility = View.VISIBLE
 
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             var window: Window = this.window
             window.statusBarColor = ContextCompat.getColor(this, R.color.LightningYellow)
         }
@@ -45,24 +45,19 @@ class UserDetailsActivity : AppCompatActivity() {
         var id = intent.getStringExtra("id")
         userDao = UsersDao()
 
-        var full_name: String=""
-        var mobile: String=""
-        var college: String=""
-        var job: String=""
-        var education: String=""
-        var displayName: String=""
-
-        userDao.ref.addListenerForSingleValueEvent(object: ValueEventListener {
+        userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var ref = snapshot.child(auth.uid.toString())
-                full_name = ref.child("full_name").value.toString()
-                mobile = ref.child("mobileNo").value.toString()
-                college = ref.child("college_name").value.toString()
-                job = ref.child("job").value.toString()
-                education = ref.child("education").value.toString()
-                displayName = ref.child("displayName").value.toString()
-            }
+                binding.fullName.editText?.setText(ref.child("full_name").value.toString())
+                binding.mobile.setText(ref.child("mobileNo").value.toString())
+                binding.college.setText(ref.child("college_name").value.toString())
+                binding.currentJob.setText(ref.child("job").value.toString())
+                binding.education.setText(ref.child("education").value.toString())
+                binding.username.setText(ref.child("displayName").value.toString())
+                binding.userDetailsProgressBar.visibility = View.GONE
+                binding.email.setText(auth.currentUser?.email)
 
+            }
 
 
             override fun onCancelled(error: DatabaseError) {
@@ -71,22 +66,21 @@ class UserDetailsActivity : AppCompatActivity() {
 
         })
 
-        binding.fullName.editText?.setText(full_name)
-        binding.mobile.setText(mobile)
-        binding.college.setText(college)
-        binding.currentJob.setText(job)
-        binding.education.setText(education)
-        binding.username.text = displayName
-        binding.userDetailsProgressBar.visibility = View.GONE
 
 
 
         binding.submit.setOnClickListener {
             binding.userDetailsProgressBar.visibility = View.VISIBLE
-            var usr = Users(binding.fullName.editText?.text.toString(), intent.getStringExtra("username"),
-            binding.email.text.toString(), binding.college.text.toString(), binding.education.text.toString(),
-                binding.currentJob.text.toString(),
-                intent.getStringExtra("userImage").toString(), binding.mobile.text.toString(), id.toString())
+            var usr =
+                Users(binding.fullName.editText?.text.toString(),
+                    intent.getStringExtra("username"),
+                    binding.email.text.toString(),
+                    binding.college.text.toString(),
+                    binding.education.text.toString(),
+                    binding.currentJob.text.toString(),
+                    intent.getStringExtra("userImage").toString(),
+                    binding.mobile.text.toString(),
+                    id.toString())
             userDao.updateUser(usr, id.toString())
             Toast.makeText(this, id, Toast.LENGTH_SHORT).show()
             binding.userDetailsProgressBar.visibility
@@ -94,7 +88,7 @@ class UserDetailsActivity : AppCompatActivity() {
         }
     }
 
-    fun startMainActivity(){
+    fun startMainActivity() {
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()

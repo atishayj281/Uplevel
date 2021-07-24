@@ -6,118 +6,131 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.HomeFragment">
 
+
+    <LinearLayout
+        android:id="@+id/homeLogo"
+        android:layout_width="1000dp"
+        android:layout_height="130dp"
+        android:elevation="7dp"
+        android:background="#4EDA44">
+
+        <ImageView
+
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            app:srcCompat="@drawable/uptoskills" />
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/homeLogo"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp">
-
-
-
-            <ImageView
-                android:id="@+id/homeLogo"
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                app:srcCompat="@drawable/uptoskills"
-                />
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Courses"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_marginTop="6.3dp"
                 android:layout_marginRight="10.3dp"
-                android:background="#d5d5d5"/>
+                android:background="#d5d5d5" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:orientation="horizontal"
                 android:id="@+id/Courserecyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                />
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Blogs"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_marginTop="6.3dp"
                 android:layout_marginRight="10.3dp"
-                android:background="#d5d5d5"/>
+                android:background="#d5d5d5" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:orientation="horizontal"
-                android:id="@+id/blogrecyclerview"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/blogrecyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    />
+            </LinearLayout>
 
-                />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Open Jobs"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_marginTop="6.3dp"
                 android:layout_marginRight="10.3dp"
-                android:background="#d5d5d5"/>
+                android:background="#d5d5d5" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="190dp"
-                android:orientation="horizontal"
                 android:id="@+id/HomeJobrecyclerview"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Profiles"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:layout_marginTop="6.3dp"
                 android:layout_marginRight="10.3dp"
-                android:background="#d5d5d5"/>
+                android:background="#d5d5d5" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:orientation="horizontal"
                 android:id="@+id/HomeProfilesrecyclerview"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp"/>
         </LinearLayout>
-
 
 
     </ScrollView>
@@ -127,9 +140,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:indeterminateTint="#02bda8"
-        android:visibility="visible"
         android:indeterminate="true"
-        />
+        android:indeterminateTint="#02bda8"
+        android:visibility="visible" />
 
 </RelativeLayout>

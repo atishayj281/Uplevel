@@ -15,17 +15,23 @@
             android:id="@+id/jobHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            android:padding="15dp"
             android:layout_marginBottom="20dp"
             android:text="Open Jobs"
             android:textColor="@color/black"
+            android:background="#4EDA44"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:elevation="7dp"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Jobsrecyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/job_recycler_view_background"/>
     </LinearLayout>
 
     <ProgressBar

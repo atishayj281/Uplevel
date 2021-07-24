@@ -88,7 +88,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
 
     private fun setUpJobRecyclerView(view: View) {
         jobRecyclerView = view.findViewById(R.id.HomeJobrecyclerview)!!
-        jobAdapter = JobAdapter(view.context, this)
+        jobAdapter = JobAdapter(view.context, this, R.layout.home_job_item)
         jobRecyclerView.adapter = jobAdapter
         jobRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
     }

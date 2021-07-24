@@ -41,7 +41,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/profileImage"
                         android:fontFamily="@font/baloo2_semibold"
-                        android:text="Atishay Jain"
+
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -54,7 +54,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/profileImage"
                         android:fontFamily="@font/baloo2_semibold"
-                        android:text="I am an Android Developer"
+
                         android:background="@color/LightningYellow"
                         android:textSize="14sp" />
 
@@ -80,7 +80,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_person"
                             android:drawablePadding="10dp"
-                            android:text="Atishay Jain" />
+                            />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +96,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_outline_call_24"
                             android:drawablePadding="10dp"
-                            android:text="7078007955" />
+                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,7 +112,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_education"
                             android:drawablePadding="10dp"
-                            android:text="B.Tech (CSE)" />
+                            />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -128,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_job"
                             android:drawablePadding="10dp"
-                            android:text="Android Developer" />
+                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -143,7 +143,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_education"
                             android:drawablePadding="10dp"
-                            android:text="TMU" />
+                            />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -182,7 +182,8 @@
             android:id="@+id/userDetailsProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/LightningYellow"/>
 
     </FrameLayout>
 

@@ -2,11 +2,13 @@ package android.example.UptoSkills
 
 import android.content.Intent
 import android.example.UptoSkills.databinding.ActivityCreateAccountBinding
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+
 
 class CreateAccountActivity : AppCompatActivity() {
 
@@ -29,6 +31,9 @@ class CreateAccountActivity : AppCompatActivity() {
             ){
                 auth.createUserWithEmailAndPassword(binding.crtemail.text.toString(), binding.crtpass.text.toString()).addOnCompleteListener {
                     if(it.isSuccessful){
+
+                        changeAuth()
+
                         binding.createAccountProgressBar.visibility = View.GONE
                         //var usr = Users("", binding.crtUsername.text.toString(), binding.crtemail.text.toString())
                         val id: String? = it.result?.user?.uid
@@ -50,5 +55,13 @@ class CreateAccountActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun changeAuth() {
+        val user = FirebaseAuth.getInstance().currentUser
+
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(binding.crtUsername.text.toString()).build()
+        user!!.updateProfile(profileUpdates)
+        }
 
 }
