@@ -26,6 +26,7 @@ class BlogViewActivity : AppCompatActivity() {
         updateBlog(postId)
     }
 
+    // Method to show blog in the activity
     private fun updateBlog(BlogId: String?) {
         var blogDao = BlogDao()
         GlobalScope.launch(Dispatchers.IO) {
@@ -35,7 +36,7 @@ class BlogViewActivity : AppCompatActivity() {
                 binding.blogView.text = blog.text
                 binding.creatorName.text = blog.createdBy.displayName
                 binding.blogViewProgressBar.visibility = View.GONE
-                Glide.with(this@BlogViewActivity).load(blog.createdBy.imageUrl).circleCrop().into(binding.creatorImage)
+                Glide.with(this@BlogViewActivity).load(blog.createdBy.userImage).circleCrop().into(binding.creatorImage)
             }
         }
 

@@ -10,9 +10,9 @@
     <LinearLayout
         android:id="@+id/homeLogo"
         android:layout_width="1000dp"
-        android:layout_height="130dp"
+        android:layout_height="120dp"
         android:elevation="7dp"
-        android:background="#4EDA44">
+        android:background="@color/AndroidGreen">
 
         <ImageView
 

@@ -43,8 +43,8 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
         holder.posttitle.text = model.title
         holder.postText.text = model.text
         holder.userText.text = model.createdBy.displayName
-        if(model.createdBy.imageUrl.isNotEmpty() && model.createdBy.imageUrl != "null"){
-            Glide.with(holder.userImage.context).load(model.createdBy.imageUrl).circleCrop().into(holder.userImage)
+        if(model.createdBy.userImage.isNotEmpty() && model.createdBy.userImage != "null"){
+            Glide.with(holder.userImage.context).load(model.createdBy.userImage).circleCrop().into(holder.userImage)
         }
 
         holder.createdAt.text = Utils.getTimeAgo(model.createdAt)

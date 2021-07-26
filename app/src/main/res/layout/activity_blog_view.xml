@@ -4,49 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:background="@color/white"
     tools:context=".BlogViewActivity">
+
+    <LinearLayout
+        android:id="@+id/blogHeadingParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/AndroidGreen"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="7dp">
+
+        <TextView
+            android:id="@+id/blogHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/blogHeadingParent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/blogHeading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:gravity="center_horizontal"
-                android:textColor="#02bda8"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"
+            >
 
             <ImageView
                 android:id="@+id/creatorImage"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_below="@id/blogHeading"
+                android:layout_margin="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/blogHeading" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/creatorName"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_below="@id/blogHeading"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/creatorImage"
-                app:layout_constraintTop_toBottomOf="@id/blogHeading"
+                app:layout_constraintTop_toTopOf="parent"
 
                 />
 
@@ -55,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/creatorImage"
-                android:layout_marginTop="20dp"
+                android:layout_margin="20dp"
                 android:textSize="13sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/creatorImage" />
@@ -63,16 +76,16 @@
     </ScrollView>
 
     <ProgressBar
+        android:id="@+id/blogViewProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/blogViewProgressBar"
-        android:indeterminate="true"
         android:layout_centerInParent="true"
-        android:indeterminateTint="@color/BlackHaze"/>
+        android:indeterminate="true"
+        android:indeterminateTint="@color/BlackHaze"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </RelativeLayout>

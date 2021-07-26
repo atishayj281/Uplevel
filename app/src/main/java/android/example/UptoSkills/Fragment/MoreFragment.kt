@@ -87,6 +87,7 @@ class MoreFragment : Fragment() {
 
             var intent = Intent(activity, UserDetailsActivity::class.java)
             intent.putExtra("username", displayName.text.toString() )
+            intent.putExtra("id", auth.currentUser?.uid)
             startActivity(intent)
         }
         return view

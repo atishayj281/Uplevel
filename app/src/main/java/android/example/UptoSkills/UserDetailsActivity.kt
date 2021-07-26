@@ -5,6 +5,7 @@ import android.content.Intent
 import android.example.UptoSkills.daos.UsersDao
 import android.example.UptoSkills.databinding.ActivityUserDetailsBinding
 import android.example.UptoSkills.models.Users
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,6 +31,8 @@ class UserDetailsActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var user: Users
     private lateinit var userDao: UsersDao
+    private val imageRequestCode = 123
+    private lateinit var ProfileimageUrl: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +60,10 @@ class UserDetailsActivity : AppCompatActivity() {
                 binding.username.setText(ref.child("displayName").value.toString())
                 binding.userDetailsProgressBar.visibility = View.GONE
                 binding.email.setText(auth.currentUser?.email)
+                var image: String = ref.child("userImage").value.toString()
+                if(image.isNotEmpty() && image != "null") {
+                    Glide.with(binding.profileImage.context).load(image).circleCrop().into(binding.profileImage)
+                }
 
             }
 
@@ -65,9 +73,6 @@ class UserDetailsActivity : AppCompatActivity() {
             }
 
         })
-
-
-
 
         binding.submit.setOnClickListener {
             binding.userDetailsProgressBar.visibility = View.VISIBLE
@@ -81,10 +86,34 @@ class UserDetailsActivity : AppCompatActivity() {
                     intent.getStringExtra("userImage").toString(),
                     binding.mobile.text.toString(),
                     id.toString())
-            userDao.updateUser(usr, id.toString())
+            userDao.uploadProfileImage(ProfileimageUrl, usr, this, id.toString())
             Toast.makeText(this, id, Toast.LENGTH_SHORT).show()
             binding.userDetailsProgressBar.visibility
             startMainActivity()
+        }
+
+        //choose and set Profile Image
+        binding.addProfileImage.setOnClickListener{
+            filechoser()
+        }
+    }
+
+    // Select the image file
+    private fun filechoser() {
+        var intent = Intent();
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, imageRequestCode)
+    }
+
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == imageRequestCode && resultCode == RESULT_OK && data?.data != null) {
+            ProfileimageUrl = data.data!!
+            binding.profileImage.setImageURI(ProfileimageUrl)
         }
     }
 

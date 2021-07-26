@@ -3,18 +3,20 @@ package android.example.UptoSkills.Fragment
 import android.example.UptoSkills.Adapters.JobAdapter
 import android.example.UptoSkills.Adapters.JobItemClicked
 import android.example.UptoSkills.R
-import android.example.UptoSkills.models.Course
+import android.example.UptoSkills.models.Job
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.example.UptoSkills.models.Job
-import android.net.Uri
-import android.widget.ProgressBar
-import androidx.browser.customtabs.CustomTabsIntent
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -87,9 +89,20 @@ class JobFragment : Fragment(), JobItemClicked {
     }
 
     override fun onJobCLick(job: Job) {
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
-        view?.let { customTabsIntent.launchUrl(it.context, Uri.parse(job.url)) }
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_action_back)
+        val uri = Uri.parse(job.url)
+        val intentBuilder = CustomTabsIntent.Builder().setCloseButtonIcon(bitmap)
+        val params = view?.let { ContextCompat.getColor(requireActivity(), R.color.AndroidGreen) }?.let {
+            CustomTabColorSchemeParams.Builder()
+                .setNavigationBarColor(it)
+                .setToolbarColor(ContextCompat.getColor(requireActivity(), R.color.AndroidGreen))
+                .setSecondaryToolbarColor(ContextCompat.getColor(requireActivity(), R.color.AndroidGreen))
+                .build()
+        }
+        params?.let { intentBuilder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, it) }
+        val customTabsIntent = intentBuilder.build()
+        view?.let { customTabsIntent.launchUrl(it.context, uri) }
+
     }
 }
 

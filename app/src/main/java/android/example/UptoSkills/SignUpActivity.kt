@@ -95,7 +95,6 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if(user != null) {
-            val googleUser = GoogleUser(user.uid, user.displayName, user.photoUrl.toString())
             var intent = Intent(this, UserDetailsActivity::class.java)
             intent.putExtra("id", auth.uid)
             intent.putExtra("username", auth.currentUser?.displayName)

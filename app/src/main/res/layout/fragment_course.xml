@@ -15,7 +15,7 @@
         android:textSize="20sp"
         android:padding="15dp"
         android:textColor="@color/black"
-        android:background="#4EDA44"
+        android:background="@color/AndroidGreen"
         android:elevation="7dp"
         android:textStyle="bold"/>
 

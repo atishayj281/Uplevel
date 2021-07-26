@@ -1,5 +1,5 @@
 package android.example.UptoSkills.models
 
 data class Users(
-    val full_name: String="", val displayName: String? ="", val email: String="", val college_name: String="",
-    val education: String="", val job: String="", val userImage: String="", val mobileNo: String="", val id: String="")
+    var full_name: String="", val displayName: String? ="", val email: String="", val college_name: String="",
+    val education: String="", val job: String="", var userImage: String="", val mobileNo: String="", val id: String="")

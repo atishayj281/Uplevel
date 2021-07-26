@@ -3,6 +3,7 @@ package android.example.UptoSkills.daos
 import android.content.Context
 import android.example.UptoSkills.models.Blog
 import android.example.UptoSkills.models.GoogleUser
+import android.example.UptoSkills.models.Users
 import android.view.View
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
@@ -29,23 +30,20 @@ class BlogDao {
     fun addPost(text: String, title: String="") {
         GlobalScope.launch {
             val currentUserId = auth.currentUser!!.uid
-            val userDao = GoogleUsersDao()
-            var user: GoogleUser = GoogleUser()
+            val userDao = UsersDao()
+            var user: Users
             userDao.ref.addListenerForSingleValueEvent(object: ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    user = snapshot.child(currentUserId).getValue(GoogleUser::class.java)!!
+                    user = snapshot.child(currentUserId).getValue(Users::class.java)!!
                     val currentTime = System.currentTimeMillis()
                     val post = Blog(text,title, user, currentTime)
                     post.let { postCollections.document().set(it) }
-
                 }
-
                 override fun onCancelled(error: DatabaseError) {
 
                 }
 
             })
-
         }
     }
 

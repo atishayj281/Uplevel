@@ -19,7 +19,7 @@
             android:layout_marginBottom="20dp"
             android:text="Open Jobs"
             android:textColor="@color/black"
-            android:background="#4EDA44"
+            android:background="@color/AndroidGreen"
             android:textSize="20sp"
             android:textStyle="bold"
             android:elevation="7dp"

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".UserDetailsActivity">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,12 +27,27 @@
                     android:background="@color/LightningYellow"
                     android:padding="20dp">
 
+
+
                     <ImageView
                         android:id="@+id/profileImage"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:padding="2dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/person" />
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/profile_image_background"/>
+
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/profileImage"
+                        android:layout_marginTop="-30dp"
+                        android:layout_marginLeft="47dp"
+                        android:backgroundTint="@color/colorTransparentWhite"
+                        app:srcCompat="@drawable/ic_baseline_add_24"
+                        android:id="@+id/addProfileImage"/>
 
                     <TextView
                         android:id="@+id/username"
@@ -41,7 +57,6 @@
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/profileImage"
                         android:fontFamily="@font/baloo2_semibold"
-
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -53,9 +68,9 @@
                         android:layout_below="@id/username"
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/profileImage"
-                        android:fontFamily="@font/baloo2_semibold"
-
                         android:background="@color/LightningYellow"
+
+                        android:fontFamily="@font/baloo2_semibold"
                         android:textSize="14sp" />
 
 
@@ -79,8 +94,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_person"
-                            android:drawablePadding="10dp"
-                            />
+                            android:drawablePadding="10dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,8 +109,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_outline_call_24"
-                            android:drawablePadding="10dp"
-                             />
+                            android:drawablePadding="10dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,8 +124,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_education"
-                            android:drawablePadding="10dp"
-                            />
+                            android:drawablePadding="10dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,8 +139,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_job"
-                            android:drawablePadding="10dp"
-                             />
+                            android:drawablePadding="10dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,8 +153,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_education"
-                            android:drawablePadding="10dp"
-                            />
+                            android:drawablePadding="10dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -158,8 +168,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_baseline_email_24"
-                            android:drawablePadding="10dp"
-                            />
+                            android:drawablePadding="10dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -183,11 +192,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminateTint="@color/LightningYellow"/>
+            android:indeterminateTint="@color/LightningYellow" />
 
     </FrameLayout>
-
-
 
 
 </LinearLayout>

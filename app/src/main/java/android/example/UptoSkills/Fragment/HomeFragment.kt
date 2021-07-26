@@ -101,7 +101,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
             profileRecyclerView = view.findViewById(R.id.HomeProfilesrecyclerview)
         }
         profileAdapter = view?.let { ProfileAdapter(it.context, this) }!!
-        profileRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
+        profileRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
         profileRecyclerView.adapter = profileAdapter
 
         userDao.ref.addValueEventListener(object: ValueEventListener{
