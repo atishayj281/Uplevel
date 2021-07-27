@@ -24,11 +24,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:background="@color/LightningYellow"
+                    android:background="@color/AndroidGreen"
                     android:padding="20dp">
-
-
-
                     <ImageView
                         android:id="@+id/profileImage"
                         android:layout_width="100dp"
@@ -49,16 +46,19 @@
                         app:srcCompat="@drawable/ic_baseline_add_24"
                         android:id="@+id/addProfileImage"/>
 
-                    <TextView
+                    <EditText
                         android:id="@+id/username"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/profileImage"
                         android:fontFamily="@font/baloo2_semibold"
+                        android:background="@android:color/transparent"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textCursorDrawable="@drawable/teal_cusror_color"
+                        />
 
 
                     <EditText
@@ -80,6 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:elevation="4dp"
                     android:padding="20dp">
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -161,7 +162,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:hint="E-Mail">
+                        android:hint="E-Mail"
+                        >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/email"
@@ -179,8 +181,6 @@
                         android:layout_gravity="center_horizontal"
                         android:backgroundTint="@color/LightningYellow"
                         android:text="Submit" />
-
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -192,7 +192,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminateTint="@color/LightningYellow" />
+            android:indeterminateTint="@color/teal_700" />
 
     </FrameLayout>
 

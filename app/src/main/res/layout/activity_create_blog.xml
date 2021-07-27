@@ -42,7 +42,7 @@
         android:layout_margin="12dp"
         android:text="POST"
         android:textColor="@color/white"
-        android:backgroundTint="@color/colorTransparentWhite"/>
+        android:backgroundTint="@color/AndroidGreen"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.example.UptoSkills">
+    package="android.example.uptoskills">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,22 +11,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GetWork">
-        <activity android:name=".UserDetailsActivity" />
-        <activity android:name=".CreateBlogActivity" />
-        <activity android:name=".BlogViewActivity" />
+        <activity android:name="android.example.uptoskills.UserDetailsActivity" />
+        <activity android:name="android.example.uptoskills.CreateBlogActivity" />
+        <activity android:name="android.example.uptoskills.BlogViewActivity" />
         <activity
-            android:name=".CreateAccountActivity"
-            android:parentActivityName=".SignUpActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".OnBoardingActivity">
+            android:name="android.example.uptoskills.CreateAccountActivity"
+            android:parentActivityName="android.example.uptoskills.SignUpActivity" />
+        <activity android:name="android.example.uptoskills.SignUpActivity" />
+        <activity android:name="android.example.uptoskills.SignInActivity" />
+        <activity android:name="android.example.uptoskills.OnBoardingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name="android.example.uptoskills.MainActivity" />
     </application>
 
 </manifest>
