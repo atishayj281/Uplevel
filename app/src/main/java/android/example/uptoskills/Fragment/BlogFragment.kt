@@ -108,7 +108,7 @@ class BlogFragment : Fragment(), IBlogAdapter {
     private fun setUpRecyclerView() {
         postDao = BlogDao()
         val postsCollections = postDao.postCollections
-        val query = postsCollections.orderBy("createdAt", Query.Direction.DESCENDING)
+        val query = postsCollections.orderBy("heading", Query.Direction.DESCENDING)
         val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Blog>().setQuery(query, Blog::class.java).build()
 
         adapter = BlogsAdapter(recyclerViewOptions, this, R.layout.blog_item)

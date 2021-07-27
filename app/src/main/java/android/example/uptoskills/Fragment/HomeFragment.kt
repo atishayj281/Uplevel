@@ -2,6 +2,7 @@ package android.example.uptoskills.Fragment
 
 import android.content.Intent
 import android.example.uptoskills.Adapters.*
+import android.example.uptoskills.AllProfilesActivity
 import android.example.uptoskills.BlogViewActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.example.uptoskills.R
+import android.example.uptoskills.UserDetailsActivity
 import android.example.uptoskills.daos.BlogDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityMainBinding
@@ -16,16 +18,16 @@ import android.example.uptoskills.models.Blog
 import android.example.uptoskills.models.Course
 import android.example.uptoskills.models.Job
 import android.example.uptoskills.models.Users
+import android.media.Image
 import android.net.Uri
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -65,7 +67,8 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     private lateinit var userDao: UsersDao
     private lateinit var profileAdapter: ProfileAdapter
     private lateinit var profileRecyclerView: RecyclerView
-    private lateinit var mainActivityBinding: ActivityMainBinding
+    private lateinit var profile: ImageView
+    private lateinit var displayName: String
 
 
     override fun onCreateView(
@@ -76,6 +79,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         var view = inflater.inflate(R.layout.fragment_home, container, false)
         recyclerView = view.findViewById(R.id.blogrecyclerview)
         progressBar = view.findViewById(R.id.homeProgressbar)
+        profile = view.findViewById(R.id.profileImage)
 
         progressBar.visibility = View.VISIBLE
         courseRecyclerView = view.findViewById(R.id.Courserecyclerview)
@@ -88,9 +92,6 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         setUpProfileRecyclerView(view)
         progressBar.visibility = View.GONE
 
-        // Accessing the MainActivity Elements
-        var mainView = inflater.inflate(R.layout.activity_main, container, false)
-        var navigationBar = mainView.findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
         var transaction = this.parentFragmentManager.beginTransaction()
 
@@ -114,12 +115,42 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
             transaction.commit()
         }
         allProfiles.setOnClickListener {
-
+            var intent = Intent(view.context, AllProfilesActivity::class.java)
+            startActivity(intent)
         }
 
+        profile.setOnClickListener {
+            var intent = Intent(activity, UserDetailsActivity::class.java)
+            intent.putExtra("username", displayName )
+            intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
+            intent.putExtra("parent", "MoreFragment")
+            startActivity(intent)
+        }
+
+        // setUpProfileImage
+        setUpProfileImage()
         return view
     }
 
+    private fun setUpProfileImage() {
+        userDao = UsersDao()
+
+        userDao.ref.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val profileImage = snapshot.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("userImage").getValue(String::class.java).toString()
+                displayName = snapshot.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
+                if(profileImage.isNotEmpty() && !profileImage.equals("null")){
+                    view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+    }
 
 
     private fun setUpJobRecyclerView(view: View) {
@@ -174,7 +205,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     private fun setUpBlogRecyclerView() {
         postDao = BlogDao()
         val postsCollections = postDao.postCollections
-        val query = postsCollections.orderBy("createdAt", Query.Direction.DESCENDING)
+        val query = postsCollections.orderBy("heading", Query.Direction.DESCENDING)
         val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Blog>().setQuery(query, Blog::class.java).build()
 
         adapter = BlogsAdapter(recyclerViewOptions, this, R.layout.home_blog_item)

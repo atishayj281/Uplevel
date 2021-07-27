@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class BlogDao {
 
     val db = FirebaseFirestore.getInstance()
-    val postCollections = db.collection("posts")
+    val postCollections = db.collection("Blogs")
     val auth = Firebase.auth
 
     fun addPost(text: String, title: String="") {
@@ -27,9 +27,6 @@ class BlogDao {
             userDao.ref.addListenerForSingleValueEvent(object: ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     user = snapshot.child(currentUserId).getValue(Users::class.java)!!
-                    val currentTime = System.currentTimeMillis()
-                    val post = Blog(text,title, user, currentTime)
-                    post.let { postCollections.document().set(it) }
                 }
                 override fun onCancelled(error: DatabaseError) {
 

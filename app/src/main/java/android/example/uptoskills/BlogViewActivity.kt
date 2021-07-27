@@ -32,11 +32,11 @@ class BlogViewActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             blog = blogDao.getBlogById(BlogId.toString()).await().toObject(Blog::class.java)!!
             withContext(Dispatchers.Main) {
-                binding.blogHeading.text = blog.title
-                binding.blogView.text = blog.text
-                binding.creatorName.text = blog.createdBy.displayName
+                binding.blogHeading.text = blog.heading
+                binding.blogView.text = blog.description
+                binding.creatorName.text = blog.createdBy
                 binding.blogViewProgressBar.visibility = View.GONE
-                Glide.with(this@BlogViewActivity).load(blog.createdBy.userImage).circleCrop().into(binding.creatorImage)
+                Glide.with(this@BlogViewActivity).load(blog.image).centerCrop().into(binding.creatorImage)
             }
         }
 

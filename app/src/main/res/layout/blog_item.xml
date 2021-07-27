@@ -1,85 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/blog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginRight="15dp"
     android:layout_marginLeft="15dp"
     android:layout_marginTop="10dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="1dp"
-    android:paddingBottom="10dp"
+    android:layout_marginRight="15dp"
     android:layout_marginBottom="10dp"
-    android:id="@+id/blog">
+    android:paddingBottom="10dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="1dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/userImage"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            app:srcCompat="@drawable/person"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/blogImage"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/userName"
-            android:layout_width="0dp"
-            style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
+            android:id="@+id/blogHeading"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@id/userImage"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/userImage"
-            android:layout_marginStart="12dp" />
-
-        <TextView
-            android:id="@+id/createdAt"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:textColor="#797979"
-            android:layout_marginTop="4dp"
-            app:layout_constraintLeft_toRightOf="@id/userImage"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userName"
-            android:layout_marginStart="12dp" />
-
-        <TextView
-            android:id="@+id/postTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:maxLines="2"
+            android:layout_below="@id/blogImage"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
             android:ellipsize="end"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userImage" />
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/black"/>
 
-        <TextView
-            android:id="@+id/post"
-            android:layout_width="0dp"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/blogDescription"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:textSize="12sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/postTitle"
-            android:maxLines="2"
-            android:ellipsize="end"/>
+            android:layout_below="@id/blogHeading"
+            android:layout_margin="10dp"
+            android:ellipsize="end"
+            android:maxLines="2" />
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+    </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

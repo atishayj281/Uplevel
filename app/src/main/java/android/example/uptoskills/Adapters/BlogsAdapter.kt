@@ -3,11 +3,13 @@ package android.example.uptoskills.Adapters
 import android.example.uptoskills.models.Blog
 import android.example.uptoskills.R
 import android.example.uptoskills.Utils
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -21,12 +23,10 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
 ) {
 
     class BLogViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val posttitle: TextView = itemView.findViewById(R.id.postTitle)
-        val postText: TextView = itemView.findViewById(R.id.post)
-        val userText: MaterialTextView = itemView.findViewById(R.id.userName)
-        val createdAt: TextView = itemView.findViewById(R.id.createdAt)
-        val userImage: ImageView = itemView.findViewById(R.id.userImage)
-        val blog: MaterialCardView = itemView.findViewById(R.id.blog)
+        val blogImage: ImageView = itemView.findViewById(R.id.blogImage)
+        val blogHeading: MaterialTextView = itemView.findViewById(R.id.blogHeading)
+        val description: MaterialTextView = itemView.findViewById(R.id.blogDescription)
+        val blog: CardView = itemView.findViewById(R.id.blog)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BLogViewHolder {
@@ -38,14 +38,9 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
     }
 
     override fun onBindViewHolder(holder: BLogViewHolder, position: Int, model: Blog) {
-        holder.posttitle.text = model.title
-        holder.postText.text = model.text
-        holder.userText.text = model.createdBy.displayName
-        if(model.createdBy.userImage.isNotEmpty() && model.createdBy.userImage != "null"){
-            Glide.with(holder.userImage.context).load(model.createdBy.userImage).circleCrop().into(holder.userImage)
-        }
-
-        holder.createdAt.text = Utils.getTimeAgo(model.createdAt)
+        holder.blogHeading.text = model.heading
+        holder.description.text = model.description
+        Glide.with(holder.blogImage.context).load(model.image).centerCrop().into(holder.blogImage)
     }
 }
 
