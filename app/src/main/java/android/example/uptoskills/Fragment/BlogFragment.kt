@@ -4,7 +4,6 @@ import android.content.Intent
 import android.example.uptoskills.Adapters.BlogsAdapter
 import android.example.uptoskills.Adapters.IBlogAdapter
 import android.example.uptoskills.BlogViewActivity
-import android.example.uptoskills.CreateBlogActivity
 import android.example.uptoskills.R
 import android.example.uptoskills.daos.BlogDao
 import android.example.uptoskills.models.Blog
@@ -17,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
@@ -60,13 +58,6 @@ class BlogFragment : Fragment(), IBlogAdapter {
         progressBar = view.findViewById(R.id.blogProgressBar)
         progressBar.visibility = View.VISIBLE
 
-        var postButton = view.findViewById<FloatingActionButton>(R.id.fab)
-        postButton.setOnClickListener{
-            var transaction = parentFragmentManager.beginTransaction()
-            var intent = Intent(view.context, CreateBlogActivity::class.java)
-            startActivity(intent)
-            transaction.commit()
-        }
 
         setUpRecyclerView()
 

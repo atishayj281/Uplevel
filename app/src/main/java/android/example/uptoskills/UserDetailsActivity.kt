@@ -1,6 +1,7 @@
 package android.example.uptoskills
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityUserDetailsBinding
 import android.example.uptoskills.models.Users
@@ -9,6 +10,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ShareCompat
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -24,6 +29,10 @@ class UserDetailsActivity : AppCompatActivity() {
     private val imageRequestCode = 123
     private lateinit var ProfileimageUrl: Uri
     private var isImageChoose: Boolean = false
+    private var isResumeSelected: Boolean = false
+    private val resumeRequestCode: Int = 2
+    private val READ_EXTERNAL_STORAGE_CODE: Int = 9
+    private lateinit var resumeUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,37 +56,59 @@ class UserDetailsActivity : AppCompatActivity() {
             else{
                     displayName = intent.getStringExtra("username").toString()
             }
-            var usr =
-                Users(binding.fullName.editText?.text.toString(),
-                    displayName,
-                    binding.email.text.toString(),
-                    binding.college.text.toString(),
-                    binding.education.text.toString(),
-                    binding.currentJob.text.toString(),
-                    intent.getStringExtra("userImage").toString(),
-                    binding.mobile.text.toString(),
-                    id.toString())
 
-            if(isImageChoose){
-                userDao.uploadProfileImage(ProfileimageUrl, usr, this, id.toString())
-                isImageChoose = false
-            } else {
-                userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        var ref = snapshot.child(auth.uid.toString())
-                        if(ref != null) {
-                            usr.userImage = ref.child("userImage").getValue(String::class.java).toString()
+
+            // Updating Resume and ProfileImage
+            userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var ref = snapshot.child(auth.currentUser?.uid.toString())
+                    if(ref.exists()) {
+                        var usr =
+                            Users(binding.fullName.editText?.text.toString(),
+                                displayName,
+                                binding.email.text.toString(),
+                                binding.college.text.toString(),
+                                binding.education.text.toString(),
+                                binding.currentJob.text.toString(),
+                                ref.child("userImage").getValue(String::class.java).toString(),
+                                binding.mobile.text.toString(),
+                                id.toString(), ref.child("resume").getValue(String::class.java).toString())
+                        if(ref.child("resume").getValue(String::class.java).toString().isNotEmpty()){
+                            binding.resumeImage.setImageResource(R.drawable.ic_resume)
+                        }
+
+                        if(isImageChoose && isResumeSelected) {
+                            if(ProfileimageUrl.toString().isNotEmpty() && resumeUri.toString().isNotEmpty()){
+                                userDao.uploadResumeWithImage(resumeUri, ProfileimageUrl, usr, this@UserDetailsActivity, id.toString())
+                                isImageChoose = false
+                                isResumeSelected = false
+                            }
+                        }
+                        else if(isResumeSelected) {
+
+                            userDao.uploadResume(resumeUri, usr, this@UserDetailsActivity, id.toString())
+                            isResumeSelected = false
+
+                        }
+                        else if(isImageChoose){
+
+                            userDao.uploadProfileImage(ProfileimageUrl, usr, this@UserDetailsActivity, id.toString())
+                            isImageChoose = false
+
+                        } else {
                             userDao.addUser(usr, id.toString())
                         }
+
+                        Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
+                        binding.userDetailsProgressBar.visibility = View.GONE
+                        updateProfile()
                     }
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-                })
-            }
-            Toast.makeText(this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
-            binding.userDetailsProgressBar.visibility = View.GONE
-            updateProfile()
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+
 
             var isNewUser:String = intent.getStringExtra("Activity").toString()
             if(isNewUser.equals("NewUser")) {
@@ -90,6 +121,52 @@ class UserDetailsActivity : AppCompatActivity() {
         binding.addProfileImage.setOnClickListener{
             filechoser()
         }
+
+        // choose and upload the resume
+        binding.uploadResume.setOnClickListener {
+            // Checking the Permissions
+            if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                resumeChooser()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), READ_EXTERNAL_STORAGE_CODE)
+            }
+
+        }
+
+        binding.resumeImage.setOnClickListener {
+            userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var ref = snapshot.child(auth.currentUser?.uid.toString())
+                    if(ref.exists()) {
+                        var resumeUrl = ref.child("resume").getValue(String::class.java).toString()
+                        val builder = CustomTabsIntent.Builder()
+                        val customTabsIntent = builder.build()
+                        customTabsIntent.launchUrl(this@UserDetailsActivity, Uri.parse(resumeUrl))
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        if(requestCode == READ_EXTERNAL_STORAGE_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            resumeChooser()
+        }
+    }
+
+    private fun resumeChooser() {
+        isResumeSelected = true
+        var intent: Intent = Intent()
+        intent.type = "application/pdf"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, resumeRequestCode)
     }
 
     // Select the image file
@@ -109,6 +186,9 @@ class UserDetailsActivity : AppCompatActivity() {
         if(requestCode == imageRequestCode && resultCode == RESULT_OK && data?.data != null) {
             ProfileimageUrl = data.data!!
             binding.profileImage.setImageURI(ProfileimageUrl)
+        } else if(requestCode == resumeRequestCode && resultCode == RESULT_OK && data?.data != null) {
+            resumeUri = data.data!! // Return the pdf uri
+            binding.resumeImage.setImageResource(R.drawable.ic_resume)
         }
     }
 

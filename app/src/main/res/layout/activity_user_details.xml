@@ -88,6 +88,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:hint="Full Name">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -103,6 +104,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:hint="Mobile No.">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -118,7 +120,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:hint="Highest Education">
+                        android:hint="Highest Education"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/education"
@@ -133,7 +136,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:hint="Current Job">
+                        android:hint="Current Job"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/currentJob"
@@ -147,7 +151,8 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Organisation">
+                        android:hint="Organisation"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/college"
@@ -163,6 +168,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:hint="E-Mail"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         >
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -173,6 +179,38 @@
                             android:drawablePadding="10dp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Resume"
+                        android:textStyle="bold"
+                        />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/resumeImage"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:srcCompat="@drawable/ic_pdf"
+                            />
+
+                        <TextView
+                            android:id="@+id/uploadResume"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Upload Resume"
+                            android:textColor="@color/AndroidGreen"
+                            android:layout_gravity="right|center_vertical"
+                            android:textSize="16sp"
+                            android:textStyle="bold"/>
+
+                    </FrameLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/submit"

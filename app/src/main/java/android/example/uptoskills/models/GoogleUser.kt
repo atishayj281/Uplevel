@@ -8,4 +8,5 @@ data class GoogleUser(val uid: String = "",
                       val email: String="",
                       val college_name: String="",
                       val userImage: String="",
-                      val mobileNo: String="")
+                      val mobileNo: String="",
+                      val resume: String="")

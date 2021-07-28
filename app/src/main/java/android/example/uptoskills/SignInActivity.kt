@@ -1,7 +1,9 @@
 package android.example.uptoskills
 
 import android.content.Intent
+import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivitySignInBinding
+import android.example.uptoskills.models.Users
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,6 +16,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -24,11 +29,14 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var binding: ActivitySignInBinding
     private lateinit var db: FirebaseFirestore
+    private lateinit var userDao: UsersDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        userDao = UsersDao()
 
         db = FirebaseFirestore.getInstance()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -144,6 +152,20 @@ class SignInActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if(user != null) {
+            userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var ref = snapshot.child(auth.uid.toString())
+                    if(!ref.exists()) {
+                        var user: Users = Users(auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
+                            auth.currentUser?.email.toString(), "", "", "",
+                            auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "")
+                        userDao.addUser(user, auth.currentUser?.uid.toString())
+                    }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
             binding.signInprogressbar.visibility = View.VISIBLE
             startMainActivity()
         }
