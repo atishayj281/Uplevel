@@ -33,7 +33,8 @@
                         android:padding="2dp"
                         android:layout_centerVertical="true"
                         android:scaleType="centerCrop"
-                        android:background="@drawable/profile_image_background"/>
+                        android:src="@drawable/profile_image_background"
+                        />
 
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -189,6 +189,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
                 val profileImage = snapshot.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("userImage").getValue(String::class.java).toString()
                 displayName = snapshot.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
                 if(profileImage.isNotEmpty() && !profileImage.equals("null")){
+                    profile.setImageResource(R.drawable.image_circle)
                     view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
                 }
             }

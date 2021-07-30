@@ -4,6 +4,7 @@ import android.content.Intent
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivitySignInBinding
 import android.example.uptoskills.models.Users
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -59,7 +60,7 @@ class SignInActivity : AppCompatActivity() {
         }
 
         binding.SignInWithEmail.setOnClickListener {
-            if(binding.email.text.toString().length != 0 && binding.password.text.toString().length != 0){
+            if(binding.email.text.toString().isNotBlank() && binding.password.text.toString().isNotBlank()){
                 binding.signInprogressbar.visibility = View.VISIBLE
                 auth.signInWithEmailAndPassword(binding.email.text.toString(), binding.password.text.toString())
                     .addOnCompleteListener{
@@ -72,7 +73,18 @@ class SignInActivity : AppCompatActivity() {
                         binding.signInprogressbar.visibility = View.GONE
                     }
                 }
+            } else {
+                binding.signInprogressbar.visibility = View.GONE
+                if(binding.emailHeading.text.isBlank()){
+                    binding.emailHeading.text = "Email*"
+                    binding.emailHeading.setTextColor(Color.parseColor("#A30000"))
+                }
 
+                if(binding.emailHeading.text.isBlank()){
+                    binding.passwordheading.text = "Password*"
+                    binding.passwordheading.setTextColor(Color.parseColor("#A30000"))
+                }
+                Toast.makeText(this, "Please fill the required details", Toast.LENGTH_SHORT).show()
             }
 
         }

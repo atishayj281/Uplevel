@@ -94,10 +94,11 @@
 
 
                 <TextView
+                    android:id="@+id/emailHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
-                    android:text="Email or Username"
+                    android:text="Email"
                     android:textColor="@color/black"
                     android:textSize="13.3sp" />
 
@@ -120,6 +121,7 @@
                     android:background="#d5d5d5" />
 
                 <TextView
+                    android:id="@+id/passwordheading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30.3dp"

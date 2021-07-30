@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityUserDetailsBinding
 import android.example.uptoskills.models.Users
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
@@ -204,15 +205,16 @@ class UserDetailsActivity : AppCompatActivity() {
         userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var ref = snapshot.child(auth.uid.toString())
-                binding.fullName.editText?.setText(ref.child("full_name").value.toString())
-                binding.mobile.setText(ref.child("mobileNo").value.toString())
-                binding.college.setText(ref.child("college_name").value.toString())
-                binding.currentJob.setText(ref.child("job").value.toString())
-                binding.education.setText(ref.child("education").value.toString())
-                binding.username.setText(ref.child("displayName").value.toString())
-                binding.email.setText(ref.child("email").value.toString())
+                binding.fullName.editText?.setText(if(ref.child("full_name").value.toString() != "null") ref.child("full_name").value.toString() else "")
+                binding.mobile.setText(if(ref.child("mobileNo").value.toString() != "null") ref.child("mobileNo").value.toString() else "")
+                binding.college.setText(if(ref.child("college_name").value.toString() != "null") ref.child("college_name").value.toString() else "")
+                binding.currentJob.setText(if(ref.child("job").value.toString() != "null") ref.child("job").value.toString() else "")
+                binding.education.setText(if(ref.child("education").value.toString() != "null") ref.child("education").value.toString() else "")
+                binding.username.setText(if(ref.child("displayName").value.toString() != "null") ref.child("displayName").value.toString() else "")
+                binding.email.setText(if(ref.child("email").value.toString() != "null") ref.child("email").value.toString() else "")
                 var image: String = ref.child("userImage").value.toString()
                 if(image.isNotEmpty() && image != "null") {
+                    binding.profileImage.setImageResource(R.drawable.image_circle)
                     Glide.with(binding.profileImage.context).load(image).circleCrop().into(binding.profileImage)
                 }
                 binding.userDetailsProgressBar.visibility = View.GONE
