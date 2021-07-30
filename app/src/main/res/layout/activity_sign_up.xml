@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,6 +10,13 @@
     android:paddingRight="23dp"
     android:background="@drawable/mainbackground"
     tools:context=".SignUpActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
 
     <TextView
         android:id="@+id/signUpheading"
@@ -41,27 +48,40 @@
         android:text="Use Your Email Address"
         />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/SignUpWithFaceBook"
+    <FrameLayout
+        android:id="@+id/facebookButtonContainer"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_below="@id/SignUpWithEmail"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="65dp"
-        android:layout_marginRight="23dp"
-        android:text="Continue With FaceBook"
-        android:drawableLeft="@drawable/ic_icons_facebook"
-        android:paddingLeft="17dp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:backgroundTint="@color/com_facebook_blue"
-        />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/SignUpWithEmail">
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebook_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/SignUpWithFaceBook"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginLeft="23dp"
+            android:layout_marginTop="65dp"
+            android:layout_marginRight="23dp"
+            android:text="Continue With FaceBook"
+            android:drawableLeft="@drawable/ic_icons_facebook"
+            android:paddingLeft="17dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:backgroundTint="@color/com_facebook_blue"
+            />
+
+    </FrameLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/SignUpWithGoogle"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        android:layout_below="@id/SignUpWithFaceBook"
+        android:layout_below="@id/facebookButtonContainer"
         android:layout_marginLeft="23dp"
         android:layout_marginTop="23dp"
         android:layout_marginRight="23dp"
@@ -99,4 +119,13 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/signUpProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/AndroidGreen"
+        android:visibility="gone"/>
+</FrameLayout>

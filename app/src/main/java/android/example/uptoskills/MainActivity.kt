@@ -4,8 +4,9 @@ import android.example.uptoskills.Fragment.*
 import android.example.uptoskills.databinding.ActivityMainBinding
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HomeFragment.onMenuItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -22,30 +23,27 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnNavigationItemSelectedListener {
 
             val transaction = supportFragmentManager.beginTransaction()
-
             when(it.itemId){
                 R.id.home -> transaction.replace(R.id.container, HomeFragment())
                 R.id.Job -> transaction.replace(R.id.container, JobFragment())
                 R.id.courses -> transaction.replace(R.id.container, CourseFragment())
                 R.id.Blog -> transaction.replace(R.id.container, BlogFragment())
-                R.id.More -> transaction.replace(R.id.container, MoreFragment())
             }
 
             transaction.commit()
             true
         }
-
     }
 
     override fun onBackPressed() {
-
         if(binding.bottomNavigation.selectedItemId == R.id.home){
-            super.onBackPressed()
-        } else {
-            binding.bottomNavigation.selectedItemId = R.id.home
+            finish()
         }
+        super.onBackPressed()
+    }
 
-
+    override fun onItemSelected(itemId: Int) {
+        binding.bottomNavigation.selectedItemId = itemId
     }
 }
 

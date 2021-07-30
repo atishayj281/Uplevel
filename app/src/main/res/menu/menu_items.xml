@@ -21,10 +21,5 @@
         android:title="Blog"
         android:icon="@drawable/ic_blog"
         />
-    <item
-        android:id="@+id/More"
-        android:title="More"
-        android:icon="@drawable/ic_more"
-        />
 
 </menu>

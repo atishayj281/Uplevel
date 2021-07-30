@@ -26,8 +26,8 @@ class CreateAccountActivity : AppCompatActivity() {
 
         binding.crtaccount.setOnClickListener {
             binding.createAccountProgressBar.visibility = View.VISIBLE
-            if(binding.crtemail.text.toString().isNotEmpty() && binding.crtpass.text.toString()
-                    .isNotEmpty()
+            if(binding.crtemail.text.toString().isNotBlank() && binding.crtpass.text.toString()
+                    .isNotBlank() && binding.crtUsername.text.isNotBlank()
             ){
                 auth.createUserWithEmailAndPassword(binding.crtemail.text.toString(), binding.crtpass.text.toString()).addOnCompleteListener {
                     if(it.isSuccessful){
@@ -52,6 +52,10 @@ class CreateAccountActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT).show()
                     }
                 }
+            } else {
+                binding.createAccountProgressBar.visibility = View.GONE
+                Toast.makeText(this, "Please Fill the required details",
+                    Toast.LENGTH_SHORT).show()
             }
         }
     }

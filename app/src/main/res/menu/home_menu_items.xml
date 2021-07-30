@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <group
+
+        android:id="@+id/navItems"
+        android:checkableBehavior="single"
+        >
+
+        <item
+            android:id="@+id/home"
+            android:title="Home"
+            android:icon="@drawable/ic_home"
+            />
+        <item
+            android:id="@+id/Job"
+            android:title="Job"
+            android:icon="@drawable/ic_baseline_card_travel_24"
+            />
+        <item
+            android:id="@+id/courses"
+            android:title="Courses"
+            android:icon="@drawable/ic_outline_library_books_24"
+            />
+        <item
+            android:id="@+id/Blog"
+            android:title="Blog"
+            android:icon="@drawable/ic_blog"
+            />
+
+        <item
+            android:id="@+id/LogOut"
+            android:icon="@drawable/ic__exit"
+            android:title="LogOut"
+            />
+
+
+
+
+    </group>
+
+
+</menu>

@@ -210,7 +210,7 @@ class UserDetailsActivity : AppCompatActivity() {
                 binding.currentJob.setText(ref.child("job").value.toString())
                 binding.education.setText(ref.child("education").value.toString())
                 binding.username.setText(ref.child("displayName").value.toString())
-                binding.email.setText(auth.currentUser?.email)
+                binding.email.setText(ref.child("email").value.toString())
                 var image: String = ref.child("userImage").value.toString()
                 if(image.isNotEmpty() && image != "null") {
                     Glide.with(binding.profileImage.context).load(image).circleCrop().into(binding.profileImage)

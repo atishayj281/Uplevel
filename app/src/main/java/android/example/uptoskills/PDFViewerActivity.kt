@@ -5,13 +5,7 @@ import android.example.uptoskills.databinding.ActivityPdfviewerBinding
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
-import com.github.barteksc.pdfviewer.listener.OnFileDownloadCompleteListener
-import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener
-import com.github.barteksc.pdfviewer.listener.OnPageChangeListener
-import java.io.File
 
 class PDFViewerActivity : AppCompatActivity() {
 

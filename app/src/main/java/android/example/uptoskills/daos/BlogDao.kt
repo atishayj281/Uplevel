@@ -19,22 +19,6 @@ class BlogDao {
     val postCollections = db.collection("Blogs")
     val auth = Firebase.auth
 
-    fun addPost(text: String, title: String="") {
-        GlobalScope.launch {
-            val currentUserId = auth.currentUser!!.uid
-            val userDao = UsersDao()
-            var user: Users
-            userDao.ref.addListenerForSingleValueEvent(object: ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    user = snapshot.child(currentUserId).getValue(Users::class.java)!!
-                }
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
-        }
-    }
 
     fun getBlogById(postId: String): Task<DocumentSnapshot> {
         return postCollections.document(postId).get()
