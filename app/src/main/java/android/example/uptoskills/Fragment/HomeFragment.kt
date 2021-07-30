@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -79,6 +81,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     private lateinit var navigationView: NavigationView
     var menuItemSelectedId: Int = -1
     private lateinit var menuItemSelectedListener: onMenuItemSelectedListener
+    private lateinit var auth: FirebaseAuth
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -100,6 +103,8 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     ): View? {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        auth = FirebaseAuth.getInstance()
 
         toolbar = view.findViewById(R.id.hometoolBar)
         drawerLayout = view.findViewById(R.id.homedrawerLayout)
@@ -174,11 +179,52 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
             intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
             intent.putExtra("parent", "MoreFragment")
             startActivity(intent)
+            activity?.finish()
         }
 
+        // setUp Navigation header Profile click
+        val navigationView = view.findViewById<NavigationView>(R.id.homeNavigationView)
+        val headerView: View = navigationView.getHeaderView(0)
+        headerView.findViewById<MaterialCardView>(R.id.profile).setOnClickListener {
+            var intent = Intent(activity, UserDetailsActivity::class.java)
+            intent.putExtra("username", displayName )
+            intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
+            intent.putExtra("parent", "MoreFragment")
+            startActivity(intent)
+            activity?.finish()
+        }
         // setUpProfileImage
         setUpProfileImage()
+
+        //set NavigationViewheader
+        setUpNavigationViewHeader(view)
         return view
+    }
+
+    private fun setUpNavigationViewHeader(view: View) {
+        val navigationView = view.findViewById<NavigationView>(R.id.homeNavigationView)
+        val headerView: View = navigationView.getHeaderView(0)
+        val username: TextView = headerView.findViewById(R.id.username)
+        val email: TextView = headerView.findViewById(R.id.email)
+        var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
+
+
+        userDao.ref.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val profileImage = snapshot.child(auth.currentUser!!.uid).child("userImage").getValue(String::class.java).toString()
+                username.text = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
+                email.text = snapshot.child(auth.currentUser?.uid.toString()).child("email").getValue(String::class.java).toString()
+                if(profileImage.isNotEmpty() && !profileImage.equals("null")){
+                    profile.setImageResource(R.drawable.image_circle)
+                    view.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     private fun setUpProfileImage() {
@@ -186,7 +232,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
 
         userDao.ref.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                val profileImage = snapshot.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("userImage").getValue(String::class.java).toString()
+                val profileImage = snapshot.child(auth.currentUser!!.uid).child("userImage").getValue(String::class.java).toString()
                 displayName = snapshot.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
                 if(profileImage.isNotEmpty() && !profileImage.equals("null")){
                     profile.setImageResource(R.drawable.image_circle)
