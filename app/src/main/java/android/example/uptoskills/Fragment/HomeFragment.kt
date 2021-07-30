@@ -46,14 +46,17 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+
+interface onMenuItemSelectedListener{
+    fun onItemSelected(itemId: Int)
+}
+
 class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, IProfileAdapter {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    interface onMenuItemSelectedListener{
-        fun onItemSelected(itemId: Int)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +105,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
-        var view = inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -152,10 +155,10 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         progressBar.visibility = View.GONE
 
         // Initialising "view All" textViews
-        var allCourses = view.findViewById<TextView>(R.id.viewAllCourses)
-        var allBlogs = view.findViewById<TextView>(R.id.viewAllBlogs)
-        var allJobs = view.findViewById<TextView>(R.id.viewAllJobs)
-        var allProfiles = view.findViewById<TextView>(R.id.viewAllProfiles)
+        val allCourses = view.findViewById<TextView>(R.id.viewAllCourses)
+        val allBlogs = view.findViewById<TextView>(R.id.viewAllBlogs)
+        val allJobs = view.findViewById<TextView>(R.id.viewAllJobs)
+        val allProfiles = view.findViewById<TextView>(R.id.viewAllProfiles)
 
         // Set OnClickListeners
         allCourses.setOnClickListener {
@@ -170,7 +173,6 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         allProfiles.setOnClickListener {
             var intent = Intent(view.context, AllProfilesActivity::class.java)
             startActivity(intent)
-            activity?.finish()
         }
 
         profile.setOnClickListener {
@@ -179,7 +181,6 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
             intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
             intent.putExtra("parent", "MoreFragment")
             startActivity(intent)
-            activity?.finish()
         }
 
         // setUp Navigation header Profile click
@@ -191,7 +192,6 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
             intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
             intent.putExtra("parent", "MoreFragment")
             startActivity(intent)
-            activity?.finish()
         }
         // setUpProfileImage
         setUpProfileImage()

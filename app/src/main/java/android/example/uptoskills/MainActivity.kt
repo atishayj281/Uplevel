@@ -5,8 +5,9 @@ import android.example.uptoskills.databinding.ActivityMainBinding
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.browser.browseractions.BrowserActionsIntent
 
-class MainActivity : AppCompatActivity(), HomeFragment.onMenuItemSelectedListener {
+class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
 
     private lateinit var binding: ActivityMainBinding
 
@@ -37,9 +38,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.onMenuItemSelectedListene
 
     override fun onBackPressed() {
         if(binding.bottomNavigation.selectedItemId == R.id.home){
-            finish()
+            super.onBackPressed()
+        } else {
+            binding.bottomNavigation.selectedItemId = R.id.home
         }
-        super.onBackPressed()
+
     }
 
     override fun onItemSelected(itemId: Int) {

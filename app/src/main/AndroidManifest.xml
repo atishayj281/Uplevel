@@ -21,7 +21,8 @@
         <activity android:name=".PDFViewerActivity"></activity>
         <activity
             android:name=".AllProfilesActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            />
         <activity android:name=".UserDetailsActivity" />
         <activity android:name=".BlogViewActivity" />
         <activity
@@ -36,7 +37,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:launchMode="singleInstance"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
