@@ -13,11 +13,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/baloo2_regular</item>
+        <item name="android:textColorPrimary">@color/black</item>
     </style>
 
     <style name="Theme.SignIn" parent="Theme.MaterialComponents.DayNight.Bridge">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">#3cd395</item>
         <item name="colorPrimaryVariant">@color/colorTransparentWhite</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -27,6 +28,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
 
     <style name="Theme.App" parent="Theme.MaterialComponents">

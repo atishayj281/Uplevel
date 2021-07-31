@@ -7,23 +7,11 @@
     android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/courseheading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Courses"
-        android:textSize="20sp"
-        android:padding="15dp"
-        android:textColor="@color/black"
-        android:background="@color/AndroidGreen"
-        android:elevation="7dp"
-        android:textStyle="bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/courseRecyclerview"
-        android:layout_below="@id/courseheading"
         />
 
 

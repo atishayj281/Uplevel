@@ -10,11 +10,6 @@
         >
 
         <item
-            android:id="@+id/home"
-            android:title="Home"
-            android:icon="@drawable/ic_home"
-            />
-        <item
             android:id="@+id/Job"
             android:title="Job"
             android:icon="@drawable/ic_baseline_card_travel_24"
@@ -35,9 +30,18 @@
             android:icon="@drawable/ic__exit"
             android:title="LogOut"
             />
+    </group>
 
 
+    <group>
 
+        <item
+            android:id="@+id/privacyPolicy"
+            android:title="Privacy Policy"/>
+
+        <item
+            android:id="@+id/TermsCondition"
+            android:title="Terms and condition"/>
 
     </group>
 

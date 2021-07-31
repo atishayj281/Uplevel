@@ -11,19 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/jobHeading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:layout_marginBottom="20dp"
-            android:text="Open Jobs"
-            android:textColor="@color/black"
-            android:background="@color/AndroidGreen"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:elevation="7dp"
-            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Jobsrecyclerview"

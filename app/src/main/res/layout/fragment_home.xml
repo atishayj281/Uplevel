@@ -1,65 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/homedrawerLayout"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="left"
     tools:context=".Fragment.HomeFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbarlayout"
-            style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:liftOnScroll="true">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/hometoolBar"
-                style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/AndroidGreen"
-                app:navigationIcon="@drawable/ic_menu">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:layout_width="152dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="0.8"
-                        app:srcCompat="@drawable/uptoskills" />
-
-                    <ImageView
-                        android:id="@+id/profileImage"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginBottom="12dp"
-                        app:srcCompat="@drawable/ic_profile" />
-                </LinearLayout>
-
-            </com.google.android.material.appbar.MaterialToolbar>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/appbarlayout"
             android:orientation="vertical">
 
             <LinearLayout
@@ -264,12 +219,4 @@
 
     </RelativeLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/homeNavigationView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:menu="@menu/home_menu_items"
-        app:headerLayout="@layout/home_navigation_header_layout"/>
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</RelativeLayout>

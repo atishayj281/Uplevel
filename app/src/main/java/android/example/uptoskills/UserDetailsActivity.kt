@@ -41,7 +41,6 @@ class UserDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.userDetailsProgressBar.visibility = View.VISIBLE
 
-
         auth = FirebaseAuth.getInstance()
         val id = intent.getStringExtra("id")
         userDao = UsersDao()
@@ -118,6 +117,7 @@ class UserDetailsActivity : AppCompatActivity() {
 
         }
 
+
         //choose and set Profile Image
         binding.addProfileImage.setOnClickListener{
             filechoser()
@@ -134,7 +134,9 @@ class UserDetailsActivity : AppCompatActivity() {
 
         }
 
+        // download resume
         binding.resumeImage.setOnClickListener {
+            binding.userDetailsProgressBar.visibility = View.VISIBLE
             userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var ref = snapshot.child(auth.currentUser?.uid.toString())
@@ -143,6 +145,7 @@ class UserDetailsActivity : AppCompatActivity() {
                         val builder = CustomTabsIntent.Builder()
                         val customTabsIntent = builder.build()
                         customTabsIntent.launchUrl(this@UserDetailsActivity, Uri.parse(resumeUrl))
+                        binding.userDetailsProgressBar.visibility = View.GONE
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
@@ -217,11 +220,12 @@ class UserDetailsActivity : AppCompatActivity() {
                     binding.profileImage.setImageResource(R.drawable.image_circle)
                     Glide.with(binding.profileImage.context).load(image).circleCrop().into(binding.profileImage)
                 }
+                if(ref.child("resume").value.toString().isNotBlank()) {
+                    binding.resumeImage.setImageResource(R.drawable.ic_resume)
+                }
                 binding.userDetailsProgressBar.visibility = View.GONE
 
             }
-
-
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
