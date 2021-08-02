@@ -12,6 +12,7 @@ import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.viewpager.widget.ViewPager
@@ -33,6 +34,8 @@ class OnBoardingActivity : AppCompatActivity() {
             var window: Window = this.window
             window.statusBarColor = ContextCompat.getColor(this, R.color.white)
         }
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         if(!isFirstTimeStartApp()){
             startMainActivity()

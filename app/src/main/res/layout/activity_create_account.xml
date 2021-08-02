@@ -152,7 +152,6 @@
                     android:layout_marginRight="32dp"
                     android:padding="10dp"
                     android:src="@drawable/black_arrow"
-
                     />
 
             </LinearLayout>

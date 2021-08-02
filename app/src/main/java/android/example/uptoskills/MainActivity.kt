@@ -11,7 +11,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.browser.browseractions.BrowserActionsIntent
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
 import com.facebook.FacebookSdk
@@ -140,12 +139,11 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
                 displayName = snapshot.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
                 if(profileImage.isNotEmpty() && !profileImage.equals("null")){
                     profile.setImageResource(R.drawable.image_circle)
-                    this@MainActivity?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
+                    this@MainActivity.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
         })
@@ -172,7 +170,6 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
         })

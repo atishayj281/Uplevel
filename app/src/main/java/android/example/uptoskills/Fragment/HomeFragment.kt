@@ -18,21 +18,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.facebook.FacebookSdk.getApplicationContext
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -114,10 +103,20 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
 
 
         progressBar.visibility = View.VISIBLE
-        courseRecyclerView = view.findViewById(R.id.Courserecyclerview)
+
+        // setUp Free Courses RecyclerView
+        courseRecyclerView = view.findViewById(R.id.FreeCourserecyclerview)
         courseAdapter = CourseAdapter(view.context, this, R.layout.home_course_item)
         courseRecyclerView.adapter = courseAdapter
         courseRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
+
+        // setUp Paid Courses RecyclerView
+        courseRecyclerView = view.findViewById(R.id.PaidCourserecyclerview)
+        courseAdapter = CourseAdapter(view.context, this, R.layout.home_course_item)
+        courseRecyclerView.adapter = courseAdapter
+        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
+
+
 
         setUpJobRecyclerView(view)
         setUpBlogRecyclerView()
@@ -125,13 +124,17 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         progressBar.visibility = View.GONE
 
         // Initialising "view All" textViews
-        val allCourses = view.findViewById<TextView>(R.id.viewAllCourses)
+        val allFreeCourses = view.findViewById<TextView>(R.id.viewFreeAllCourses)
+        val allPaidCourses = view.findViewById<TextView>(R.id.viewAllPaidCourses)
         val allBlogs = view.findViewById<TextView>(R.id.viewAllBlogs)
         val allJobs = view.findViewById<TextView>(R.id.viewAllJobs)
         val allProfiles = view.findViewById<TextView>(R.id.viewAllProfiles)
 
         // Set OnClickListeners
-        allCourses.setOnClickListener {
+        allFreeCourses.setOnClickListener {
+            menuItemSelectedListener.onItemSelected(R.id.courses)
+        }
+        allPaidCourses.setOnClickListener {
             menuItemSelectedListener.onItemSelected(R.id.courses)
         }
         allBlogs.setOnClickListener {
@@ -183,7 +186,9 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
+                Toast.makeText(view.context, error.message, Toast.LENGTH_SHORT)
+                    .show()
             }
 
         })
@@ -233,7 +238,6 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     }
 
     override fun onProfileClicked(uid: String) {
-        TODO("Not yet implemented")
     }
 }
 

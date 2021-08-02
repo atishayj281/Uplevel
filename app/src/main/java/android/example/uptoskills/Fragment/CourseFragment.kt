@@ -1,26 +1,26 @@
 package android.example.uptoskills.Fragment
 
-import android.example.uptoskills.Adapters.CourseAdapter
-import android.example.uptoskills.Adapters.CourseItemClicked
+import android.example.uptoskills.Adapters.CourseViewPagerAdapter
 import android.example.uptoskills.R
-import android.example.uptoskills.models.Course
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
-class CourseFragment: Fragment(), CourseItemClicked {
+class CourseFragment: Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +30,6 @@ class CourseFragment: Fragment(), CourseItemClicked {
         }
     }
 
-    private lateinit var courseRecyclerView: RecyclerView
-    private lateinit var courseAdapter: CourseAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,10 +37,17 @@ class CourseFragment: Fragment(), CourseItemClicked {
     ): View? {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_course, container, false)
-        courseRecyclerView = view.findViewById(R.id.courseRecyclerview)
-        courseAdapter = CourseAdapter(view.context, this, R.layout.item_course)
-        courseRecyclerView.adapter = courseAdapter
-        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context)
+
+        tabLayout = view.findViewById(R.id.courseTabLayout)
+        viewPager = view.findViewById(R.id.courseViewPager)
+        tabLayout.post { tabLayout.setupWithViewPager(viewPager) }
+
+        var adapter = CourseViewPagerAdapter(parentFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+        adapter.addFragment(FreeCourseFragment(), "Free")
+        adapter.addFragment(PaidCourseFragment(), "Paid")
+        viewPager.adapter = adapter
+
+
 
         return view
     }
@@ -67,9 +72,4 @@ class CourseFragment: Fragment(), CourseItemClicked {
             }
     }
 
-    override fun onCourseCLick(course: Course) {
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
-        view?.let { customTabsIntent.launchUrl(it.context, Uri.parse(course.url)) }
-    }
 }

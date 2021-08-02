@@ -41,6 +41,7 @@ class UserDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.userDetailsProgressBar.visibility = View.VISIBLE
 
+
         auth = FirebaseAuth.getInstance()
         val id = intent.getStringExtra("id")
         userDao = UsersDao()
@@ -102,18 +103,15 @@ class UserDetailsActivity : AppCompatActivity() {
                         Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
                         binding.userDetailsProgressBar.visibility = View.GONE
                         updateProfile()
+                        var isNewUser:String = intent.getStringExtra("Activity").toString()
+                        if(isNewUser == "NewUser") {
+                            startMainActivity()
+                        }
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
                 }
             })
-
-
-            var isNewUser:String = intent.getStringExtra("Activity").toString()
-            if(isNewUser.equals("NewUser")) {
-                startMainActivity()
-            }
 
         }
 
@@ -149,7 +147,6 @@ class UserDetailsActivity : AppCompatActivity() {
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
                 }
             })
         }
@@ -227,10 +224,8 @@ class UserDetailsActivity : AppCompatActivity() {
 
             }
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
-
         })
-
     }
+
 }

@@ -194,7 +194,6 @@ class SignUpActivity : AppCompatActivity() {
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
                 }
             })
             binding.signUpProgressBar.visibility = View.VISIBLE

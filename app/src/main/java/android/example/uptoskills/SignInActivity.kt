@@ -248,7 +248,6 @@ class SignInActivity : AppCompatActivity() {
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
                 }
             })
             binding.signInprogressbar.visibility = View.VISIBLE
