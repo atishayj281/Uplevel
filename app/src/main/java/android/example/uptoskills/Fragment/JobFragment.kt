@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -45,6 +46,7 @@ class JobFragment : Fragment(), JobItemClicked {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: JobAdapter
     private lateinit var progressBar: ProgressBar
+    private lateinit var refreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,12 +58,24 @@ class JobFragment : Fragment(), JobItemClicked {
         recyclerView = view.findViewById(R.id.Jobsrecyclerview)
         progressBar = view.findViewById(R.id.jobProgressBar)
         progressBar.visibility = View.VISIBLE
+        refreshLayout = view.findViewById(R.id.refreshLayout)
 
+        // Setting the jobs
+        setUpJobRecyclerView(view)
+
+        refreshLayout.setOnRefreshListener {
+            setUpJobRecyclerView(view)
+            refreshLayout.handler
+                .postDelayed(Runnable { refreshLayout.isRefreshing = false }, 2000)
+        }
+        return view
+    }
+
+    private fun setUpJobRecyclerView(view: View){
         adapter = JobAdapter(view.context, this, R.layout.job_item)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
         progressBar.visibility = View.GONE
-        return view
     }
 
     companion object {

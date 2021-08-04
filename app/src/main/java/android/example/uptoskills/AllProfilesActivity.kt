@@ -29,7 +29,7 @@ class AllProfilesActivity : AppCompatActivity(), IProfileAdapter {
         userDao = UsersDao()
         var profiles: ArrayList<Users> = ArrayList()
         profileRecyclerView = findViewById(R.id.Profilerecyclerview)
-        profileAdapter = ProfileAdapter(this, this)
+        profileAdapter = ProfileAdapter(this, this, R.layout.profile_view_item)
         profileRecyclerView.layoutManager = LinearLayoutManager(this)
         profileRecyclerView.adapter = profileAdapter
 

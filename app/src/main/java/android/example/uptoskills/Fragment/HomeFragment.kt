@@ -21,6 +21,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -74,6 +75,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     var menuItemSelectedId: Int = -1
     private lateinit var menuItemSelectedListener: onMenuItemSelectedListener
     private lateinit var auth: FirebaseAuth
+    private lateinit var refreshLayout: SwipeRefreshLayout
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -93,8 +95,11 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        refreshLayout = view.findViewById(R.id.swiperefresh)
 
         auth = FirebaseAuth.getInstance()
 
@@ -148,11 +153,16 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
             startActivity(intent)
         }
 
+        // Refreshing fragment
+        refreshLayout.setOnRefreshListener {
+            setUpJobRecyclerView(view)
+            setUpProfileRecyclerView(view)
+            refreshLayout.handler
+                .postDelayed(Runnable { refreshLayout.isRefreshing = false }, 2000)
+        }
+
         return view
     }
-
-
-
 
 
     private fun setUpJobRecyclerView(view: View) {
@@ -169,7 +179,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         if (view != null) {
             profileRecyclerView = view.findViewById(R.id.HomeProfilesrecyclerview)
         }
-        profileAdapter = view?.let { ProfileAdapter(it.context, this) }!!
+        profileAdapter = view?.let { ProfileAdapter(it.context, this, R.layout.profile) }!!
         profileRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
         profileRecyclerView.adapter = profileAdapter
 

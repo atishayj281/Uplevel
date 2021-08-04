@@ -72,7 +72,7 @@ class UsersDao {
     }
 
     fun uploadResumeWithImage(resumeUri: Uri,imageUri: Uri, user: Users, context: Context, id: String) {
-        var updatedUser = uploadResume(resumeUri, user, context, id)
+        uploadResume(resumeUri, user, context, id)
         uploadProfileImage(imageUri, user, context, id)
 
     }

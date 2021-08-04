@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GetWork">
-        <activity android:name=".PrivacyPolicyActivity"></activity>
+        <activity android:name=".PrivacyPolicyActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
         <activity android:name=".PDFViewerActivity" />
         <activity
             android:name=".AllProfilesActivity"

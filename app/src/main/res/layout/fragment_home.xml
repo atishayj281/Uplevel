@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
+    android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.HomeFragment">
+    tools:context=".Fragment.HomeFragment"
+    android:background="?attr/bgc">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -42,7 +41,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Free Courses"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -55,7 +54,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:text="View All"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -68,7 +67,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="10dp"
-                        android:orientation="horizontal" />
+                        android:orientation="horizontal"
+                        android:background="?attr/bgc"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Paid Courses"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:text="View All"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -125,7 +125,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Blogs"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -136,12 +136,10 @@
                             android:layout_marginRight="20dp"
                             android:gravity="end"
                             android:text="View All"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
-
                     </FrameLayout>
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -170,7 +168,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Recent Jobs"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -181,7 +179,7 @@
                             android:layout_marginRight="20dp"
                             android:gravity="end"
                             android:text="View All"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -208,7 +206,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Profiles"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -219,7 +217,7 @@
                             android:layout_marginRight="20dp"
                             android:gravity="end"
                             android:text="View All"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -237,7 +235,7 @@
             </LinearLayout>
 
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
             android:id="@+id/homeProgressbar"
@@ -251,4 +249,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

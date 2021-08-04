@@ -14,7 +14,7 @@ object CurUser {
     private var usersDao: UsersDao = UsersDao()
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var exists: Users? = null
-    fun getUser(user: FirebaseUser?): Users? {
+    fun getUser(): Users? {
 
         try {
             usersDao.ref.orderByChild("id").equalTo(auth.currentUser?.uid).addListenerForSingleValueEvent(object: ValueEventListener {

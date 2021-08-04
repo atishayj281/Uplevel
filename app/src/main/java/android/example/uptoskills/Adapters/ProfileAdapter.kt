@@ -12,7 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class ProfileAdapter(val context: Context, val listener: IProfileAdapter): RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
+class ProfileAdapter(val context: Context, val listener: IProfileAdapter, val itemId: Int): RecyclerView.Adapter<ProfileAdapter.ProfileViewHolder>() {
 
     var profiles: ArrayList<Users> = ArrayList()
 
@@ -26,7 +26,7 @@ class ProfileAdapter(val context: Context, val listener: IProfileAdapter): Recyc
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfileViewHolder {
-        var viewHolder = ProfileViewHolder(LayoutInflater.from(context).inflate(R.layout.profile, parent, false))
+        var viewHolder = ProfileViewHolder(LayoutInflater.from(context).inflate(itemId, parent, false))
         return viewHolder
     }
 
