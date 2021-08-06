@@ -2,10 +2,12 @@ package android.example.uptoskills.Fragment
 
 import android.example.uptoskills.Adapters.CourseViewPagerAdapter
 import android.example.uptoskills.R
+import android.example.uptoskills.daos.CourseDao
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -46,9 +48,6 @@ class CourseFragment: Fragment() {
         adapter.addFragment(FreeCourseFragment(), "Free")
         adapter.addFragment(PaidCourseFragment(), "Paid")
         viewPager.adapter = adapter
-
-
-
         return view
     }
 
@@ -71,5 +70,4 @@ class CourseFragment: Fragment() {
                 }
             }
     }
-
 }

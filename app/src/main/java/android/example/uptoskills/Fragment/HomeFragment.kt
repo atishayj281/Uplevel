@@ -6,13 +6,15 @@ import android.content.Intent
 import android.example.uptoskills.*
 import android.example.uptoskills.Adapters.*
 import android.example.uptoskills.daos.BlogDao
+import android.example.uptoskills.daos.CourseDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.Blog
-import android.example.uptoskills.models.Course
+import android.example.uptoskills.models.FreeCourse
 import android.example.uptoskills.models.Job
 import android.example.uptoskills.models.Users
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +78,7 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     private lateinit var menuItemSelectedListener: onMenuItemSelectedListener
     private lateinit var auth: FirebaseAuth
     private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var courseDao: CourseDao
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -110,22 +113,23 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         progressBar.visibility = View.VISIBLE
 
         // setUp Free Courses RecyclerView
-        courseRecyclerView = view.findViewById(R.id.FreeCourserecyclerview)
-        courseAdapter = CourseAdapter(view.context, this, R.layout.home_course_item)
-        courseRecyclerView.adapter = courseAdapter
-        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
+//        courseRecyclerView = view.findViewById(R.id.FreeCourserecyclerview)
+//        courseAdapter = CourseAdapter(view.context, this, R.layout.home_course_item)
+//        courseRecyclerView.adapter = courseAdapter
+//        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
 
         // setUp Paid Courses RecyclerView
-        courseRecyclerView = view.findViewById(R.id.PaidCourserecyclerview)
-        courseAdapter = CourseAdapter(view.context, this, R.layout.home_course_item)
-        courseRecyclerView.adapter = courseAdapter
-        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
+//        courseRecyclerView = view.findViewById(R.id.PaidCourserecyclerview)
+//        courseAdapter = CourseAdapter(view.context, this, R.layout.home_course_item)
+//        courseRecyclerView.adapter = courseAdapter
+//        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
 
 
 
         setUpJobRecyclerView(view)
         setUpBlogRecyclerView()
         setUpProfileRecyclerView(view)
+        setUpcourses(view)
         progressBar.visibility = View.GONE
 
         // Initialising "view All" textViews
@@ -161,7 +165,20 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
                 .postDelayed(Runnable { refreshLayout.isRefreshing = false }, 2000)
         }
 
+
         return view
+    }
+
+    private fun setUpcourses(view: View) {
+        courseDao = CourseDao()
+        courseRecyclerView = view.findViewById(R.id.FreeCourserecyclerview)
+        val courseCollection = courseDao.courseCollection
+        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
+        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<FreeCourse>().setQuery(query, FreeCourse::class.java).build()
+
+        courseAdapter = CourseAdapter(view.context,this, R.layout.home_course_item, recyclerViewOptions)
+        courseRecyclerView.adapter = courseAdapter
+        courseRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
     }
 
 
@@ -200,18 +217,19 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
                 Toast.makeText(view.context, error.message, Toast.LENGTH_SHORT)
                     .show()
             }
-
         })
     }
 
     override fun onStart() {
         super.onStart()
         adapter.startListening()
+        courseAdapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
         adapter.stopListening()
+        courseAdapter.stopListening()
     }
 
 
@@ -235,10 +253,8 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         startActivity(intent)
     }
 
-    override fun onCourseCLick(course: Course) {
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
-        view?.let { customTabsIntent.launchUrl(it.context, Uri.parse(course.url)) }
+    override fun onCourseCLick(paidCourse: String) {
+
     }
 
     override fun onJobCLick(job: Job) {

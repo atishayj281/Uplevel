@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.example.uptoskills.R
-import android.example.uptoskills.models.Course
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,8 +29,8 @@ class PaidCourseFragment : Fragment(), CourseItemClicked {
     private var param2: String? = null
 
 
-    private lateinit var courseRecyclerView: RecyclerView
-    private lateinit var courseAdapter: CourseAdapter
+//    private lateinit var courseRecyclerView: RecyclerView
+//    private lateinit var courseAdapter: CourseAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,10 +47,10 @@ class PaidCourseFragment : Fragment(), CourseItemClicked {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_paid_course, container, false)
 
-        courseRecyclerView = view.findViewById(R.id.paidCourseRecyclerView)
-        courseAdapter = CourseAdapter(view.context, this, R.layout.item_course)
-        courseRecyclerView.adapter = courseAdapter
-        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context)
+//        courseRecyclerView = view.findViewById(R.id.paidCourseRecyclerView)
+//        courseAdapter = CourseAdapter(view.context, this, R.layout.item_course)
+//        courseRecyclerView.adapter = courseAdapter
+//        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context)
 
 
         return view
@@ -77,9 +76,9 @@ class PaidCourseFragment : Fragment(), CourseItemClicked {
             }
     }
 
-    override fun onCourseCLick(course: Course) {
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
-        view?.let { customTabsIntent.launchUrl(it.context, Uri.parse(course.url)) }
+    override fun onCourseCLick(paidCourse: String) {
+//        val builder = CustomTabsIntent.Builder()
+//        val customTabsIntent = builder.build()
+//        view?.let { customTabsIntent.launchUrl(it.context, Uri.parse(paidCourse.url)) }
     }
 }

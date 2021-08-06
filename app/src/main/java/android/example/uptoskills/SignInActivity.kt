@@ -186,6 +186,7 @@ class SignInActivity : AppCompatActivity() {
     fun startMainActivity(){
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        binding.signInprogressbar.visibility = View.GONE
         finish()
     }
 

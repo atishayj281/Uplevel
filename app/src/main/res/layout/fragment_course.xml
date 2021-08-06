@@ -3,14 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.CourseFragment"
     android:orientation="vertical"
-    >
+    android:background="@android:color/transparent">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/courseTabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:tabSelectedTextColor="@color/black">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -27,8 +30,6 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/courseViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>

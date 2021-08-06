@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/courseImage"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="145dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

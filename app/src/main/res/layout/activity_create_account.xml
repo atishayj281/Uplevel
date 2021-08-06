@@ -20,12 +20,14 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="600dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="535dp"
                 android:background="@drawable/white_cueve_bg"
+                android:elevation="10dp"
                 />
 
             <LinearLayout
@@ -33,7 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="20.7dp">
+                android:paddingLeft="20.7dp"
+                android:elevation="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -143,6 +146,7 @@
                 android:paddingLeft="30dp"
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="120dp"
+                android:elevation="10dp"
                 >
                 <ImageView
                     android:id="@+id/crtaccount"
@@ -161,8 +165,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:id="@+id/createAccountProgressBar"
-                android:indeterminateTint="@color/com_facebook_blue"
-                android:visibility="gone"/>
+                android:indeterminateTint="@color/teal_700"
+                android:visibility="gone"
+                android:elevation="10dp"/>
 
         </FrameLayout>
 

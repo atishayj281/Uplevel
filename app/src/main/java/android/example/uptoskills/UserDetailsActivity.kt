@@ -2,6 +2,7 @@ package android.example.uptoskills
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.example.uptoskills.daos.CourseDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityUserDetailsBinding
 import android.example.uptoskills.models.Users
@@ -51,13 +52,12 @@ class UserDetailsActivity : AppCompatActivity() {
         binding.submit.setOnClickListener {
             var displayName: String = ""
             binding.userDetailsProgressBar.visibility = View.VISIBLE
-            if(intent.getStringExtra("parent").toString().equals("MoreFragment")){
+            if(intent.getStringExtra("parent").toString().equals("MoreFragment") || intent.getStringExtra("parent").toString().equals("course")){
                 displayName = binding.username.text.toString()
             }
             else{
                     displayName = intent.getStringExtra("username").toString()
             }
-
 
             // Updating Resume and ProfileImage
             userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -100,12 +100,17 @@ class UserDetailsActivity : AppCompatActivity() {
                             userDao.addUser(usr, id.toString())
                         }
 
-                        Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
                         binding.userDetailsProgressBar.visibility = View.GONE
                         updateProfile()
                         var isNewUser:String = intent.getStringExtra("Activity").toString()
                         if(isNewUser == "NewUser") {
                             startMainActivity()
+                        }
+                        else if(intent.getStringExtra("parent") == "course") {
+                            Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
+                            finish()
+                        } else {
+                            Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

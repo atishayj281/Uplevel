@@ -4,22 +4,22 @@
     <item
         android:id="@+id/home"
         android:title="Home"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_tap_home"
         />
     <item
         android:id="@+id/Job"
         android:title="Job"
-        android:icon="@drawable/ic_baseline_card_travel_24"
+        android:icon="@drawable/ic_tap_job"
         />
     <item
         android:id="@+id/courses"
         android:title="Courses"
-        android:icon="@drawable/ic_outline_library_books_24"
+        android:icon="@drawable/ic_tap_learn"
         />
     <item
         android:id="@+id/Blog"
         android:title="Blog"
-        android:icon="@drawable/ic_blog"
+        android:icon="@drawable/ic_tap_article"
         />
 
 </menu>

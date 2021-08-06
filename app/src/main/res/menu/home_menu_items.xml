@@ -12,17 +12,12 @@
         <item
             android:id="@+id/Job"
             android:title="Job"
-            android:icon="@drawable/ic_baseline_card_travel_24"
+            android:icon="@drawable/ic_job"
             />
         <item
-            android:id="@+id/courses"
-            android:title="Courses"
-            android:icon="@drawable/ic_outline_library_books_24"
-            />
-        <item
-            android:id="@+id/Blog"
-            android:title="Blog"
-            android:icon="@drawable/ic_blog"
+            android:id="@+id/MyCourses"
+            android:title="My Courses"
+            android:icon="@drawable/ic_article"
             />
 
         <item
@@ -35,6 +30,10 @@
 
 
     <group>
+
+        <item
+            android:id="@+id/aboutUs"
+            android:title="About Us"/>
 
         <item
             android:id="@+id/privacyPolicy"

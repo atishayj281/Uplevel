@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.JobFragment"
-    android:id="@+id/refreshLayout">
+    android:id="@+id/refreshLayout"
+    android:background="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,9 +22,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/Jobsrecyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/job_recycler_view_background"/>
+            android:layout_height="match_parent"/>
     </LinearLayout>
     <ProgressBar
         android:id="@+id/jobProgressBar"

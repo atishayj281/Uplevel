@@ -1,18 +1,26 @@
 package android.example.uptoskills.Fragment
 
+import android.content.Intent
+import android.example.uptoskills.Adapters.BlogsAdapter
 import android.example.uptoskills.Adapters.CourseAdapter
 import android.example.uptoskills.Adapters.CourseItemClicked
+import android.example.uptoskills.CourseViewActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.example.uptoskills.R
-import android.example.uptoskills.models.Course
+import android.example.uptoskills.daos.BlogDao
+import android.example.uptoskills.daos.CourseDao
+import android.example.uptoskills.models.Blog
+import android.example.uptoskills.models.FreeCourse
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.Query
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +39,7 @@ class FreeCourseFragment : Fragment(), CourseItemClicked {
 
     private lateinit var courseRecyclerView: RecyclerView
     private lateinit var courseAdapter: CourseAdapter
+    private lateinit var courseDao: CourseDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +56,31 @@ class FreeCourseFragment : Fragment(), CourseItemClicked {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_free_course, container, false)
 
-        courseRecyclerView = view.findViewById(R.id.freeCourseRecyclerView)
-        courseAdapter = CourseAdapter(view.context, this, R.layout.item_course)
-        courseRecyclerView.adapter = courseAdapter
-        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context)
+
+        setUpcourses(view)
         return view
+    }
+
+    private fun setUpcourses(view: View) {
+        courseDao = CourseDao()
+        courseRecyclerView = view.findViewById(R.id.freeCourseRecyclerView)
+        val courseCollection = courseDao.courseCollection
+        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
+        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<FreeCourse>().setQuery(query, FreeCourse::class.java).build()
+
+        courseAdapter = CourseAdapter(view.context,this, R.layout.item_course, recyclerViewOptions)
+        courseRecyclerView.adapter = courseAdapter
+        courseRecyclerView.layoutManager = LinearLayoutManager(view.context)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        courseAdapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        courseAdapter.stopListening()
     }
 
     companion object {
@@ -74,9 +103,9 @@ class FreeCourseFragment : Fragment(), CourseItemClicked {
             }
     }
 
-    override fun onCourseCLick(course: Course) {
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
-        view?.let { customTabsIntent.launchUrl(it.context, Uri.parse(course.url)) }
+    override fun onCourseCLick(courseId: String) {
+         val intent = Intent(activity, CourseViewActivity::class.java)
+        intent.putExtra("courseId", courseId)
+        startActivity(intent)
     }
 }

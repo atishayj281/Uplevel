@@ -49,18 +49,21 @@ class UsersDao {
     }
 
     fun uploadProfileImage(imageUri: Uri,user: Users, context: Context, id: String) {
-        var fileRef: StorageReference = storageReference.child("users/"+auth.currentUser?.uid+"/profile."+getFileExtension(imageUri, context))
-        fileRef.putFile(imageUri).addOnSuccessListener {
-            fileRef.downloadUrl.addOnSuccessListener {
-                user.userImage = it.toString()
-                updateUser(user, id)
-                Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_SHORT)
-            }
-        }.addOnProgressListener {
+        if(imageUri.toString().isNotBlank()) {
+            var fileRef: StorageReference = storageReference.child("users/"+auth.currentUser?.uid+"/profile."+getFileExtension(imageUri, context))
+            fileRef.putFile(imageUri).addOnSuccessListener {
+                fileRef.downloadUrl.addOnSuccessListener {
+                    user.userImage = it.toString()
+                    updateUser(user, id)
+                    Toast.makeText(context, "Uploaded Successfully", Toast.LENGTH_SHORT)
+                }
+            }.addOnProgressListener {
 
-        }.addOnFailureListener{
-            Toast.makeText(context, "Uploading Failed...", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener{
+                Toast.makeText(context, "Uploading Failed...", Toast.LENGTH_SHORT).show()
+            }
         }
+
     }
 
 
@@ -78,48 +81,20 @@ class UsersDao {
     }
 
     fun uploadResume(resumeUri: Uri, user: Users, context: Context, id: String): Users {
+        if(resumeUri.toString().isNotBlank()){
+            var fileRef: StorageReference = storageReference.child("users/"+auth.currentUser?.uid+"/"+user.displayName+"Resume."+getFileExtension(resumeUri, context))
+            fileRef.putFile(resumeUri).addOnSuccessListener {
+                fileRef.downloadUrl.addOnSuccessListener {
+                    user.resume = it.toString()
+                    auth.currentUser?.uid?.let { it1 -> updateUser(user, it1) }
+                }
+            }.addOnProgressListener {
 
-        var fileRef: StorageReference = storageReference.child("users/"+auth.currentUser?.uid+"/"+user.displayName+"Resume."+getFileExtension(resumeUri, context))
-        fileRef.putFile(resumeUri).addOnSuccessListener {
-            fileRef.downloadUrl.addOnSuccessListener {
-                user.resume = it.toString()
-                auth.currentUser?.uid?.let { it1 -> updateUser(user, it1) }
+            }.addOnFailureListener{
+                Toast.makeText(context, "Uploading Failed...", Toast.LENGTH_SHORT).show()
             }
-        }.addOnProgressListener {
-
-        }.addOnFailureListener{
-            Toast.makeText(context, "Uploading Failed...", Toast.LENGTH_SHORT).show()
         }
+
         return user
-    }
-
-    fun getResumeUri(): String{
-        var resumeUri: String = ""
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var ref = snapshot.child(auth.currentUser?.uid.toString())
-                resumeUri = ref.child("resume").getValue(String::class.java).toString()
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
-        return resumeUri
-    }
-
-    fun getProfileImageUri(): String{
-        var ImageUri: String = ""
-        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var ref = snapshot.child(auth.currentUser?.uid.toString())
-                ImageUri = ref.child("userImage").getValue(String::class.java).toString()
-            }
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
-        return ImageUri
     }
 }
