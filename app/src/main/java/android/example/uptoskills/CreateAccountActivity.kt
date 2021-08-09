@@ -25,7 +25,6 @@ class CreateAccountActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-
         binding.crtaccount.setOnClickListener {
             binding.createAccountProgressBar.visibility = View.VISIBLE
             if(binding.crtemail.text.toString().isNotBlank() && binding.crtpass.text.toString()
@@ -37,7 +36,7 @@ class CreateAccountActivity : AppCompatActivity() {
                         binding.createAccountProgressBar.visibility = View.GONE
 
                         //adding user to db
-                        val user: Users = Users(binding.crtUsername.text.toString(), binding.crtUsername.text.toString(),
+                        val user: Users = Users(hashMapOf(), hashMapOf(),binding.crtUsername.text.toString(), binding.crtUsername.text.toString(),
                         binding.crtemail.text.toString(), "", "", "", "", "",
                             it.result?.user?.uid!!, "")
                         val userDao = UsersDao()

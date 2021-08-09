@@ -253,8 +253,10 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         startActivity(intent)
     }
 
-    override fun onCourseCLick(paidCourse: String) {
-
+    override fun onCourseCLick(courseId: String) {
+        val intent = Intent(activity, CourseViewActivity::class.java)
+        intent.putExtra("courseId", courseId)
+        startActivity(intent)
     }
 
     override fun onJobCLick(job: Job) {

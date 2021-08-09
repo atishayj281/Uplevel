@@ -1,17 +1,25 @@
 package android.example.uptoskills.Fragment
 
+import android.content.Intent
 import android.example.uptoskills.Adapters.CourseAdapter
 import android.example.uptoskills.Adapters.CourseItemClicked
+import android.example.uptoskills.Adapters.PaidCourseAdapter
+import android.example.uptoskills.CourseViewActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.example.uptoskills.R
+import android.example.uptoskills.daos.CourseDao
+import android.example.uptoskills.daos.PaidCourseDao
+import android.example.uptoskills.models.PaidCourse
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.Query
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,6 +48,10 @@ class PaidCourseFragment : Fragment(), CourseItemClicked {
         }
     }
 
+    private lateinit var courseRecyclerView: RecyclerView
+    private lateinit var courseAdapter: PaidCourseAdapter
+    private lateinit var courseDao: PaidCourseDao
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -47,11 +59,7 @@ class PaidCourseFragment : Fragment(), CourseItemClicked {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_paid_course, container, false)
 
-//        courseRecyclerView = view.findViewById(R.id.paidCourseRecyclerView)
-//        courseAdapter = CourseAdapter(view.context, this, R.layout.item_course)
-//        courseRecyclerView.adapter = courseAdapter
-//        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context)
-
+        setUpcourses(view)
 
         return view
     }
@@ -76,9 +84,36 @@ class PaidCourseFragment : Fragment(), CourseItemClicked {
             }
     }
 
-    override fun onCourseCLick(paidCourse: String) {
-//        val builder = CustomTabsIntent.Builder()
-//        val customTabsIntent = builder.build()
-//        view?.let { customTabsIntent.launchUrl(it.context, Uri.parse(paidCourse.url)) }
+
+    private fun setUpcourses(view: View) {
+        courseDao = PaidCourseDao()
+        courseRecyclerView = view.findViewById(R.id.paidCourseRecyclerView)
+        val courseCollection = courseDao.courseCollection
+        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
+        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<PaidCourse>().setQuery(query, PaidCourse::class.java).build()
+
+        courseAdapter = PaidCourseAdapter(view.context,this, R.layout.item_course, recyclerViewOptions)
+        courseRecyclerView.adapter = courseAdapter
+        courseRecyclerView.layoutManager = LinearLayoutManager(view.context)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        courseAdapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        courseAdapter.stopListening()
+    }
+
+
+
+    override fun onCourseCLick(courseId: String) {
+        val intent = Intent(activity, CourseViewActivity::class.java)
+        intent.putExtra("courseId", courseId)
+        intent.putExtra("courseCategory", "paid")
+        startActivity(intent)
+        activity?.finish()
     }
 }

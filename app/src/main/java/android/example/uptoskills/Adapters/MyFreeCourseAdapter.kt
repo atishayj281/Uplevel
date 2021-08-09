@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 
-class MyCourseAdapter(val context: Context, val listener: CourseItemClicked): RecyclerView.Adapter<MyCourseAdapter.CourseViewholder>() {
+class MyFreeCourseAdapter(val context: Context, val listener: CourseItemClicked): RecyclerView.Adapter<MyFreeCourseAdapter.CourseViewholder>() {
 
     private var courses: ArrayList<FreeCourse> = ArrayList()
 
@@ -46,4 +46,3 @@ class MyCourseAdapter(val context: Context, val listener: CourseItemClicked): Re
         notifyDataSetChanged()
     }
 }
-

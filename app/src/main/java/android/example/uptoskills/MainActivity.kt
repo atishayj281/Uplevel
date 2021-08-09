@@ -148,12 +148,10 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
 
 
         //set NavigationViewheader
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 if(!this.isDestroyed){
                     setUpNavigationViewHeader()
                     setUpProfileImage()
                 }
-            }
 
     }
 
@@ -202,9 +200,8 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
                 username.text = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
                 email.text = snapshot.child(auth.currentUser?.uid.toString()).child("email").getValue(String::class.java).toString()
                 if(profileImage.isNotEmpty() && !profileImage.equals("null")){
-                    profile.setImageResource(R.drawable.image_circle)
-                    this@MainActivity.let { Glide.with(it).load(profileImage).circleCrop().diskCacheStrategy(
-                        DiskCacheStrategy.ALL).into(profile) }
+                    //profile.setImageResource(R.drawable.image_circle)
+                    //this@MainActivity.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
                 }
             }
 

@@ -2,27 +2,22 @@ package android.example.uptoskills.daos
 
 import android.content.Context
 import android.example.uptoskills.models.FreeCourse
-import android.example.uptoskills.models.Users
+import android.example.uptoskills.models.PaidCourse
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
-class CourseDao {
+class PaidCourseDao {
+
     val db = FirebaseFirestore.getInstance()
-    val courseCollection = db.collection("FreeCourses")
+    val courseCollection = db.collection("PaidCourses")
     val auth = Firebase.auth
 
     fun getCoursebyId(courseId: String): Task<DocumentSnapshot> {
@@ -36,20 +31,19 @@ class CourseDao {
 
             GlobalScope.launch {
                 val currentUserId = auth.currentUser!!.uid
-                val course = getCoursebyId(courseId).await().toObject(FreeCourse::class.java)!!
+                val course = getCoursebyId(courseId).await().toObject(PaidCourse::class.java)!!
                 val isEnrolled = course.enrolledStudents.contains(currentUserId)
                 if(!isEnrolled) {
                     isSuccessful = true
-                    course.enrolledStudents.add(currentUserId)
+                    course.enrolledStudents.put(currentUserId, "No")
                     courseCollection.document(courseId).set(course)
-                    UsersDao().ref.child(currentUserId).child("freecourses").child(courseId).setValue(course.course_name).addOnSuccessListener {
+                    UsersDao().ref.child(currentUserId).child("paidcourses").child(courseId).setValue(course.course_name).addOnSuccessListener {
                         Log.d("Enrolled", "YES")
                         Toast.makeText(context, "Successfully Enrolled", Toast.LENGTH_SHORT).show()
                     }.addOnFailureListener {
                         Log.d("failure", it.message.toString())
                     }
                 } else {
-                    Toast.makeText(context, "Already Enrolled", Toast.LENGTH_SHORT).show()
                     isSuccessful = false
                 }
             }
@@ -59,6 +53,8 @@ class CourseDao {
             return false;
         }
     }
+
+
 
 
 }

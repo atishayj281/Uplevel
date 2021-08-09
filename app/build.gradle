@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "android.example.getwork"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -91,6 +91,9 @@ dependencies {
 
     // no-Internet-Layout
     implementation 'com.github.MohamedWessam:no-internet-layout:0.1.1'
+
+    // Razorpay
+    implementation 'com.razorpay:checkout:1.6.11'
 
 
 }

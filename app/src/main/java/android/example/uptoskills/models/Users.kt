@@ -1,6 +1,8 @@
 package android.example.uptoskills.models
 
 data class Users(
+    var freecourses: HashMap<String, String>? = HashMap(),
+    var paidcourses: HashMap<String, String>? = HashMap(),
     var full_name: String="",
     var displayName: String? ="",
     var email: String="",

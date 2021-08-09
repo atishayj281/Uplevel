@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E8EBEF"
+    android:background="#E9F6EB"
     tools:context=".MainActivity">
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -85,7 +85,7 @@
                 android:id="@+id/bottomNavigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:itemIconTint="#B5CCED"
+                app:itemIconTint="@color/AndroidGreen"
                 app:itemTextColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

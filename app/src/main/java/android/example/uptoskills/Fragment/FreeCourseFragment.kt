@@ -106,6 +106,7 @@ class FreeCourseFragment : Fragment(), CourseItemClicked {
     override fun onCourseCLick(courseId: String) {
          val intent = Intent(activity, CourseViewActivity::class.java)
         intent.putExtra("courseId", courseId)
+        intent.putExtra("courseCategory", "free")
         startActivity(intent)
     }
 }

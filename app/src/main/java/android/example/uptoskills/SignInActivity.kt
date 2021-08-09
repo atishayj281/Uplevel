@@ -19,11 +19,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.*
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class SignInActivity : AppCompatActivity() {
@@ -92,7 +92,6 @@ class SignInActivity : AppCompatActivity() {
         binding.SignInWithGoogle.setOnClickListener {
             binding.signInprogressbar.visibility = View.VISIBLE
             signInwithGoogle()
-            binding.signInprogressbar.visibility = View.GONE
         }
 
         binding.forgetPass.setOnClickListener {
@@ -240,9 +239,9 @@ class SignInActivity : AppCompatActivity() {
         if(user != null) {
             userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    var ref = snapshot.child(auth.uid.toString())
+                    var ref = snapshot.child(auth.currentUser?.uid.toString())
                     if(!ref.exists()) {
-                        var user: Users = Users(auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
+                        var user: Users = Users(hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
                             auth.currentUser?.email.toString(), "", "", "",
                             auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "")
                         userDao.addUser(user, auth.currentUser?.uid.toString())
@@ -251,7 +250,7 @@ class SignInActivity : AppCompatActivity() {
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
-            binding.signInprogressbar.visibility = View.VISIBLE
+
             startMainActivity()
         }
     }

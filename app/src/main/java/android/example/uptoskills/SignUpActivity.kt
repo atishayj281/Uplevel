@@ -186,7 +186,7 @@ class SignUpActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var ref = snapshot.child(auth.uid.toString())
                     if(!ref.exists()) {
-                        var user: Users = Users(auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
+                        var user: Users = Users(hashMapOf(), hashMapOf(),auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
                             auth.currentUser?.email.toString(), "", "", "",
                             auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "")
                         userDao.addUser(user, auth.currentUser?.uid.toString())

@@ -1,29 +1,41 @@
 package android.example.uptoskills
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.example.uptoskills.daos.CourseDao
+import android.example.uptoskills.daos.PaidCourseDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityUserDetailsBinding
+import android.example.uptoskills.models.FreeCourse
+import android.example.uptoskills.models.PaidCourse
 import android.example.uptoskills.models.Users
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
+import com.razorpay.Checkout
+import com.razorpay.PaymentResultListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 
-class UserDetailsActivity : AppCompatActivity() {
+class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
 
     private lateinit var binding: ActivityUserDetailsBinding
     private lateinit var auth: FirebaseAuth
@@ -34,7 +46,9 @@ class UserDetailsActivity : AppCompatActivity() {
     private var isResumeSelected: Boolean = false
     private val resumeRequestCode: Int = 2
     private val READ_EXTERNAL_STORAGE_CODE: Int = 9
+    private val READ_SMS_CODE: Int = 1
     private lateinit var resumeUri: Uri
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +56,10 @@ class UserDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.userDetailsProgressBar.visibility = View.VISIBLE
 
-
+        Checkout.preload(applicationContext)
+        Checkout.clearUserData(this)
         auth = FirebaseAuth.getInstance()
-        val id = intent.getStringExtra("id")
+        val id = auth.currentUser?.uid
         userDao = UsersDao()
 
         updateProfile()
@@ -64,8 +79,12 @@ class UserDetailsActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var ref = snapshot.child(auth.currentUser?.uid.toString())
                     if(ref.exists()) {
+                        val freecourses: HashMap<String, String>? = ref.child("freecourses").getValue(object: GenericTypeIndicator<HashMap<String, String>>(){})
+                        val paidcourses: HashMap<String, String>? = ref.child("paidcourses").getValue(object: GenericTypeIndicator<HashMap<String, String>>(){})
+
                         var usr =
-                            Users(binding.fullName.editText?.text.toString(),
+                            Users(freecourses,paidcourses,
+                                binding.fullName.editText?.text.toString(),
                                 displayName,
                                 binding.email.text.toString(),
                                 binding.college.text.toString(),
@@ -107,8 +126,7 @@ class UserDetailsActivity : AppCompatActivity() {
                             startMainActivity()
                         }
                         else if(intent.getStringExtra("parent") == "course") {
-                            Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
-                            finish()
+                            isEnrolled(usr.email, usr.mobileNo)
                         } else {
                             Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
                         }
@@ -145,10 +163,15 @@ class UserDetailsActivity : AppCompatActivity() {
                     var ref = snapshot.child(auth.currentUser?.uid.toString())
                     if(ref.exists()) {
                         var resumeUrl = ref.child("resume").getValue(String::class.java).toString()
-                        val builder = CustomTabsIntent.Builder()
-                        val customTabsIntent = builder.build()
-                        customTabsIntent.launchUrl(this@UserDetailsActivity, Uri.parse(resumeUrl))
-                        binding.userDetailsProgressBar.visibility = View.GONE
+                        if(!resumeUrl.isBlank()) {
+                            val builder = CustomTabsIntent.Builder()
+                            val customTabsIntent = builder.build()
+                            customTabsIntent.launchUrl(this@UserDetailsActivity, Uri.parse(resumeUrl))
+                            binding.userDetailsProgressBar.visibility = View.GONE
+                        } else {
+                            Toast.makeText(this@UserDetailsActivity, "Please upload the Resume", Toast.LENGTH_SHORT).show()
+                        }
+
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
@@ -157,6 +180,85 @@ class UserDetailsActivity : AppCompatActivity() {
         }
     }
 
+    // checking if Student is Already Enrolled in the course
+    private fun isEnrolled(email: String, phoneNo:String){
+        var courseId: String = intent.getStringExtra("courseId").toString()
+        if(courseId.isNotBlank()) {
+            GlobalScope.launch(Dispatchers.IO) {
+                val course: PaidCourse = PaidCourseDao().getCoursebyId(courseId).await().toObject(PaidCourse::class.java)!!
+                withContext(Dispatchers.Main) {
+                    if(course.enrolledStudents.contains(auth.currentUser!!.uid)) {
+                        Toast.makeText(this@UserDetailsActivity, "Already Enrolled", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        // Checking the Permissions
+                        if(ContextCompat.checkSelfPermission(this@UserDetailsActivity, android.Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
+                            startpayment(email, phoneNo)
+                        } else {
+                            ActivityCompat.requestPermissions(this@UserDetailsActivity, arrayOf(android.Manifest.permission.READ_SMS), READ_SMS_CODE)
+                        }
+
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    // Starting Payment
+    private fun startpayment(email: String, contact: String){
+
+        if(email.isBlank() && contact.isBlank()){
+            Toast.makeText(this, "Please Provide Your Full Details", Toast.LENGTH_SHORT).show()
+        } else {
+            var price = intent.getIntExtra("coursePrice", -1)
+            if(price == 0) {
+                intent.getStringExtra("courseId")?.let {
+                    CourseDao().EnrollStudents(it, this)
+                }
+            } else {
+                price *= 100
+                if(price != -1) {
+                    val activity: Activity = this
+                    val checkout = Checkout()
+                    try {
+                        val orderRequest = JSONObject()
+                        orderRequest.put("name", "UptoSkills")
+                        orderRequest.put("description", intent.getStringExtra("courseName")+" Payment")
+                        orderRequest.put("currency", "INR")
+                        orderRequest.put("amount", price) // amount in the smallest currency unit
+                        orderRequest.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png")
+                        orderRequest.put("prefill.email", email);
+                        orderRequest.put("prefill.contact",contact);
+
+                        checkout.open(activity, orderRequest)
+                    } catch (e: Exception){
+                        Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    override fun onPaymentSuccess(p0: String?) {
+
+        Toast.makeText(this, "Successful Payment Id: $p0", Toast.LENGTH_SHORT).show()
+        intent.getStringExtra("courseId")?.let {
+            PaidCourseDao().EnrollStudents(it, this)
+        }
+    }
+
+    override fun onPaymentError(p0: Int, p1: String?) {
+        Toast.makeText(this, p0, Toast.LENGTH_SHORT).show()
+        Log.d("Payment", p0.toString())
+    }
+
+
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -164,6 +266,8 @@ class UserDetailsActivity : AppCompatActivity() {
     ) {
         if(requestCode == READ_EXTERNAL_STORAGE_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             resumeChooser()
+        } else if(requestCode == READ_SMS_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            auth.currentUser?.email?.let { startpayment(it, auth.currentUser!!.phoneNumber.toString()) }
         }
     }
 
@@ -232,5 +336,7 @@ class UserDetailsActivity : AppCompatActivity() {
             }
         })
     }
+
+
 
 }
