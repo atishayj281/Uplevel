@@ -22,4 +22,9 @@
         android:icon="@drawable/ic_tap_article"
         />
 
+    <item
+        android:id="@+id/events"
+        android:title="Events"
+        android:icon="@drawable/ic_events"/>
+
 </menu>

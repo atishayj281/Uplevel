@@ -5,21 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.example.uptoskills.*
 import android.example.uptoskills.Adapters.*
-import android.example.uptoskills.daos.BlogDao
-import android.example.uptoskills.daos.CourseDao
-import android.example.uptoskills.daos.UsersDao
-import android.example.uptoskills.models.Blog
-import android.example.uptoskills.models.FreeCourse
-import android.example.uptoskills.models.Job
-import android.example.uptoskills.models.Users
-import android.net.Uri
+import android.example.uptoskills.daos.*
+import android.example.uptoskills.models.*
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,7 +40,8 @@ interface onMenuItemSelectedListener{
     fun onItemSelected(itemId: Int)
 }
 
-class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, IProfileAdapter {
+class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, IProfileAdapter,
+    paidCourseclicked {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -73,12 +66,15 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     private lateinit var userDao: UsersDao
     private lateinit var profileAdapter: ProfileAdapter
     private lateinit var profileRecyclerView: RecyclerView
-    private lateinit var displayName: String
     var menuItemSelectedId: Int = -1
     private lateinit var menuItemSelectedListener: onMenuItemSelectedListener
     private lateinit var auth: FirebaseAuth
     private lateinit var refreshLayout: SwipeRefreshLayout
     private lateinit var courseDao: CourseDao
+    private lateinit var jobDao: JobDao
+    private lateinit var paidcourseAdapter: PaidCourseAdapter
+    private lateinit var paidCourseDao: PaidCourseDao
+    private lateinit var paidCourseRecyclerView: RecyclerView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -102,34 +98,26 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        paidCourseDao = PaidCourseDao()
+        paidCourseRecyclerView = view.findViewById(R.id.PaidCourserecyclerview)
+
         refreshLayout = view.findViewById(R.id.swiperefresh)
 
         auth = FirebaseAuth.getInstance()
 
         recyclerView = view.findViewById(R.id.blogrecyclerview)
         progressBar = view.findViewById(R.id.homeProgressbar)
+        jobRecyclerView = view.findViewById(R.id.HomeJobrecyclerview)
 
 
         progressBar.visibility = View.VISIBLE
-
-        // setUp Free Courses RecyclerView
-//        courseRecyclerView = view.findViewById(R.id.FreeCourserecyclerview)
-//        courseAdapter = CourseAdapter(view.context, this, R.layout.home_course_item)
-//        courseRecyclerView.adapter = courseAdapter
-//        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
-
-        // setUp Paid Courses RecyclerView
-//        courseRecyclerView = view.findViewById(R.id.PaidCourserecyclerview)
-//        courseAdapter = CourseAdapter(view.context, this, R.layout.home_course_item)
-//        courseRecyclerView.adapter = courseAdapter
-//        courseRecyclerView.layoutManager = LinearLayoutManager(view?.context, LinearLayoutManager.HORIZONTAL, false)
-
-
 
         setUpJobRecyclerView(view)
         setUpBlogRecyclerView()
         setUpProfileRecyclerView(view)
         setUpcourses(view)
+        setUppaidCourses(view)
+
         progressBar.visibility = View.GONE
 
         // Initialising "view All" textViews
@@ -182,10 +170,15 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     }
 
 
-    private fun setUpJobRecyclerView(view: View) {
-        jobRecyclerView = view.findViewById(R.id.HomeJobrecyclerview)!!
-        jobAdapter = JobAdapter(view.context, this, R.layout.home_job_item)
-        jobRecyclerView.adapter = jobAdapter
+    private fun setUpJobRecyclerView(view: View){
+        jobDao = JobDao()
+        val jobCollection = jobDao.jobCollection
+        val query = jobCollection.orderBy("id", Query.Direction.DESCENDING)
+        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Job>().setQuery(query, Job::class.java).build()
+
+        jobAdapter = JobAdapter(recyclerViewOptions, this, R.layout.home_job_item)
+
+        jobRecyclerView.adapter =jobAdapter
         jobRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
     }
 
@@ -224,12 +217,27 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         super.onStart()
         adapter.startListening()
         courseAdapter.startListening()
+        jobAdapter.startListening()
+        paidcourseAdapter.startListening()
     }
 
     override fun onStop() {
         super.onStop()
         adapter.stopListening()
         courseAdapter.stopListening()
+        jobAdapter.stopListening()
+        paidcourseAdapter.stopListening()
+    }
+
+    private fun setUppaidCourses(view: View){
+        val courseCollection = paidCourseDao.courseCollection
+        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
+        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<PaidCourse>().setQuery(query, PaidCourse::class.java).build()
+
+        paidcourseAdapter = PaidCourseAdapter(view.context,this, R.layout.home_course_item, recyclerViewOptions)
+        paidCourseRecyclerView.adapter = paidcourseAdapter
+        paidCourseRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+
     }
 
 
@@ -256,16 +264,25 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     override fun onCourseCLick(courseId: String) {
         val intent = Intent(activity, CourseViewActivity::class.java)
         intent.putExtra("courseId", courseId)
+        intent.putExtra("courseCategory", "free")
         startActivity(intent)
     }
 
-    override fun onJobCLick(job: Job) {
-        val builder = CustomTabsIntent.Builder()
-        val customTabsIntent = builder.build()
-        view?.let { customTabsIntent.launchUrl(it.context, Uri.parse(job.url)) }
+    override fun onProfileClicked(uid: String) {
     }
 
-    override fun onProfileClicked(uid: String) {
+    override fun onJobCLick(jobId: String) {
+        val intent = Intent(view?.context, JobViewActivity::class.java)
+        intent.putExtra("jobId", jobId)
+        intent.putExtra("category", "job")
+        startActivity(intent)
+    }
+
+    override fun onpaidCourseClicked(courseId: String) {
+        val intent = Intent(activity, CourseViewActivity::class.java)
+        intent.putExtra("courseId", courseId)
+        intent.putExtra("courseCategory", "paid")
+        startActivity(intent)
     }
 }
 

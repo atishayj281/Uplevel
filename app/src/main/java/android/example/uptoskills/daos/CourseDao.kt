@@ -36,9 +36,9 @@ class CourseDao {
 
             GlobalScope.launch {
                 val currentUserId = auth.currentUser!!.uid
-                val course = getCoursebyId(courseId).await().toObject(FreeCourse::class.java)!!
-                val isEnrolled = course.enrolledStudents.contains(currentUserId)
-                if(!isEnrolled) {
+                val course = getCoursebyId(courseId).await().toObject(FreeCourse::class.java)
+                val isEnrolled = course?.enrolledStudents?.contains(currentUserId)
+                if(!isEnrolled!!) {
                     isSuccessful = true
                     course.enrolledStudents.add(currentUserId)
                     courseCollection.document(courseId).set(course)
@@ -49,7 +49,9 @@ class CourseDao {
                         Log.d("failure", it.message.toString())
                     }
                 } else {
-                    Toast.makeText(context, "Already Enrolled", Toast.LENGTH_SHORT).show()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Already Enrolled", Toast.LENGTH_SHORT).show()
+                    }
                     isSuccessful = false
                 }
             }

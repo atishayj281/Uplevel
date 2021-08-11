@@ -32,16 +32,26 @@
     <group>
 
         <item
+            android:id="@+id/share"
+            android:title="Refer and Earn"
+            android:icon="@drawable/ic_share"/>
+
+        <item
             android:id="@+id/aboutUs"
-            android:title="About Us"/>
+            android:title="About Us"
+            android:icon="@drawable/ic_about_us"
+            />
 
         <item
             android:id="@+id/privacyPolicy"
-            android:title="Privacy Policy"/>
+            android:title="Privacy Policy"
+            android:icon="@drawable/ic_privacy_policy"/>
 
         <item
             android:id="@+id/TermsCondition"
-            android:title="Terms and condition"/>
+            android:title="Terms and condition"
+            android:icon="@drawable/ic_terms"
+            />
 
     </group>
 

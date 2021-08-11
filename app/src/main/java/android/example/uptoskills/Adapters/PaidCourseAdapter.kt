@@ -15,7 +15,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.card.MaterialCardView
 
-class PaidCourseAdapter(val context: Context, val listner: CourseItemClicked, val itemId: Int,
+class PaidCourseAdapter(val context: Context, val listner: paidCourseclicked, val itemId: Int,
                         options: FirestoreRecyclerOptions<PaidCourse>
 ): FirestoreRecyclerAdapter<PaidCourse, PaidCourseAdapter.CourseViewholder>(options) {
     inner class CourseViewholder(itemview: View): RecyclerView.ViewHolder(itemview) {
@@ -31,7 +31,7 @@ class PaidCourseAdapter(val context: Context, val listner: CourseItemClicked, va
         val viewholder = CourseViewholder(LayoutInflater.from(parent.context).inflate(itemId, parent, false))
 
         viewholder.course.setOnClickListener {
-            listner.onCourseCLick(snapshots.getSnapshot(viewholder.adapterPosition).id)
+            listner.onpaidCourseClicked(snapshots.getSnapshot(viewholder.adapterPosition).id)
         }
         return viewholder
     }
@@ -43,5 +43,9 @@ class PaidCourseAdapter(val context: Context, val listner: CourseItemClicked, va
         Glide.with(holder.courseImage.context).load(model.course_image).centerCrop().into(holder.courseImage)
 
     }
+}
+
+interface paidCourseclicked{
+    fun onpaidCourseClicked(courseId: String)
 }
 

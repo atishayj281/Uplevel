@@ -4,16 +4,12 @@ import android.content.ContentResolver
 import android.content.Context
 import android.example.uptoskills.models.Users
 import android.net.Uri
-import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.Toast
-import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +40,6 @@ class UsersDao {
     fun updateUser(user: Users, id: String){
         GlobalScope.launch {
             ref.child(id).setValue(user)
-
         }
     }
 
@@ -74,9 +69,11 @@ class UsersDao {
         return mime.getExtensionFromMimeType(contentResolver.getType(imageUri)).toString()
     }
 
-    fun uploadResumeWithImage(resumeUri: Uri,imageUri: Uri, user: Users, context: Context, id: String) {
-        uploadResume(resumeUri, user, context, id)
-        uploadProfileImage(imageUri, user, context, id)
+    fun uploadResumeWithImage(resumeUri: Uri, imageUri: Uri, user: Users?, context: Context, id: String) {
+        if (user != null) {
+            uploadResume(resumeUri, user, context, id)
+            uploadProfileImage(imageUri, user, context, id)
+        }
 
     }
 

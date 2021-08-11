@@ -13,4 +13,6 @@ data class Users(
     var mobileNo: String="",
     val id: String="",
     var resume: String="",
+    var referCode: String="",
+    var coins: Int = 0
 )

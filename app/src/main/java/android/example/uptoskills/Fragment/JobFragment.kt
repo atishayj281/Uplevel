@@ -1,5 +1,6 @@
 package android.example.uptoskills.Fragment
 
+import android.example.uptoskills.Adapters.CourseViewPagerAdapter
 import android.example.uptoskills.Adapters.JobAdapter
 import android.example.uptoskills.Adapters.JobItemClicked
 import android.example.uptoskills.R
@@ -15,9 +16,12 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,12 +29,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
 /**
  * A simple [Fragment] subclass.
  * Use the [JobFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class JobFragment : Fragment(), JobItemClicked {
+class JobFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -42,11 +47,8 @@ class JobFragment : Fragment(), JobItemClicked {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: JobAdapter
-    private lateinit var progressBar: ProgressBar
-    private lateinit var refreshLayout: SwipeRefreshLayout
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,28 +57,21 @@ class JobFragment : Fragment(), JobItemClicked {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_job, container, false)
 
-        recyclerView = view.findViewById(R.id.Jobsrecyclerview)
-        progressBar = view.findViewById(R.id.jobProgressBar)
-        progressBar.visibility = View.VISIBLE
-        refreshLayout = view.findViewById(R.id.refreshLayout)
 
-        // Setting the jobs
-        setUpJobRecyclerView(view)
+        // setting up tabs
+        tabLayout = view.findViewById(R.id.courseTabLayout)
+        viewPager = view.findViewById(R.id.courseViewPager)
+        tabLayout.post { tabLayout.setupWithViewPager(viewPager) }
+        var adapter = CourseViewPagerAdapter(parentFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+        adapter.addFragment(OnlyJobsFragment(), "Jobs")
+        adapter.addFragment(InternshipFragment(), "Internships")
+        viewPager.adapter = adapter
 
-        refreshLayout.setOnRefreshListener {
-            setUpJobRecyclerView(view)
-            refreshLayout.handler
-                .postDelayed(Runnable { refreshLayout.isRefreshing = false }, 2000)
-        }
         return view
     }
 
-    private fun setUpJobRecyclerView(view: View){
-        adapter = JobAdapter(view.context, this, R.layout.job_item)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(view.context)
-        progressBar.visibility = View.GONE
-    }
+
+
 
     companion object {
         /**
@@ -96,27 +91,6 @@ class JobFragment : Fragment(), JobItemClicked {
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
-
-    fun fetchJob(){
-        
-    }
-
-    override fun onJobCLick(job: Job) {
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_action_back)
-        val uri = Uri.parse(job.url)
-        val intentBuilder = CustomTabsIntent.Builder().setCloseButtonIcon(bitmap)
-        val params = view?.let { ContextCompat.getColor(requireActivity(), R.color.AndroidGreen) }?.let {
-            CustomTabColorSchemeParams.Builder()
-                .setNavigationBarColor(it)
-                .setToolbarColor(ContextCompat.getColor(requireActivity(), R.color.AndroidGreen))
-                .setSecondaryToolbarColor(ContextCompat.getColor(requireActivity(), R.color.AndroidGreen))
-                .build()
-        }
-        params?.let { intentBuilder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, it) }
-        val customTabsIntent = intentBuilder.build()
-        view?.let { customTabsIntent.launchUrl(it.context, uri) }
-
     }
 }
 

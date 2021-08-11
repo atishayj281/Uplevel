@@ -4,6 +4,7 @@ import android.content.Intent
 import android.example.uptoskills.Adapters.CourseAdapter
 import android.example.uptoskills.Adapters.CourseItemClicked
 import android.example.uptoskills.Adapters.PaidCourseAdapter
+import android.example.uptoskills.Adapters.paidCourseclicked
 import android.example.uptoskills.CourseViewActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -31,7 +32,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [PaidCourseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PaidCourseFragment : Fragment(), CourseItemClicked {
+class PaidCourseFragment : Fragment(), paidCourseclicked {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -107,13 +108,10 @@ class PaidCourseFragment : Fragment(), CourseItemClicked {
         courseAdapter.stopListening()
     }
 
-
-
-    override fun onCourseCLick(courseId: String) {
+    override fun onpaidCourseClicked(courseId: String) {
         val intent = Intent(activity, CourseViewActivity::class.java)
         intent.putExtra("courseId", courseId)
         intent.putExtra("courseCategory", "paid")
         startActivity(intent)
-        activity?.finish()
     }
 }

@@ -5,9 +5,11 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.example.uptoskills.Adapters.SliderAdapter
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
@@ -16,19 +18,23 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.viewpager.widget.ViewPager
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
+import java.lang.Exception
 
 class OnBoardingActivity : AppCompatActivity() {
 
     private lateinit var slideViewPager: ViewPager
     private lateinit var dotsLayout: LinearLayout
     private lateinit var sliderAdapter: SliderAdapter
-    private lateinit var mDots: ArrayList<TextView>
     private lateinit var btnNext: TextView
     private lateinit var btnSkip: TextView
+    private var referId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_boarding)
+
 
         if(Build.VERSION.SDK_INT >= 21) {
             var window: Window = this.window
@@ -37,15 +43,48 @@ class OnBoardingActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        if(!isFirstTimeStartApp()){
-            startMainActivity()
-        }
+        Firebase.dynamicLinks
+            .getDynamicLink(intent)
+            .addOnSuccessListener(this) { pendingDynamicLinkData ->
+                // Get deep link from result (may be null if no link is found)
+                var deepLink: Uri? = null
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.link
+                    Log.e("my refer link", deepLink.toString())
+                    var referralLink = deepLink.toString()
+                    try {
+                        referralLink = referralLink.substring(referralLink.lastIndexOf("=")+1)
+                        Log.e("subReferLink", referralLink)
+                        referId = referralLink.substring(0, referralLink.indexOf("-"))
+                        Log.e("refer", referId.toString())
+                        val productId: String = referralLink.substring(referralLink.indexOf("-")+1)
+
+                    } catch (e: Exception) {
+                        Log.e("error", e.message.toString())
+                    }
+
+                }
+
+                // Handle the deep link. For example, open the linked
+                // content, or apply promotional credit to the user's
+                // account.
+                // ...
+
+                // ...
+            }
+            .addOnFailureListener(this) { e -> Log.w("starting Activity", "getDynamicLink:onFailure", e) }
+
         slideViewPager = findViewById(R.id.slideViewPager)
         dotsLayout = findViewById(R.id.dotLayout)
         sliderAdapter = SliderAdapter(this)
         btnNext = findViewById(R.id.btn_next)
         btnSkip = findViewById(R.id.btn_skip)
         slideViewPager.adapter = sliderAdapter
+
+        if(!isFirstTimeStartApp()){
+            Log.e("refer", referId.toString())
+            startMainActivity()
+        }
 
         slideViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 
@@ -70,14 +109,16 @@ class OnBoardingActivity : AppCompatActivity() {
             }
 
         })
-        //addDotsIndicator(0)
 
+
+        //addDotsIndicator(0)
         btnSkip.setOnClickListener {
+            Log.e("refer", referId.toString())
             startMainActivity()
         }
 
         btnNext.setOnClickListener {
-            var currentPage  =slideViewPager.currentItem+1
+            var currentPage = slideViewPager.currentItem+1
             if(currentPage < 3) {
                 slideViewPager.setCurrentItem(currentPage)
             } else {
@@ -90,22 +131,11 @@ class OnBoardingActivity : AppCompatActivity() {
     fun startMainActivity(){
         setFirstTimeStartStatus(false)
         var intent = Intent(this, SignInActivity::class.java)
+        if(referId != null) {
+            intent.putExtra("ReferId", referId)
+        }
         startActivity(intent)
         finish()
-    }
-
-    fun addDotsIndicator(page: Int){
-        dotsLayout.removeAllViews()
-        mDots = ArrayList<TextView>(4)
-        for(i in 0..2){
-            mDots[i] = TextView(this)
-            mDots[i].text = HtmlCompat.fromHtml("&#8226;", HtmlCompat.FROM_HTML_MODE_LEGACY)
-            mDots[i].textSize = 35F
-            mDots[i].setTextColor(ContextCompat.getColor(this, R.color.white))
-            dotsLayout.addView(mDots[i])
-        }
-
-        mDots[page].setTextColor(Color.parseColor("#ffffff"))
     }
 
     fun isFirstTimeStartApp():Boolean {

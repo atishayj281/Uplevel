@@ -181,7 +181,6 @@ class SignInActivity : AppCompatActivity() {
             binding.signInprogressbar.visibility = View.GONE
         }
     }
-
     fun startMainActivity(){
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -241,10 +240,20 @@ class SignInActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var ref = snapshot.child(auth.currentUser?.uid.toString())
                     if(!ref.exists()) {
-                        var user: Users = Users(hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
+                        var user = Users(hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
                             auth.currentUser?.email.toString(), "", "", "",
-                            auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "")
+                            auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "",
+                            intent.getStringExtra("ReferId").toString())
                         userDao.addUser(user, auth.currentUser?.uid.toString())
+
+                        var upRef: Users? =
+                            intent.getStringExtra("ReferId")?.let { snapshot.child(it).getValue(Users::class.java) }
+
+                        if(upRef != null) {
+                            upRef.coins += 20
+                            Log.e("coins", upRef.coins.toString())
+                            userDao.updateUser(upRef, intent.getStringExtra("ReferId").toString())
+                        }
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
@@ -253,15 +262,6 @@ class SignInActivity : AppCompatActivity() {
 
             startMainActivity()
         }
-    }
-
-    private fun startUserDetailsActivity() {
-        val intent = Intent(this, UserDetailsActivity::class.java)
-        intent.putExtra("id", auth.uid)
-        intent.putExtra("username", auth.currentUser?.displayName)
-        intent.putExtra("userImage", auth.currentUser?.photoUrl)
-        startActivity(intent)
-        finish()
     }
 
 

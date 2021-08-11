@@ -4,20 +4,15 @@ import android.content.Intent
 import android.example.uptoskills.Fragment.*
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityMainBinding
-import android.example.uptoskills.models.Blog
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.facebook.FacebookSdk
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -25,12 +20,14 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.wessam.library.NetworkChecker
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ktx.*
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
@@ -40,6 +37,8 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
     private lateinit var userDao: UsersDao
     private lateinit var auth: FirebaseAuth
     private lateinit var profile: ImageView
+    private lateinit var dynamicLink: DynamicLink
+    private lateinit var dynamicLinkUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,6 +119,11 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
                     startActivity(intent)
                 }
 
+                // base link - uptoskills.page.link
+                R.id.share -> {
+                    auth.currentUser?.let { createReferLink(it.uid, "1234533dsd") }
+                }
+
             }
             menuItem.isChecked = false
 
@@ -153,6 +157,47 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
                     setUpProfileImage()
                 }
 
+    }
+
+    private fun createReferLink(uId: String, productId: String) {
+        var link: String = "https://uptoskills.page.link/?"+
+                "link=https://www.uptoskills.com/myrefer.php?uId="+uId+"-"+productId+
+                "&apn="+packageName+
+                "&st=My Refer link"+
+                "&sd=Reward Coins 20"+
+                "&si=https://www.uptoskills.com/wp-content/uploads/2019/10/logo-dark.png"
+
+        // https://uptoskills.page.link?apn=android.example.getwork&ibi=com.example.ios&link=https%3A%2F%2Fwww.uptoskills.com%2F
+        Log.e("sharelink", link)
+        // shorten the link
+
+        val shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse(link))
+            .setDomainUriPrefix("https://uptoskills.page.link") // Set parameters
+            // ...
+            .buildShortDynamicLink()
+            .addOnCompleteListener(this
+            ) { task ->
+                if (task.isSuccessful) {
+                    // Short link created
+                    val shortLink = task.result.shortLink
+                    val flowchartLink = task.result.previewLink
+                    Log.e("short link", ""+shortLink)
+
+                    val intent = Intent()
+                    intent.action = Intent.ACTION_SEND
+                    intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    intent.type = "text/plain"
+                    startActivity(intent)
+                    // ------ click -> link -> google play store -> installed/not ---------
+
+                } else {
+                    // Error
+                    // ...
+                }
+            }
+
+//                    Log.e("long link", ""+dynamicLinkUri)
     }
 
     private fun setUpProfileImage() {
@@ -192,6 +237,7 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
         val username: TextView = headerView.findViewById(R.id.username)
         val email: TextView = headerView.findViewById(R.id.email)
         var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
+        val coins: TextView = headerView.findViewById(R.id.coins)
 
 
         userDao.ref.addValueEventListener(object: ValueEventListener{
@@ -203,6 +249,7 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
                     //profile.setImageResource(R.drawable.image_circle)
                     //this@MainActivity.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
                 }
+                coins.text = snapshot.child(auth.currentUser?.uid.toString()).child("coins").getValue(Int::class.java).toString()
             }
 
             override fun onCancelled(error: DatabaseError) {
