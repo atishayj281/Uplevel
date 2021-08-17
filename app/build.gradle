@@ -96,5 +96,8 @@ dependencies {
     // Razorpay
     implementation 'com.razorpay:checkout:1.6.11'
 
+    // searchable spinner
+    implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
+
 
 }

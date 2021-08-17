@@ -54,8 +54,9 @@ class SignInActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         binding.createAccount.setOnClickListener {
-            var intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
+            var signUpintent = Intent(this, SignUpActivity::class.java)
+            startActivity(signUpintent)
+            signUpintent.putExtra("ReferId", intent.getStringExtra("ReferId"))
             finish()
         }
 
@@ -208,7 +209,7 @@ class SignInActivity : AppCompatActivity() {
         if(requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                var account = task.getResult(ApiException::class.java)!!
+                val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account.idToken!!)
 
             } catch (e: ApiException) {
@@ -243,14 +244,14 @@ class SignInActivity : AppCompatActivity() {
                         var user = Users(hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
                             auth.currentUser?.email.toString(), "", "", "",
                             auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "",
-                            intent.getStringExtra("ReferId").toString())
+                            intent.getStringExtra("ReferId").toString(), 250)
                         userDao.addUser(user, auth.currentUser?.uid.toString())
 
                         var upRef: Users? =
                             intent.getStringExtra("ReferId")?.let { snapshot.child(it).getValue(Users::class.java) }
 
                         if(upRef != null) {
-                            upRef.coins += 20
+                            upRef.coins += 500
                             Log.e("coins", upRef.coins.toString())
                             userDao.updateUser(upRef, intent.getStringExtra("ReferId").toString())
                         }

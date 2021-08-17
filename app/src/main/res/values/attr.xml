@@ -4,5 +4,6 @@
     <declare-styleable name="dt">
         <attr name="bgc" format="color"/>
         <attr name="tC" format="color"/>
+        <attr name="mbgc" format="color"/>
     </declare-styleable>
 </resources>

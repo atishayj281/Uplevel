@@ -24,21 +24,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.dynamiclinks.ktx.*
-import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
 
-    private lateinit var displayName: String
+    private var displayName: String = ""
     private lateinit var binding: ActivityMainBinding
     private lateinit var userDao: UsersDao
     private lateinit var auth: FirebaseAuth
-    private lateinit var profile: ImageView
-    private lateinit var dynamicLink: DynamicLink
-    private lateinit var dynamicLinkUri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +47,6 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
 
         userDao = UsersDao()
         auth = FirebaseAuth.getInstance()
-        profile = findViewById(R.id.profileImage)
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener {
 
@@ -77,94 +70,85 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
             true
         }
 
-        binding.hometoolBar.setOnClickListener {
-            binding.homedrawerLayout.openDrawer(GravityCompat.START)
-        }
+//        binding.hometoolBar.setOnClickListener {
+//            binding.homedrawerLayout.openDrawer(GravityCompat.START)
+//        }
 
-        binding.homeNavigationView.setNavigationItemSelectedListener { menuItem ->
-            // Handle menu item selected
-            menuItem.isChecked = true
-            binding.homedrawerLayout.closeDrawer(GravityCompat.START)
-
-            when(menuItem.itemId){
-                R.id.Job -> binding.bottomNavigation.selectedItemId = R.id.Job
-                R.id.courses -> binding.bottomNavigation.selectedItemId = R.id.courses
-                R.id.MyCourses -> {
-                    val intent = Intent(this, MyCourseActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.LogOut ->{
-                    val gso =
-                        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-
-                    val googleSignInClient = GoogleSignIn.getClient(this, gso)
-                    googleSignInClient.signOut()
-                        .addOnCompleteListener(object : OnCompleteListener<Void?> {
-                            override fun onComplete(task: Task<Void?>) {
-                                if (task.isSuccessful) {
-                                    FirebaseAuth.getInstance()
-                                        .signOut() // very important if you are using firebase.
-                                    val login_intent = Intent(FacebookSdk.getApplicationContext(),
-                                        SignInActivity::class.java)
-                                    login_intent.flags =
-                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // clear previous task (optional)
-                                    startActivity(login_intent)
-                                    finish()
-                                }
-                            }
-                        })
-                }
-                R.id.privacyPolicy -> {
-                    val intent = Intent(this, PrivacyPolicyActivity::class.java)
-                    startActivity(intent)
-                }
-
-                // base link - uptoskills.page.link
-                R.id.share -> {
-                    auth.currentUser?.let { createReferLink(it.uid, "1234533dsd") }
-                }
-
-            }
-            menuItem.isChecked = false
-
-
-            true
-        }
-        profile.setOnClickListener {
-            var intent = Intent(this, UserDetailsActivity::class.java)
-            intent.putExtra("username", displayName )
-            intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
-            intent.putExtra("parent", "MoreFragment")
-            startActivity(intent)
-        }
-
-
-        // setUp Navigation header Profile click
-        val navigationView = findViewById<NavigationView>(R.id.homeNavigationView)
-        val headerView: View = navigationView.getHeaderView(0)
-        headerView.findViewById<MaterialCardView>(R.id.profile).setOnClickListener {
-            var intent = Intent(this, UserDetailsActivity::class.java)
-            intent.putExtra("username", displayName )
-            intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
-            intent.putExtra("parent", "MoreFragment")
-            startActivity(intent)
-        }
+//        binding.homeNavigationView.setNavigationItemSelectedListener { menuItem ->
+//            // Handle menu item selected
+//            menuItem.isChecked = true
+//            binding.homedrawerLayout.closeDrawer(GravityCompat.START)
+//
+//            when(menuItem.itemId){
+//                R.id.Job -> binding.bottomNavigation.selectedItemId = R.id.Job
+//                R.id.courses -> binding.bottomNavigation.selectedItemId = R.id.courses
+//                R.id.MyCourses -> {
+//                    val intent = Intent(this, MyCourseActivity::class.java)
+//                    startActivity(intent)
+//                }
+//                R.id.certificate -> {
+//
+//                }
+//                R.id.LogOut ->{
+//                    val gso =
+//                        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+//
+//                    val googleSignInClient = GoogleSignIn.getClient(this, gso)
+//                    googleSignInClient.signOut()
+//                        .addOnCompleteListener(object : OnCompleteListener<Void?> {
+//                            override fun onComplete(task: Task<Void?>) {
+//                                if (task.isSuccessful) {
+//                                    FirebaseAuth.getInstance()
+//                                        .signOut() // very important if you are using firebase.
+//                                    val login_intent = Intent(FacebookSdk.getApplicationContext(),
+//                                        SignInActivity::class.java)
+//                                    login_intent.flags =
+//                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // clear previous task (optional)
+//                                    startActivity(login_intent)
+//                                    finish()
+//                                }
+//                            }
+//                        })
+//                }
+//                R.id.privacyPolicy -> {
+//                    val intent = Intent(this, PrivacyPolicyActivity::class.java)
+//                    startActivity(intent)
+//                }
+//
+//                R.id.share -> {
+//                    auth.currentUser?.let { createReferLink(it.uid, "1234533dsd") }
+//                }
+//
+//                R.id.bookmark ->
+//                {
+//                    val intent = Intent(this, BookmarkActivity::class.java)
+//                    startActivity(intent)
+//                }
+//
+//            }
+//            menuItem.isChecked = false
+//
+//
+//            true
+//        }
 
 
-        //set NavigationViewheader
-                if(!this.isDestroyed){
-                    setUpNavigationViewHeader()
-                    setUpProfileImage()
-                }
+
+//        //set NavigationViewheader
+//                if(!this.isDestroyed){
+//                    setUpNavigationViewHeader()
+//                }
 
     }
 
+
+    // create referral link
     private fun createReferLink(uId: String, productId: String) {
         var link: String = "https://uptoskills.page.link/?"+
                 "link=https://www.uptoskills.com/myrefer.php?uId="+uId+"-"+productId+
                 "&apn="+packageName+
-                "&st=My Refer link"+
-                "&sd=Reward Coins 20"+
+                "&st=Join me on UptoSkills"+
+                "&sd=Reward UsCash 500"+
                 "&si=https://www.uptoskills.com/wp-content/uploads/2019/10/logo-dark.png"
 
         // https://uptoskills.page.link?apn=android.example.getwork&ibi=com.example.ios&link=https%3A%2F%2Fwww.uptoskills.com%2F
@@ -196,68 +180,7 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
                     // ...
                 }
             }
-
 //                    Log.e("long link", ""+dynamicLinkUri)
-    }
-
-    private fun setUpProfileImage() {
-        userDao = UsersDao()
-
-        userDao.ref.addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val profileImage =
-                    auth.currentUser?.uid?.let { snapshot.child(it).child("userImage").getValue(String::class.java).toString() }
-                displayName = snapshot.child(FirebaseAuth.getInstance().currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
-                if (profileImage != null) {
-                    if(profileImage.isNotEmpty() && !profileImage.equals("null")){
-                        profile.setImageResource(R.drawable.image_circle)
-                        try{
-                            this@MainActivity.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
-                        } catch (e: Exception) {
-
-                        }
-
-                    }
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setUpProfileImage()
-    }
-
-    private fun setUpNavigationViewHeader() {
-        val navigationView = findViewById<NavigationView>(R.id.homeNavigationView)
-        val headerView: View = navigationView.getHeaderView(0)
-        val username: TextView = headerView.findViewById(R.id.username)
-        val email: TextView = headerView.findViewById(R.id.email)
-        var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
-        val coins: TextView = headerView.findViewById(R.id.coins)
-
-
-        userDao.ref.addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val profileImage = snapshot.child(auth.currentUser!!.uid).child("userImage").getValue(String::class.java).toString()
-                username.text = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
-                email.text = snapshot.child(auth.currentUser?.uid.toString()).child("email").getValue(String::class.java).toString()
-                if(profileImage.isNotEmpty() && !profileImage.equals("null")){
-                    //profile.setImageResource(R.drawable.image_circle)
-                    //this@MainActivity.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
-                }
-                coins.text = snapshot.child(auth.currentUser?.uid.toString()).child("coins").getValue(Int::class.java).toString()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
-
-
     }
 
 

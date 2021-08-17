@@ -32,7 +32,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [PaidCourseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PaidCourseFragment : Fragment(), paidCourseclicked {
+class PaidCourseFragment : Fragment(), paidCourseclicked, onJobSearch {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -60,7 +60,7 @@ class PaidCourseFragment : Fragment(), paidCourseclicked {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_paid_course, container, false)
 
-        setUpcourses(view)
+        setUpcourses(view, "")
 
         return view
     }
@@ -86,14 +86,20 @@ class PaidCourseFragment : Fragment(), paidCourseclicked {
     }
 
 
-    private fun setUpcourses(view: View) {
+    private fun setUpcourses(view: View, filter: String) {
         courseDao = PaidCourseDao()
         courseRecyclerView = view.findViewById(R.id.paidCourseRecyclerView)
         val courseCollection = courseDao.courseCollection
-        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
-        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<PaidCourse>().setQuery(query, PaidCourse::class.java).build()
-
-        courseAdapter = PaidCourseAdapter(view.context,this, R.layout.item_course, recyclerViewOptions)
+        val query: Query
+        if(filter.isEmpty()) {
+            query = courseCollection.orderBy("id", Query.Direction.DESCENDING)
+            val recyclerViewOptions = FirestoreRecyclerOptions.Builder<PaidCourse>().setQuery(query, PaidCourse::class.java).build()
+            courseAdapter = PaidCourseAdapter(view.context,this, R.layout.item_course, recyclerViewOptions)
+        } else {
+            query = courseCollection.whereEqualTo("category", filter)
+            val recyclerViewOptions = FirestoreRecyclerOptions.Builder<PaidCourse>().setQuery(query, PaidCourse::class.java).build()
+            courseAdapter.updateOptions(recyclerViewOptions)
+        }
         courseRecyclerView.adapter = courseAdapter
         courseRecyclerView.layoutManager = LinearLayoutManager(view.context)
     }
@@ -113,5 +119,9 @@ class PaidCourseFragment : Fragment(), paidCourseclicked {
         intent.putExtra("courseId", courseId)
         intent.putExtra("courseCategory", "paid")
         startActivity(intent)
+    }
+
+    override fun updateRecyclerView(query: String) {
+        view?.let { setUpcourses(it, query) }
     }
 }

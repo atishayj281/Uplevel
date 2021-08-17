@@ -12,22 +12,29 @@
     app:cardCornerRadius="10dp"
     app:cardElevation="1dp">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:theme="@style/DarkTheme">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/blogImage"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="wrap_content"
+            android:id="@+id/blogImageLayout">
 
-        <com.google.android.material.textview.MaterialTextView
+            <ImageView
+                android:id="@+id/blogImage"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+        </FrameLayout>
+
+
+
+        <TextView
             android:id="@+id/blogHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/blogImage"
+            android:layout_below="@id/blogImageLayout"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="5dp"
@@ -35,15 +42,17 @@
             android:maxLines="1"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:textColor="?attr/tC"
             />
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:id="@+id/blogDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/blogHeading"
             android:layout_margin="10dp"
             android:ellipsize="end"
+            android:textColor="?attr/tC"
             android:maxLines="2"/>
     </RelativeLayout>
 

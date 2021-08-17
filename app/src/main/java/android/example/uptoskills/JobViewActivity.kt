@@ -8,6 +8,7 @@ import android.example.uptoskills.databinding.ActivityJobViewBinding
 import android.example.uptoskills.models.Internship
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
@@ -35,6 +36,10 @@ class JobViewActivity : AppCompatActivity() {
             intent.putExtra("jobId", jobId)
             startActivity(intent)
         }
+
+        binding.back.setOnClickListener {
+            finish()
+        }
     }
 
     private fun fillActivity(){
@@ -42,7 +47,7 @@ class JobViewActivity : AppCompatActivity() {
             if(isJob) {
                 val jobDao = JobDao()
                 val job: Job? = jobDao.getJobbyId(jobId).await().toObject(Job::class.java)
-
+                Log.e("job", jobId)
                 if(job != null) {
                     withContext(Dispatchers.Main) {
                         binding.basicQualification.text = job.basic_requirements
@@ -53,7 +58,10 @@ class JobViewActivity : AppCompatActivity() {
                         binding.title.text = job.title
                         binding.totalApplied.text = job.applied.size.toString()
                         Glide.with(this@JobViewActivity).load(job.company_logo_url).circleCrop().into(binding.logo)
+
                     }
+                } else {
+                    Log.e("job is null", "Job is null")
                 }
             } else {
                 val internshipDao = InternshipDao()

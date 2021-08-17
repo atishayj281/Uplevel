@@ -10,9 +10,10 @@
     android:layout_marginRight="15dp"
     android:layout_marginBottom="10dp"
     app:cardElevation="1dp"
+    app:cardBackgroundColor="?attr/bgc"
     >
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -30,14 +31,22 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <FrameLayout
+            android:id="@+id/jobTypeLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:layout_constraintStart_toEndOf="@id/company_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
         <TextView
             android:id="@+id/jobtype"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Full TIme Job"
-            app:layout_constraintStart_toEndOf="@id/company_image"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Full Time Job"
+            android:textColor="?attr/tC" />
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/jobname"
@@ -45,10 +54,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Android Developer"
-            android:textColor="@color/black"
+            android:textColor="?attr/tC"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/company_image"
-            app:layout_constraintTop_toBottomOf="@id/jobtype"
+            app:layout_constraintTop_toBottomOf="@id/jobTypeLayout"
             app:layout_constraintEnd_toEndOf="parent"
             android:maxLines="2"
             android:ellipsize="end"/>
@@ -59,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Growagro"
-            android:textColor="@color/black"
+            android:textColor="?attr/tC"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/company_image"
             app:layout_constraintTop_toBottomOf="@id/jobname" />
@@ -72,18 +81,18 @@
             app:layout_constraintStart_toEndOf="@id/companyname"
             android:text="Hydrabad"
             android:layout_margin="10dp"
-            android:textColor="@color/black"/>
+            android:textColor="?attr/tC"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/ic_bookmarked"
+            android:layout_margin="10dp"
+            android:layout_gravity="right"
+            android:id="@+id/isBookmarked"/>
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="10dp"
-            android:background="?android:attr/listDivider"/>
-
-    </LinearLayout>
+    </FrameLayout>
 
 
 </com.google.android.material.card.MaterialCardView>

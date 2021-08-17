@@ -3,6 +3,8 @@ package android.example.uptoskills.Adapters
 import android.example.uptoskills.models.Blog
 import android.example.uptoskills.R
 import android.example.uptoskills.Utils
+import android.example.uptoskills.daos.UsersDao
+import android.example.uptoskills.models.Users
 import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +18,10 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 
 class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogAdapter, val itemId: Int) : FirestoreRecyclerAdapter<Blog, BlogsAdapter.BLogViewHolder>(
@@ -24,8 +30,8 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
 
     class BLogViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val blogImage: ImageView = itemView.findViewById(R.id.blogImage)
-        val blogHeading: MaterialTextView = itemView.findViewById(R.id.blogHeading)
-        val description: MaterialTextView = itemView.findViewById(R.id.blogDescription)
+        val blogHeading: TextView = itemView.findViewById(R.id.blogHeading)
+        val description: TextView = itemView.findViewById(R.id.blogDescription)
         val blog: CardView = itemView.findViewById(R.id.blog)
     }
 
@@ -46,4 +52,5 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
 
 interface IBlogAdapter {
     fun onBlogClicked(postId: String)
+    fun onBookmarkClicked(blogId: String, item: String)
 }

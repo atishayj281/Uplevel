@@ -29,4 +29,9 @@ class CourseViewPagerAdapter(fm: FragmentManager, behavior: Int):
     override fun getPageTitle(position: Int): CharSequence? {
         return fragmentTitle[position]
     }
+
+    fun clearData(){
+        fragmentArrayList.clear()
+        fragmentTitle.clear()
+    }
 }

@@ -1,251 +1,527 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     tools:context=".Fragment.HomeFragment"
-    android:background="@android:color/transparent">
+    >
 
-    <RelativeLayout
+    <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.core.widget.NestedScrollView
+        android:layout_height="match_parent"
+        android:id="@+id/homedrawerLayout"
+        android:layout_gravity="left">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbarlayout"
+                style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@android:color/transparent"
+                android:fitsSystemWindows="true"
+                app:elevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:liftOnScroll="true">
 
-                <LinearLayout
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/hometoolBar"
+                    style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/navigation_view_background"
+                    android:elevation="2dp"
+                    android:layout_margin="4dp"
+                    app:navigationIcon="@drawable/ic_menu"
+                    >
 
-                    <FrameLayout
+                </com.google.android.material.appbar.MaterialToolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swiperefresh"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@id/appbarlayout"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Free Courses"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/viewFreeAllCourses"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_marginRight="20dp"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:text="View All"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </FrameLayout>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/FreeCourserecyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal"/>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Paid Courses"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/viewAllPaidCourses"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:layout_marginRight="20dp"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:text="View All"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </FrameLayout>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/PaidCourserecyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal" />
-
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Blogs"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/viewAllBlogs"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="20dp"
-                            android:gravity="end"
-                            android:text="View All"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                    </FrameLayout>
+                            <FrameLayout
+                                android:id="@+id/popUpLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                                <com.google.android.material.card.MaterialCardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="10dp"
+                                    app:cardCornerRadius="10dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:paddingLeft="20dp"
+                                        android:paddingTop="10dp"
+                                        android:paddingRight="20dp"
+                                        android:paddingBottom="10dp"
+                                        android:background="@drawable/mainbackground">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="70dp"
+                                            android:layout_marginRight="70dp"
+                                            android:gravity="center_horizontal"
+                                            android:text="Begin your career in data science earn scholarship upto Rs 40,000"
+                                            android:textColor="@color/white" />
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center_horizontal">
+
+                                            <TextView
+                                                android:layout_width="100dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center_vertical"
+                                                android:gravity="right"
+                                                android:text="Valid till 13th August,2021"
+                                                android:textColor="@color/white"
+                                                android:textStyle="bold" />
+
+                                            <com.google.android.material.card.MaterialCardView
+                                                android:id="@+id/popUpKnowMore"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginLeft="10dp"
+                                                android:layout_marginRight="10dp"
+                                                android:background="@color/white"
+                                                app:cardCornerRadius="0dp">
+
+                                                <TextView
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:layout_margin="10dp"
+                                                    android:maxLines="1"
+                                                    android:text="KNOW MORE"
+                                                    android:textColor="?attr/tC" />
+
+
+                                            </com.google.android.material.card.MaterialCardView>
+
+
+                                            <TextView
+                                                android:layout_width="100dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="bottom"
+                                                android:gravity="left"
+                                                android:textSize="7sp"
+                                                android:text="Exclusive for you"
+                                                android:textColor="@color/white"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
+
+
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:id="@+id/popUpback"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="right"
+                                        android:layout_marginTop="15dp"
+                                        android:layout_marginRight="15dp"
+                                        android:text="X"
+                                        android:textColor="?attr/bgc" />
+
+
+                                </com.google.android.material.card.MaterialCardView>
+
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:gravity="center"
+                                android:text="Welcome to UptoSkills"
+                                android:textColor="?attr/tC"
+                                android:textSize="31sp" />
+
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/courseEnquiryLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_marginTop="20dp"
+                                android:layout_marginRight="20dp"
+                                android:layout_marginBottom="10dp"
+                                android:backgroundTint="?attr/bgc"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="7dp">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/enqHeading"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="15dp"
+                                        android:text="Talk to a Course Counselor"
+                                        android:textColor="?attr/tC"
+                                        android:textSize="15sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/subheading"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/enqHeading"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="5dp"
+                                        android:elevation="1dp"
+                                        android:text="Get expert assistance in choosing a course"
+                                        android:textColor="?attr/tC"
+                                        android:textSize="12sp" />
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/subheading">
+
+                                        <ImageView
+                                            android:layout_width="100dp"
+                                            android:layout_height="100dp"
+                                            android:layout_gravity="right"
+                                            android:background="@android:color/transparent"
+                                            android:src="@drawable/student_with_laptop" />
+
+
+                                        <com.google.android.material.card.MaterialCardView
+                                            android:id="@+id/courseEnquiry"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="20dp"
+                                            android:layout_gravity="bottom"
+                                            android:padding="10dp"
+                                            android:layout_marginBottom="20dp"
+                                            app:cardBackgroundColor="@color/AndroidGreen"
+                                            app:cardCornerRadius="2.5dp"
+                                            app:cardElevation="2dp">
+
+                                            <TextView
+
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginLeft="5dp"
+                                                android:layout_gravity="bottom"
+                                                android:layout_marginRight="5dp"
+                                                android:layout_margin="5dp"
+                                                android:text="Course Enquiry"
+                                                android:textColor="@color/white"
+                                                android:textSize="15sp" />
+                                        </com.google.android.material.card.MaterialCardView>
+
+                                    </FrameLayout>
+
+
+                                </RelativeLayout>
+
+                                <TextView
+                                    android:id="@+id/delNotification"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    android:layout_marginTop="15dp"
+                                    android:layout_marginRight="10dp"
+                                    android:elevation="5dp"
+                                    android:text="X"
+                                    android:textColor="?attr/tC" />
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Free Courses"
+                                        android:textColor="?attr/tC"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/viewFreeAllCourses"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="right"
+                                        android:layout_marginRight="20dp"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:text="View All"
+                                        android:textColor="#150E56"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                </FrameLayout>
+
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/FreeCourserecyclerview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:orientation="horizontal" />
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Paid Courses"
+                                        android:textColor="?attr/tC"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/viewAllPaidCourses"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="right"
+                                        android:layout_marginRight="20dp"
+                                        android:clickable="true"
+                                        android:focusable="true"
+                                        android:text="View All"
+                                        android:textColor="#150E56"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                </FrameLayout>
+
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/PaidCourserecyclerview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="5dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:orientation="horizontal" />
+
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Blogs"
+                                        android:textColor="?attr/tC"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/viewAllBlogs"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="20dp"
+                                        android:gravity="end"
+                                        android:text="View All"
+                                        android:textColor="#150E56"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+                                </FrameLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp">
+
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/blogrecyclerview"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:paddingBottom="10dp" />
+                                </LinearLayout>
+
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Recent Jobs"
+                                        android:textColor="?attr/tC"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/viewAllJobs"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginRight="20dp"
+                                        android:gravity="end"
+                                        android:text="View All"
+                                        android:textColor="#150E56"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                </FrameLayout>
+
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/HomeJobrecyclerview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:orientation="horizontal" />
+
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Interview Questions"
+                                        android:textColor="?attr/tC"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+                                </FrameLayout>
+
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/InterviewQuestionsrecyclerview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:orientation="horizontal" />
+
+
+
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/referEarn"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="150dp"
+                                    android:layout_margin="10dp"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="7dp">
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="right"
+                                        android:src="@drawable/refer" />
+
+
+                                </com.google.android.material.card.MaterialCardView>
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.core.widget.NestedScrollView>
+
+                    <ProgressBar
+                        android:id="@+id/homeProgressbar"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp">
+                        android:layout_centerInParent="true"
+                        android:indeterminate="true"
+                        android:indeterminateTint="#02bda8"
+                        android:visibility="visible" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/blogrecyclerview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="10dp" />
-                    </LinearLayout>
+                </RelativeLayout>
 
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="horizontal">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Recent Jobs"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/viewAllJobs"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="20dp"
-                            android:gravity="end"
-                            android:text="View All"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </FrameLayout>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/HomeJobrecyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Profiles"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/viewAllProfiles"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="20dp"
-                            android:gravity="end"
-                            android:text="View All"
-                            android:textColor="?attr/tC"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                    </FrameLayout>
-
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/HomeProfilesrecyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-        </androidx.core.widget.NestedScrollView>
-
-        <ProgressBar
-            android:id="@+id/homeProgressbar"
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/homeNavigationView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminate="true"
-            android:indeterminateTint="#02bda8"
-            android:visibility="visible" />
-
-
-    </RelativeLayout>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:headerLayout="@layout/home_navigation_header_layout"
+            app:menu="@menu/home_menu_items"
+            app:itemIconTint="@color/black"
+            app:itemTextColor="@color/black"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</FrameLayout>

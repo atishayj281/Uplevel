@@ -35,7 +35,6 @@ class OnBoardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_on_boarding)
 
-
         if(Build.VERSION.SDK_INT >= 21) {
             var window: Window = this.window
             window.statusBarColor = ContextCompat.getColor(this, R.color.white)

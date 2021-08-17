@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/AndroidGreen"
+    android:background="@color/blue"
     tools:context=".CreateAccountActivity"
     >
 
@@ -45,7 +45,6 @@
                     android:text="SIGN UP"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:fontFamily="@font/baloo2_extrabold"
                     android:textSize="31.3sp"
                     />
 
@@ -63,7 +62,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/back"
-                    android:fontFamily="@font/baloo2_semibold"
                     android:maxLines="1"
                     android:textCursorDrawable="@drawable/grey_cursor_color"
                     android:textSize="15sp"/>
@@ -91,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/back"
-                    android:fontFamily="@font/baloo2_semibold"
                     android:maxLines="1"
                     android:textCursorDrawable="@drawable/grey_cursor_color"
                     android:textSize="15sp"

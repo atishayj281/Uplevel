@@ -26,6 +26,22 @@ class JobDao {
         return jobCollection.document(jobId).get()
     }
 
+    fun addbookmark(jobId: String) {
+        if(jobId.isNotBlank()) {
+            GlobalScope.launch(Dispatchers.IO) {
+                val currentUserId = auth.currentUser!!.uid
+                val job = getJobbyId(jobId).await().toObject(Job::class.java)!!
+                val isBookmarked = job.bookmark.contains(currentUserId)
+                if(isBookmarked) {
+                    job.bookmark.remove(currentUserId)
+                } else {
+                    job.bookmark.add(currentUserId)
+                }
+                jobCollection.document(jobId).set(job)
+            }
+        }
+    }
+
     fun applyJob(jobId: String, context: Context): Boolean {
         if(jobId.isNotBlank()) {
 

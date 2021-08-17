@@ -11,5 +11,6 @@ data class Job (val applied: HashMap<String, String> = HashMap(),
                 var publication_date: String="",
                 val basic_requirements: String="",
                 val preferred_requirements: String="",
-                var title: String=""
+                var title: String="",
+                val bookmark: ArrayList<String> = ArrayList()
                 )

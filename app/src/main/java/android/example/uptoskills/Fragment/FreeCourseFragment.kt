@@ -32,7 +32,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [FreeCourseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FreeCourseFragment : Fragment(), CourseItemClicked {
+class FreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -57,18 +57,25 @@ class FreeCourseFragment : Fragment(), CourseItemClicked {
         val view = inflater.inflate(R.layout.fragment_free_course, container, false)
 
 
-        setUpcourses(view)
+        setUpcourses(view, "")
         return view
     }
 
-    private fun setUpcourses(view: View) {
+    private fun setUpcourses(view: View, filter: String) {
         courseDao = CourseDao()
         courseRecyclerView = view.findViewById(R.id.freeCourseRecyclerView)
         val courseCollection = courseDao.courseCollection
-        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
-        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<FreeCourse>().setQuery(query, FreeCourse::class.java).build()
+        val query: Query
+        if(filter.isEmpty()) {
+            query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
+            val recyclerViewOptions = FirestoreRecyclerOptions.Builder<FreeCourse>().setQuery(query, FreeCourse::class.java).build()
+            courseAdapter = CourseAdapter(view.context,this, R.layout.item_course, recyclerViewOptions)
+        } else {
+            query = courseCollection.whereEqualTo("category", filter)
+            val recyclerViewOptions = FirestoreRecyclerOptions.Builder<FreeCourse>().setQuery(query, FreeCourse::class.java).build()
+            courseAdapter.updateOptions(recyclerViewOptions)
+        }
 
-        courseAdapter = CourseAdapter(view.context,this, R.layout.item_course, recyclerViewOptions)
         courseRecyclerView.adapter = courseAdapter
         courseRecyclerView.layoutManager = LinearLayoutManager(view.context)
     }
@@ -108,5 +115,9 @@ class FreeCourseFragment : Fragment(), CourseItemClicked {
         intent.putExtra("courseId", courseId)
         intent.putExtra("courseCategory", "free")
         startActivity(intent)
+    }
+
+    override fun updateRecyclerView(query: String) {
+        view?.let { setUpcourses(it, query) }
     }
 }

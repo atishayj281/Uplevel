@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/AndroidGreen"
+    android:background="@color/blue"
     android:orientation="vertical"
     tools:context=".SignInActivity">
 
@@ -42,7 +42,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="57.7dp"
-                        android:fontFamily="@font/baloo2_extrabold"
                         android:text="LOGIN"
                         android:textColor="@color/black"
                         android:textSize="31.3sp"
@@ -108,7 +107,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/back"
-                    android:fontFamily="@font/baloo2_semibold"
                     android:maxLines="1"
                     android:textCursorDrawable="@drawable/grey_cursor_color"
                     android:textSize="15sp" />
@@ -226,7 +224,7 @@
                 android:layout_marginLeft="7dp"
                 android:gravity="center_horizontal"
                 android:text="Create One"
-                android:textColor="@color/com_facebook_blue"
+                android:textColor="@color/white"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -299,7 +297,6 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="44.3dp"
                 android:background="@drawable/back"
-                android:fontFamily="@font/baloo2_semibold"
                 android:maxLines="1"
                 android:textCursorDrawable="@drawable/grey_cursor_color"
                 android:textSize="15sp" />

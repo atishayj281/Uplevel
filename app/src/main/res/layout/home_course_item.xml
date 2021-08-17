@@ -8,6 +8,7 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
+    app:cardBackgroundColor="?attr/bgc"
     app:cardElevation="5dp"
     app:cardCornerRadius="14dp">
 
@@ -26,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:textColor="@color/black"
+            android:textColor="?attr/tC"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/courseImage" />
@@ -38,7 +39,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:textSize="14sp"
-            android:textColor="@color/black"
+            android:textColor="?attr/tC"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -58,7 +59,8 @@
             app:layout_constraintTop_toBottomOf="@id/CourseName"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textColor="?attr/tC"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

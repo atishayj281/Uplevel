@@ -6,21 +6,39 @@ import android.content.Intent
 import android.example.uptoskills.*
 import android.example.uptoskills.Adapters.*
 import android.example.uptoskills.daos.*
+import android.example.uptoskills.databinding.FragmentHomeBinding
 import android.example.uptoskills.models.*
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
+import com.facebook.FacebookSdk
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.firestore.Query
 
 
@@ -40,8 +58,7 @@ interface onMenuItemSelectedListener{
     fun onItemSelected(itemId: Int)
 }
 
-class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, IProfileAdapter,
-    paidCourseclicked {
+class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, paidCourseclicked {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -64,8 +81,6 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     private lateinit var jobAdapter: JobAdapter
     private lateinit var progressBar: ProgressBar
     private lateinit var userDao: UsersDao
-    private lateinit var profileAdapter: ProfileAdapter
-    private lateinit var profileRecyclerView: RecyclerView
     var menuItemSelectedId: Int = -1
     private lateinit var menuItemSelectedListener: onMenuItemSelectedListener
     private lateinit var auth: FirebaseAuth
@@ -75,6 +90,18 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     private lateinit var paidcourseAdapter: PaidCourseAdapter
     private lateinit var paidCourseDao: PaidCourseDao
     private lateinit var paidCourseRecyclerView: RecyclerView
+    private lateinit var courseEnquirybtn: MaterialCardView
+    private lateinit var courseEnqClosebtn: MaterialTextView
+    private lateinit var courseEnquiryLayout: MaterialCardView
+    private lateinit var popUpback: TextView
+    private lateinit var popUpLayout: FrameLayout
+    private lateinit var popUpKnowMore: MaterialCardView
+    private lateinit var referandEarnCardView: MaterialCardView
+    private lateinit var curUser: Users
+    private lateinit var hometoolBar: MaterialToolbar
+    private lateinit var homedrawerLayout: DrawerLayout
+    private lateinit var homeNavigationView: NavigationView
+    private var displayName: String = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -98,12 +125,29 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        hometoolBar = view.findViewById(R.id.hometoolBar)
+        homedrawerLayout = view.findViewById(R.id.homedrawerLayout)
+        homeNavigationView = view.findViewById(R.id.homeNavigationView)
+
+
+
+        courseEnqClosebtn = view.findViewById(R.id.delNotification)
+        courseEnquirybtn = view.findViewById(R.id.courseEnquiry)
+        courseEnquiryLayout = view.findViewById(R.id.courseEnquiryLayout)
+
+        popUpback = view.findViewById(R.id.popUpback)
+        popUpLayout = view.findViewById(R.id.popUpLayout)
+        popUpKnowMore = view.findViewById(R.id.popUpKnowMore)
+
+        referandEarnCardView = view.findViewById(R.id.referEarn)
+
         paidCourseDao = PaidCourseDao()
         paidCourseRecyclerView = view.findViewById(R.id.PaidCourserecyclerview)
 
         refreshLayout = view.findViewById(R.id.swiperefresh)
 
         auth = FirebaseAuth.getInstance()
+        userDao = UsersDao()
 
         recyclerView = view.findViewById(R.id.blogrecyclerview)
         progressBar = view.findViewById(R.id.homeProgressbar)
@@ -111,10 +155,12 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
 
 
         progressBar.visibility = View.VISIBLE
+        hometoolBar.setOnClickListener {
+            homedrawerLayout.openDrawer(GravityCompat.START)
+        }
 
         setUpJobRecyclerView(view)
         setUpBlogRecyclerView()
-        setUpProfileRecyclerView(view)
         setUpcourses(view)
         setUppaidCourses(view)
 
@@ -125,7 +171,6 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         val allPaidCourses = view.findViewById<TextView>(R.id.viewAllPaidCourses)
         val allBlogs = view.findViewById<TextView>(R.id.viewAllBlogs)
         val allJobs = view.findViewById<TextView>(R.id.viewAllJobs)
-        val allProfiles = view.findViewById<TextView>(R.id.viewAllProfiles)
 
         // Set OnClickListeners
         allFreeCourses.setOnClickListener {
@@ -140,21 +185,183 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         allJobs.setOnClickListener {
             menuItemSelectedListener.onItemSelected(R.id.Job)
         }
-        allProfiles.setOnClickListener {
-            var intent = Intent(view.context, AllProfilesActivity::class.java)
-            startActivity(intent)
-        }
 
         // Refreshing fragment
         refreshLayout.setOnRefreshListener {
-            setUpJobRecyclerView(view)
-            setUpProfileRecyclerView(view)
             refreshLayout.handler
                 .postDelayed(Runnable { refreshLayout.isRefreshing = false }, 2000)
         }
 
+        courseEnqClosebtn.setOnClickListener {
+            courseEnquiryLayout.visibility = View.GONE
+        }
+
+        courseEnquirybtn.setOnClickListener {
+            val intent = Intent(activity, CourseEnquiryActivity::class.java)
+            startActivity(intent)
+        }
+
+        popUpback.setOnClickListener {
+            popUpLayout.visibility = View.GONE
+        }
+
+        popUpKnowMore.setOnClickListener {
+            
+        }
+
+        referandEarnCardView.setOnClickListener {
+            auth.currentUser?.let { createReferLink(it.uid, "1234533dsd") }
+        }
+
+        auth.currentUser?.let { userDao.ref.child(it.uid).addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.getValue(Users::class.java)?.also { curUser = it }
+                displayName = curUser.displayName.toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        }) }
+
+        homeNavigationView.setNavigationItemSelectedListener { menuItem ->
+            // Handle menu item selected
+            menuItem.isChecked = true
+            homedrawerLayout.closeDrawer(GravityCompat.START)
+
+            when(menuItem.itemId){
+                R.id.MyCourses -> {
+                    val intent = Intent(activity, MyCourseActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.certificate -> {
+
+                }
+                R.id.LogOut ->{
+                    val gso =
+                        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+
+                    val googleSignInClient = activity?.let { GoogleSignIn.getClient(it, gso) }
+                    googleSignInClient?.signOut()?.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            FirebaseAuth.getInstance()
+                                .signOut() // very important if you are using firebase.
+                            val login_intent = Intent(FacebookSdk.getApplicationContext(),
+                                SignInActivity::class.java)
+                            login_intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // clear previous task (optional)
+                            startActivity(login_intent)
+                            activity?.finish()
+                        }
+                    }
+                }
+                R.id.privacyPolicy -> {
+                    val intent = Intent(activity, PrivacyPolicyActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.share -> {
+                    auth.currentUser?.let { createReferLink(it.uid, "1234533dsd") }
+                }
+
+                R.id.bookmark ->
+                {
+                    val intent = Intent(activity, BookmarkActivity::class.java)
+                    startActivity(intent)
+                }
+
+            }
+            menuItem.isChecked = false
+
+
+            true
+        }
+
+        // setUp Navigation header Profile click
+        val navigationView = view.findViewById<NavigationView>(R.id.homeNavigationView)
+        val headerView: View = navigationView.getHeaderView(0)
+        headerView.findViewById<MaterialCardView>(R.id.profile).setOnClickListener {
+            var intent = Intent(activity, UserDetailsActivity::class.java)
+            intent.putExtra("username", displayName )
+            intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
+            intent.putExtra("parent", "MoreFragment")
+            startActivity(intent)
+        }
+
 
         return view
+    }
+
+    private fun setUpNavigationViewHeader(activity: Activity) {
+        val navigationView = activity.findViewById<NavigationView>(R.id.homeNavigationView)
+        val headerView: View = navigationView.getHeaderView(0)
+        val username: TextView = headerView.findViewById(R.id.username)
+        val email: TextView = headerView.findViewById(R.id.email)
+        var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
+        val coins: TextView = headerView.findViewById(R.id.coins)
+
+
+        userDao.ref.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val profileImage = snapshot.child(auth.currentUser!!.uid).child("userImage").getValue(String::class.java).toString()
+                username.text = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
+                displayName = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
+                email.text = snapshot.child(auth.currentUser?.uid.toString()).child("email").getValue(String::class.java).toString()
+                if(profileImage.isNotEmpty() && !profileImage.equals("null")){
+                    profile.setImageResource(R.drawable.image_circle)
+                    view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
+                }
+                coins.text = snapshot.child(auth.currentUser?.uid.toString()).child("coins").getValue(Int::class.java).toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+        })
+
+
+    }
+
+    // create referral link
+    private fun createReferLink(uId: String, productId: String) {
+        var link: String = "https://uptoskills.page.link/?"+
+                "link=https://www.uptoskills.com/myrefer.php?uId="+uId+"-"+productId+
+                "&apn="+activity?.packageName+
+                "&st=Join me on UptoSkills"+
+                "&sd=Reward UsCash 500"+
+                "&si=https://www.uptoskills.com/wp-content/uploads/2019/10/logo-dark.png"
+
+        // https://uptoskills.page.link?apn=android.example.getwork&ibi=com.example.ios&link=https%3A%2F%2Fwww.uptoskills.com%2F
+        Log.e("sharelink", link)
+        // shorten the link
+
+        val shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse(link))
+            .setDomainUriPrefix("https://uptoskills.page.link") // Set parameters
+            // ...
+            .buildShortDynamicLink()
+            .addOnCompleteListener(activity
+            ) { task ->
+                if (task.isSuccessful) {
+                    // Short link created
+                    val shortLink = task.result.shortLink
+                    val flowchartLink = task.result.previewLink
+                    Log.e("short link", ""+shortLink)
+
+                    val intent = Intent()
+                    intent.action = Intent.ACTION_SEND
+                    intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                    intent.type = "text/plain"
+                    startActivity(intent)
+                    // ------ click -> link -> google play store -> installed/not ---------
+
+                } else {
+                    // Error
+                    // ...
+                }
+            }
+//                    Log.e("long link", ""+dynamicLinkUri)
     }
 
     private fun setUpcourses(view: View) {
@@ -183,38 +390,9 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
     }
 
 
-    private fun setUpProfileRecyclerView(view: View?) {
-        userDao = UsersDao()
-        var profiles: ArrayList<Users> = ArrayList()
-        if (view != null) {
-            profileRecyclerView = view.findViewById(R.id.HomeProfilesrecyclerview)
-        }
-        profileAdapter = view?.let { ProfileAdapter(it.context, this, R.layout.profile) }!!
-        profileRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
-        profileRecyclerView.adapter = profileAdapter
-
-        userDao.ref.addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val children = snapshot.children
-                children.forEach {
-                    var user = it.getValue(Users::class.java)
-                    if (user != null) {
-                        profiles.add(user)
-                    }
-                }
-                profileAdapter.updateProfiles(profiles)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-                Toast.makeText(view.context, error.message, Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
-    }
-
     override fun onStart() {
         super.onStart()
+        activity?.let { setUpNavigationViewHeader(it) }
         adapter.startListening()
         courseAdapter.startListening()
         jobAdapter.startListening()
@@ -261,6 +439,10 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         startActivity(intent)
     }
 
+    override fun onBookmarkClicked(blogId: String, item: String) {
+
+    }
+
     override fun onCourseCLick(courseId: String) {
         val intent = Intent(activity, CourseViewActivity::class.java)
         intent.putExtra("courseId", courseId)
@@ -268,14 +450,23 @@ class HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked
         startActivity(intent)
     }
 
-    override fun onProfileClicked(uid: String) {
-    }
-
     override fun onJobCLick(jobId: String) {
         val intent = Intent(view?.context, JobViewActivity::class.java)
         intent.putExtra("jobId", jobId)
         intent.putExtra("category", "job")
         startActivity(intent)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onbookmarkCLick(itemId: String, itemtype: String) {
+        if(curUser.bookmarks.containsValue(itemId)) {
+            curUser.bookmarks.remove(itemtype, itemId)
+        } else {
+            curUser.bookmarks[itemtype] = itemId
+        }
+        jobDao.addbookmark(itemId)
+        auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }
+        Log.e(itemtype, itemId)
     }
 
     override fun onpaidCourseClicked(courseId: String) {

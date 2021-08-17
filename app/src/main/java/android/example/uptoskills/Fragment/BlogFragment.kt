@@ -114,4 +114,8 @@ class BlogFragment : Fragment(), IBlogAdapter {
         intent.putExtra("123", postId)
         startActivity(intent)
     }
+
+    override fun onBookmarkClicked(blogId: String, item: String) {
+
+    }
 }

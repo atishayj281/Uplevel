@@ -8,7 +8,7 @@
     android:paddingLeft="23dp"
     android:paddingTop="50dp"
     android:paddingRight="23dp"
-    android:background="@drawable/mainbackground"
+    android:background="@color/white"
     tools:context=".SignUpActivity">
 
     <RelativeLayout

@@ -24,7 +24,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:background="@color/AndroidGreen"
+                    android:background="@color/blue"
                     android:padding="20dp">
                     <ImageView
                         android:id="@+id/profileImage"
@@ -54,7 +54,6 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/profileImage"
-                        android:fontFamily="@font/baloo2_semibold"
                         android:background="@android:color/transparent"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -70,8 +69,6 @@
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/profileImage"
                         android:background="@color/LightningYellow"
-
-                        android:fontFamily="@font/baloo2_semibold"
                         android:textSize="14sp" />
 
 
@@ -89,6 +86,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
+                        app:hintTextColor="?attr/tC"
+                        android:backgroundTint="@color/black"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:hint="Full Name">
 
@@ -97,7 +96,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_person"
-                            android:drawablePadding="10dp" />
+                            android:drawablePadding="10dp"
+                            android:textColor="?attr/tC"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +113,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_outline_call_24"
-                            android:drawablePadding="10dp" />
+                            android:drawablePadding="10dp"
+                            android:textColor="?attr/tC"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,7 +130,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_education"
-                            android:drawablePadding="10dp" />
+                            android:drawablePadding="10dp"
+                            android:textColor="?attr/tC"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,7 +147,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_job"
-                            android:drawablePadding="10dp" />
+                            android:drawablePadding="10dp"
+                            android:textColor="?attr/tC"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,7 +163,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_education"
-                            android:drawablePadding="10dp" />
+                            android:drawablePadding="10dp"
+                            android:textColor="?attr/tC"
+                            />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,7 +182,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_baseline_email_24"
-                            android:drawablePadding="10dp" />
+                            android:drawablePadding="10dp"
+                            android:textColor="?attr/tC"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -187,6 +193,7 @@
                         android:layout_height="wrap_content"
                         android:text="Resume"
                         android:textStyle="bold"
+                        android:textColor="?attr/tC"
                         />
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -206,7 +213,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Upload Resume"
-                            android:textColor="@color/AndroidGreen"
+                            android:textColor="@color/blue"
                             android:layout_gravity="right|center_vertical"
                             android:textSize="16sp"
                             android:textStyle="bold"/>
@@ -218,7 +225,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:backgroundTint="@color/LightningYellow"
+                        android:backgroundTint="@color/blue"
+                        android:textColor="@color/white"
                         android:text="Submit" />
                 </LinearLayout>
             </LinearLayout>
@@ -231,7 +239,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminateTint="@color/teal_700" />
+            android:indeterminateTint="@color/black"/>
 
     </FrameLayout>
 

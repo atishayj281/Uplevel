@@ -9,7 +9,9 @@ import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +24,28 @@ class UsersDao {
     val ref = database.getReference("users")
     private val storageReference = FirebaseStorage.getInstance().reference
     private val auth = FirebaseAuth.getInstance()
+
+    fun addBookMark(itemId: String, itemType: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            ref.child(auth.currentUser?.uid.toString()).addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user: Users = snapshot.getValue(Users::class.java)!!
+                    if(user.bookmarks.containsKey(itemId)) {
+                        user.bookmarks.remove(itemId)
+                    } else {
+                        user.bookmarks.put(itemId, itemType)
+                    }
+                    ref.child(auth.currentUser?.uid.toString()).setValue(user)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+        }
+
+    }
 
     fun addUser(user: Users?, id: String) {
         user?.let {

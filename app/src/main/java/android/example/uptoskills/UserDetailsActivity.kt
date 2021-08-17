@@ -8,10 +8,12 @@ import android.example.uptoskills.databinding.ActivityUserDetailsBinding
 import android.example.uptoskills.models.PaidCourse
 import android.example.uptoskills.models.Users
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
@@ -44,9 +46,11 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
     private var isResumeSelected: Boolean = false
     private val resumeRequestCode: Int = 2
     private val READ_EXTERNAL_STORAGE_CODE: Int = 9
+    private val READ_LOCATION_CODE: Int = 9
     private val READ_SMS_CODE: Int = 1
     private lateinit var resumeUri: Uri
     private var money: Int = 0
+    private lateinit var usr: Users
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,20 +62,18 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
         Checkout.preload(applicationContext)
         Checkout.clearUserData(this)
         auth = FirebaseAuth.getInstance()
-        val id = auth.currentUser?.uid
+
         userDao = UsersDao()
 
         updateProfile()
 
         binding.submit.setOnClickListener {
+            val id = auth.currentUser?.uid
             var displayName: String = ""
             binding.userDetailsProgressBar.visibility = View.VISIBLE
             if(intent.getStringExtra("parent").toString().equals("MoreFragment") || intent.getStringExtra("parent").toString().equals("course")
                 || intent.getStringExtra("parent") == "job"){
                 displayName = binding.username.text.toString()
-            }
-            else{
-                    displayName = intent.getStringExtra("username").toString()
             }
 
             // Updating Resume and ProfileImage
@@ -82,7 +84,7 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
                         val freecourses: HashMap<String, String>? = ref.child("freecourses").getValue(object: GenericTypeIndicator<HashMap<String, String>>(){})
                         val paidcourses: HashMap<String, String>? = ref.child("paidcourses").getValue(object: GenericTypeIndicator<HashMap<String, String>>(){})
 
-                        var usr =
+                        usr =
                             ref.child("coins").getValue(Int::class.java)?.let { it1 ->
                                 Users(freecourses,paidcourses,
                                     binding.fullName.editText?.text.toString(),
@@ -96,7 +98,7 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
                                     id.toString(), ref.child("resume").getValue(String::class.java).toString(),
                                     ref.child("referCode").getValue(String::class.java).toString(),
                                     it1)
-                            }
+                            }!!
                         if(ref.child("resume").getValue(String::class.java).toString().isNotEmpty()){
                             binding.resumeImage.setImageResource(R.drawable.ic_resume)
                         }
@@ -137,7 +139,7 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
                                 && usr.education.isNotBlank() && usr.job.isNotBlank()
                                 && usr.college_name.isBlank() && usr.resume.isNotBlank()) {
 
-                                    // checking job or internship
+                                // checking job or internship
 
                             } else {
                                 if(intent.getBooleanExtra("isJob", true) ) {
@@ -151,7 +153,7 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
                         }
                         else if(intent.getStringExtra("parent") == "course") {
                             if (usr != null) {
-                                isEnrolled(usr.email, usr.mobileNo)
+                                isEnrolled(usr.email, usr.mobileNo, usr.coins)
                             }
                         } else {
                             Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
@@ -207,7 +209,7 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
     }
 
     // checking if Student is Already Enrolled in the course
-    private fun isEnrolled(email: String, phoneNo:String){
+    private fun isEnrolled(email: String, phoneNo:String, wallet: Int){
         var courseId: String = intent.getStringExtra("courseId").toString()
         if(courseId.isNotBlank()) {
             GlobalScope.launch(Dispatchers.IO) {
@@ -219,7 +221,7 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
                     else {
                         // Checking the Permissions
                         if(ContextCompat.checkSelfPermission(this@UserDetailsActivity, android.Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED) {
-                            startpayment(email, phoneNo)
+                            startpayment(email, phoneNo, wallet)
                         } else {
                             ActivityCompat.requestPermissions(this@UserDetailsActivity, arrayOf(android.Manifest.permission.READ_SMS), READ_SMS_CODE)
                         }
@@ -234,17 +236,21 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
     private var ispayed = false
 
     // Starting Payment
-    private fun startpayment(email: String, contact: String){
+    private fun startpayment(email: String, contact: String, wallet: Int){
 
         if(email.isBlank() && contact.isBlank()){
             Toast.makeText(this, "Please Provide Your Full Details", Toast.LENGTH_SHORT).show()
         } else {
             var price = intent.getIntExtra("coursePrice", -1)
 
+            if(usr.coins >= 100) {
+                price -= 100
+            }
+
             if(price == 0) {
                 intent.getStringExtra("courseId")?.let {
                     Toast.makeText(this@UserDetailsActivity, "courseDao", Toast.LENGTH_SHORT).show()
-                    CourseDao().EnrollStudents(it, this@UserDetailsActivity)
+                    PaidCourseDao().EnrollStudents(it, this@UserDetailsActivity)
                 }
             } else {
                 price *= 100
@@ -277,7 +283,8 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
         intent.getStringExtra("courseId")?.let {
             PaidCourseDao().EnrollStudents(it, this@UserDetailsActivity)
         }
-
+        usr.coins -= 100
+        userDao.updateUser(usr, auth.currentUser?.uid!!)
     }
 
     override fun onPaymentError(p0: Int, p1: String?) {
@@ -295,8 +302,6 @@ class UserDetailsActivity : AppCompatActivity(), PaymentResultListener {
     ) {
         if(requestCode == READ_EXTERNAL_STORAGE_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             resumeChooser()
-        } else if(requestCode == READ_SMS_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            auth.currentUser?.email?.let { startpayment(it, auth.currentUser!!.phoneNumber.toString()) }
         }
     }
 

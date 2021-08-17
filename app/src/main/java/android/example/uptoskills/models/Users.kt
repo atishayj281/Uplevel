@@ -14,5 +14,6 @@ data class Users(
     val id: String="",
     var resume: String="",
     var referCode: String="",
-    var coins: Int = 0
+    var coins: Int = 0,
+    val bookmarks: HashMap<String, String> = HashMap()
 )

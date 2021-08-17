@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET " />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <queries>
         <package android:name="com.facebook.katana" />
@@ -17,14 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GetWork">
-        <activity android:name=".JobViewActivity"></activity>
+        <activity android:name=".BookmarkActivity"></activity>
+        <activity android:name=".CertificateActivity" />
+        <activity android:name=".CourseEnquiryActivity" />
+        <activity android:name=".JobViewActivity" />
         <activity android:name=".MyCourseActivity" />
         <activity android:name=".CourseViewActivity" />
         <activity
             android:name=".PrivacyPolicyActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".AllProfilesActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".UserDetailsActivity" />
         <activity android:name=".BlogViewActivity" />
@@ -42,18 +44,17 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance"
-            >
-
+            android:launchMode="singleInstance">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="example.com"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
-
         </activity>
 
         <meta-data

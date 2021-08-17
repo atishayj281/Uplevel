@@ -31,7 +31,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [InternshipFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InternshipFragment : Fragment(), JobItemClicked {
+class InternshipFragment : Fragment(), JobItemClicked, onJobSearch {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -60,17 +60,24 @@ class InternshipFragment : Fragment(), JobItemClicked {
         progressBar.visibility = View.VISIBLE
 
         // Setting the internship
-        setUpInternshipRecyclerView(view)
+        setUpInternshipRecyclerView(view, "")
         return view
     }
 
-    private fun setUpInternshipRecyclerView(view: View){
+    private fun setUpInternshipRecyclerView(view: View, filter: String){
         internshipDao = InternshipDao()
         val internshipCollection = internshipDao.jobCollection
-        val query = internshipCollection.orderBy("id", Query.Direction.DESCENDING)
-        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Internship>().setQuery(query, Internship::class.java).build()
+        val query: Query
 
-        adapter = InternshipAdapter(recyclerViewOptions, this, R.layout.job_item)
+        if(filter.isEmpty()) {
+            query = internshipCollection.orderBy("id", Query.Direction.DESCENDING)
+            val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Internship>().setQuery(query, Internship::class.java).build()
+            adapter = InternshipAdapter(recyclerViewOptions, this, R.layout.internship_item)
+        } else {
+            query = internshipCollection.whereEqualTo("category", filter)
+            val recyclerOptions = FirestoreRecyclerOptions.Builder<Internship>().setQuery(query, Internship::class.java).build()
+            adapter.updateOptions(recyclerOptions)
+        }
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
@@ -115,5 +122,13 @@ class InternshipFragment : Fragment(), JobItemClicked {
         intent.putExtra("jobId", jobId)
         intent.putExtra("category", "internship")
         startActivity(intent)
+    }
+
+    override fun onbookmarkCLick(itemId: String, itemtype: String) {
+
+    }
+
+    override fun updateRecyclerView(query: String) {
+        view?.let { setUpInternshipRecyclerView(it, query) }
     }
 }

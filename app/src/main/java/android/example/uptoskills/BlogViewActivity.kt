@@ -24,6 +24,10 @@ class BlogViewActivity : AppCompatActivity() {
         var postId: String? = intent.getStringExtra("123")
         binding.blogViewProgressBar.visibility = View.VISIBLE
         updateBlog(postId)
+
+        binding.back.setOnClickListener {
+            finish()
+        }
     }
 
     // Method to show blog in the activity

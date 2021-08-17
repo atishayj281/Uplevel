@@ -35,6 +35,7 @@ class SignUpActivity : AppCompatActivity() {
     private val TAG = "SignUpActivity Tag"
     private lateinit var userDao: UsersDao
     private lateinit var authStateChangeListener: FirebaseAuth.AuthStateListener
+    private lateinit var referId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,9 @@ class SignUpActivity : AppCompatActivity() {
         userDao = UsersDao()
 
         supportActionBar?.hide()
+
+        referId = intent.getStringExtra("ReferId").toString()
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -60,8 +64,9 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         createAccount.setOnClickListener {
-            var intent = Intent(this, CreateAccountActivity::class.java)
-            startActivity(intent)
+            var crtintent = Intent(this, CreateAccountActivity::class.java)
+            crtintent.putExtra("ReferId", referId)
+            startActivity(crtintent)
 
         }
 
@@ -140,7 +145,7 @@ class SignUpActivity : AppCompatActivity() {
         if(requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                var account = task.getResult(ApiException::class.java)!!
+                val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account.idToken!!)
 
             } catch (e: ApiException) {
@@ -188,8 +193,14 @@ class SignUpActivity : AppCompatActivity() {
                     if(!ref.exists()) {
                         var user: Users = Users(hashMapOf(), hashMapOf(),auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
                             auth.currentUser?.email.toString(), "", "", "",
-                            auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "")
+                            auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "", referId, if(referId != "null") 250 else 0)
                         userDao.addUser(user, auth.currentUser?.uid.toString())
+
+                        val referer = snapshot.child(referId).getValue(Users::class.java)
+                        if(referer != null) {
+                            referer.coins += 250
+                            userDao.updateUser(referer, referId)
+                        }
 
                     }
                 }

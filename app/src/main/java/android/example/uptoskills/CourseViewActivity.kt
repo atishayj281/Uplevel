@@ -34,6 +34,10 @@ class CourseViewActivity : AppCompatActivity() {
         binding = ActivityCourseViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.back.setOnClickListener {
+            finish()
+        }
+
         courseId = intent.getStringExtra("courseId").toString()
         courseDao = CourseDao()
         val isFree: Boolean = intent.getStringExtra("courseCategory") == "free"
