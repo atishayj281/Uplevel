@@ -48,7 +48,8 @@ class SignUpActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         referId = intent.getStringExtra("ReferId").toString()
-
+//        Log.e("referId", referId)
+//        Log.e("differ", "")
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -59,6 +60,7 @@ class SignUpActivity : AppCompatActivity() {
 
         binding.SignIn.setOnClickListener {
             var intent = Intent(this, SignInActivity::class.java)
+            intent.putExtra("ReferId", referId)
             startActivity(intent)
             finish()
         }
@@ -79,7 +81,8 @@ class SignUpActivity : AppCompatActivity() {
         binding.SignUpWithFaceBook.setOnClickListener {
             binding.signUpProgressBar.visibility = View.VISIBLE
 
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+            LoginManager.getInstance()
+                .logInWithReadPermissions(this, Arrays.asList("public_profile"));
 
             LoginManager.getInstance().retrieveLoginStatus(this, object : LoginStatusCallback {
                 override fun onCompleted(accessToken: AccessToken) {
@@ -90,11 +93,14 @@ class SignUpActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure() {
+                    binding.signUpProgressBar.visibility = View.GONE
                 }
 
                 override fun onError(exception: Exception) {
                     // An error occurred
-                    Toast.makeText(this@SignUpActivity, exception.message, Toast.LENGTH_SHORT).show()
+                    binding.signUpProgressBar.visibility = View.GONE
+                    Toast.makeText(this@SignUpActivity, exception.message, Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
             binding.facebookLoginButton.registerCallback(callbackManager,
@@ -102,28 +108,34 @@ class SignUpActivity : AppCompatActivity() {
                     override fun onSuccess(loginResult: LoginResult?) {
                         handelFacebookToken(loginResult?.accessToken)
                     }
+
                     override fun onCancel() {
                         // App code
+                        binding.signUpProgressBar.visibility = View.GONE
                     }
+
                     override fun onError(exception: FacebookException) {
-                        Toast.makeText(this@SignUpActivity, "Login Failed", Toast.LENGTH_SHORT).show()
+                        binding.signUpProgressBar.visibility = View.GONE
+                        Toast.makeText(this@SignUpActivity, "Login Failed", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 })
         }
 
         authStateChangeListener = FirebaseAuth.AuthStateListener {
-            var user: FirebaseUser? = auth.currentUser
-            if(user != null) {
+            val user: FirebaseUser? = auth.currentUser
+            if (user != null) {
                 updateUI(user)
             }
         }
     }
 
     private fun handelFacebookToken(accessToken: AccessToken?) {
-        var credential: AuthCredential = FacebookAuthProvider.getCredential(accessToken?.token.toString())
+        val credential: AuthCredential =
+            FacebookAuthProvider.getCredential(accessToken?.token.toString())
         auth.signInWithCredential(credential).addOnCompleteListener {
-            if(it.isSuccessful) {
-                var user: FirebaseUser = auth.currentUser!!
+            if (it.isSuccessful) {
+                val user: FirebaseUser = auth.currentUser!!
                 updateUI(user)
             } else {
                 Toast.makeText(this, it.exception?.message, Toast.LENGTH_SHORT).show()
@@ -142,14 +154,14 @@ class SignUpActivity : AppCompatActivity() {
         callbackManager.onActivityResult(requestCode, resultCode, data)
 
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account.idToken!!)
 
             } catch (e: ApiException) {
-                Log.d("TAG", "Google Sign in failed")
+                binding.signUpProgressBar.visibility = View.GONE
             }
         }
     }
@@ -161,9 +173,7 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        if(authStateChangeListener != null) {
-            auth.removeAuthStateListener(authStateChangeListener)
-        }
+        auth.removeAuthStateListener(authStateChangeListener)
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
@@ -176,8 +186,7 @@ class SignUpActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     updateUI(user)
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w("TAG", "signInWithCredential:failure", task.exception)
+                    binding.signUpProgressBar.visibility = View.GONE
                     updateUI(null)
                 }
             }
@@ -185,36 +194,52 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
 
-        if(user != null) {
-
+        if (user != null) {
             userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    var ref = snapshot.child(auth.uid.toString())
-                    if(!ref.exists()) {
-                        var user: Users = Users(hashMapOf(), hashMapOf(),auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
-                            auth.currentUser?.email.toString(), "", "", "",
-                            auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "", referId, if(referId != "null") 250 else 0)
+                    var ref = snapshot.child(auth.currentUser?.uid.toString())
+                    if (!ref.exists()) {
+                        var user = Users(hashMapOf(),
+                            hashMapOf(),
+                            auth.currentUser?.displayName.toString(),
+                            auth.currentUser?.displayName.toString(),
+                            auth.currentUser?.email.toString(),
+                            "",
+                            "",
+                            "",
+                            auth.currentUser?.photoUrl.toString(),
+                            "",
+                            auth.currentUser?.uid.toString(),
+                            "",
+                            referId,
+                            250)
                         userDao.addUser(user, auth.currentUser?.uid.toString())
 
-                        val referer = snapshot.child(referId).getValue(Users::class.java)
-                        if(referer != null) {
-                            referer.coins += 250
-                            userDao.updateUser(referer, referId)
-                        }
+                        var upRef: Users? =
+                            referId
+                                .let { snapshot.child(it).getValue(Users::class.java) }
 
+                        if (upRef != null) {
+                            upRef.coins += 500
+                            Log.e("coins", upRef.coins.toString())
+                            userDao.updateUser(upRef, referId)
+                        }
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
-            binding.signUpProgressBar.visibility = View.VISIBLE
-            var intent = Intent(this@SignUpActivity, UserDetailsActivity::class.java)
-            intent.putExtra("id", auth.uid)
-            intent.putExtra("username", auth.currentUser?.displayName)
-            intent.putExtra("userImage", auth.currentUser?.photoUrl)
-            intent.putExtra("Activity", "NewUser")
-            startActivity(intent)
-            finish()
+
+            startMainActivity()
         }
+
+    }
+
+    fun startMainActivity() {
+        var intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        binding.signUpProgressBar.visibility = View.GONE
+        finish()
     }
 }

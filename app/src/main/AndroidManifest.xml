@@ -8,6 +8,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
     <queries>
         <package android:name="com.facebook.katana" />
     </queries>
@@ -19,16 +22,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GetWork">
-        <activity android:name=".BookmarkActivity"></activity>
+        <activity android:name=".CourseVideoActivity">
+
+        </activity>
+        <activity android:name=".MyJobsActivity" />
+        <activity android:name=".BookmarkActivity" />
         <activity android:name=".CertificateActivity" />
         <activity android:name=".CourseEnquiryActivity" />
         <activity android:name=".JobViewActivity" />
-        <activity android:name=".MyCourseActivity" />
+        <activity android:name=".MyCourseActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
         <activity android:name=".CourseViewActivity" />
         <activity
             android:name=".PrivacyPolicyActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".UserDetailsActivity" />
+        <activity android:name=".UserDetailsActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".BlogViewActivity" />
         <activity
             android:name=".CreateAccountActivity"

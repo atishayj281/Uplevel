@@ -30,10 +30,10 @@ class UsersDao {
             ref.child(auth.currentUser?.uid.toString()).addValueEventListener(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user: Users = snapshot.getValue(Users::class.java)!!
-                    if(user.bookmarks.containsKey(itemId)) {
+                    if(user.bookmarks?.containsKey(itemId) == true) {
                         user.bookmarks.remove(itemId)
                     } else {
-                        user.bookmarks.put(itemId, itemType)
+                        user.bookmarks?.put(itemId, itemType)
                     }
                     ref.child(auth.currentUser?.uid.toString()).setValue(user)
                 }

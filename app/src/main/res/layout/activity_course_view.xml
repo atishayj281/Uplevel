@@ -303,10 +303,11 @@
         android:id="@+id/enroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#BBDEFB"
+        android:backgroundTint="#2196F3"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="20dp"
         android:elevation="4dp"
+        android:textColor="@color/white"
         android:text="Enroll"/>
 
 

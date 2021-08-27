@@ -15,9 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
-
     <TextView
         android:id="@+id/signUpheading"
         android:layout_width="wrap_content"
@@ -98,8 +95,7 @@
         android:layout_below="@id/SignUpWithGoogle"
         android:layout_marginTop="155dp"
         android:orientation="horizontal"
-        android:paddingLeft="45dp"
-        android:paddingRight="20dp">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"

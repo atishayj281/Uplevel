@@ -41,18 +41,19 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:background="@drawable/navigation_view_background"
-            android:elevation="2dp"
-            app:navigationIcon="@drawable/ic_menu">
+            android:elevation="2dp">
 
-            <EditText
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                app:srcCompat="@drawable/ic_menu"
+                android:id="@+id/menuBar"/>
+
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:hint="Search Courses by category"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:inputType="textAutoComplete"
-                android:id="@+id/search"/>
+                android:layout_height="52dp"
+                android:src="@drawable/uptoskills"
+                />
 
         </com.google.android.material.appbar.MaterialToolbar>
 

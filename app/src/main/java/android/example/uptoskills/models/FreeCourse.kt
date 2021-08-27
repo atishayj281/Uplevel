@@ -14,5 +14,5 @@ data class FreeCourse (
     val lectures: Int=0,
     val mentor_name: String="",
     val price: Int=0,
-    val videos: ArrayList<String> = ArrayList(),
+    val videos: ArrayList<Video> = ArrayList(),
 )

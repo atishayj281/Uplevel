@@ -66,8 +66,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/progress_bar"
-            android:visibility="visible"
+            android:visibility="gone"
             android:indeterminateTint="@color/black"
+
             android:layout_gravity="center"/>
 
         <TextView
@@ -75,8 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No Certificate"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:layout_gravity="center"/>
 
     </FrameLayout>
 

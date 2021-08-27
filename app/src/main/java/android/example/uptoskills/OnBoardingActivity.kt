@@ -29,7 +29,7 @@ class OnBoardingActivity : AppCompatActivity() {
     private lateinit var sliderAdapter: SliderAdapter
     private lateinit var btnNext: TextView
     private lateinit var btnSkip: TextView
-    private var referId: String? = null
+    private var referId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,13 +63,6 @@ class OnBoardingActivity : AppCompatActivity() {
                     }
 
                 }
-
-                // Handle the deep link. For example, open the linked
-                // content, or apply promotional credit to the user's
-                // account.
-                // ...
-
-                // ...
             }
             .addOnFailureListener(this) { e -> Log.w("starting Activity", "getDynamicLink:onFailure", e) }
 
@@ -123,16 +116,13 @@ class OnBoardingActivity : AppCompatActivity() {
             } else {
                 startMainActivity()
             }
-
         }
     }
 
     fun startMainActivity(){
         setFirstTimeStartStatus(false)
         var intent = Intent(this, SignInActivity::class.java)
-        if(referId != null) {
-            intent.putExtra("ReferId", referId)
-        }
+        intent.putExtra("ReferId", referId)
         startActivity(intent)
         finish()
     }

@@ -51,7 +51,7 @@ class CourseFragment: Fragment() {
     private lateinit var viewPager: ViewPager
     private lateinit var auth: FirebaseAuth
     private lateinit var userDao: UsersDao
-    private lateinit var curUser: Users
+    private var curUser: Users = Users()
 
     private lateinit var hometoolBar: MaterialToolbar
     private lateinit var homedrawerLayout: DrawerLayout
@@ -155,6 +155,10 @@ class CourseFragment: Fragment() {
                     val intent = Intent(activity, BookmarkActivity::class.java)
                     startActivity(intent)
                 }
+                R.id.appliedJobs -> {
+                    val intent = Intent(activity, MyJobsActivity::class.java)
+                    startActivity(intent)
+                }
 
             }
             menuItem.isChecked = false
@@ -186,7 +190,6 @@ class CourseFragment: Fragment() {
         categoryItems.add("Design");
         categoryItems.add("Competitive Programming");
         categoryItems.add("Android Development");
-        categoryItems.add("Auto CAD");
         categoryItems.add("Google");
 
         spinnerDialog =

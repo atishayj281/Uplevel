@@ -21,6 +21,7 @@ class JobDao {
     private val db = FirebaseFirestore.getInstance()
     val jobCollection = db.collection("jobs")
     val auth = Firebase.auth
+    private val usersDao = UsersDao()
 
     fun getJobbyId(jobId: String): Task<DocumentSnapshot> {
         return jobCollection.document(jobId).get()
@@ -55,7 +56,7 @@ class JobDao {
                     isSuccessful = true
                     auth.currentUser!!.email?.let { job.applied.put(currentUserId, it) }
                     jobCollection.document(jobId).set(job)
-                    UsersDao().ref.child(currentUserId).child("appliedJobs").child(jobId).setValue(job.title).addOnSuccessListener {
+                    UsersDao().ref.child(currentUserId).child("appliedJobs").child(jobId).setValue("Job").addOnSuccessListener {
                         Log.d("Applied", "YES")
                         Toast.makeText(context, "Successfully Applied", Toast.LENGTH_SHORT).show()
                     }.addOnFailureListener {

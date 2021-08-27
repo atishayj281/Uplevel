@@ -6,7 +6,6 @@ import android.content.Intent
 import android.example.uptoskills.*
 import android.example.uptoskills.Adapters.*
 import android.example.uptoskills.daos.*
-import android.example.uptoskills.databinding.FragmentHomeBinding
 import android.example.uptoskills.models.*
 import android.net.Uri
 import android.os.Build
@@ -28,8 +27,6 @@ import com.facebook.FacebookSdk
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
@@ -42,7 +39,6 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.firestore.Query
 
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -59,7 +55,6 @@ interface onMenuItemSelectedListener{
 }
 
 class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, paidCourseclicked {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
@@ -97,11 +92,12 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     private lateinit var popUpLayout: FrameLayout
     private lateinit var popUpKnowMore: MaterialCardView
     private lateinit var referandEarnCardView: MaterialCardView
-    private lateinit var curUser: Users
+    private var curUser: Users = Users()
     private lateinit var hometoolBar: MaterialToolbar
     private lateinit var homedrawerLayout: DrawerLayout
     private lateinit var homeNavigationView: NavigationView
     private var displayName: String = ""
+    private lateinit var menuBar: ImageView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -128,7 +124,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         hometoolBar = view.findViewById(R.id.hometoolBar)
         homedrawerLayout = view.findViewById(R.id.homedrawerLayout)
         homeNavigationView = view.findViewById(R.id.homeNavigationView)
-
+        menuBar = view.findViewById(R.id.menuBar)
 
 
         courseEnqClosebtn = view.findViewById(R.id.delNotification)
@@ -155,7 +151,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
 
 
         progressBar.visibility = View.VISIBLE
-        hometoolBar.setOnClickListener {
+        menuBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
         }
 
@@ -235,9 +231,6 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
                     val intent = Intent(activity, MyCourseActivity::class.java)
                     startActivity(intent)
                 }
-                R.id.certificate -> {
-
-                }
                 R.id.LogOut ->{
                     val gso =
                         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
@@ -271,6 +264,16 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
                     startActivity(intent)
                 }
 
+                R.id.appliedJobs -> {
+                    val intent = Intent(activity, MyJobsActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.certificate -> {
+                    val intent = Intent(activity, CertificateActivity::class.java)
+                    startActivity(intent)
+                }
+
             }
             menuItem.isChecked = false
 
@@ -279,8 +282,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         }
 
         // setUp Navigation header Profile click
-        val navigationView = view.findViewById<NavigationView>(R.id.homeNavigationView)
-        val headerView: View = navigationView.getHeaderView(0)
+        val headerView: View = homeNavigationView.getHeaderView(0)
         headerView.findViewById<MaterialCardView>(R.id.profile).setOnClickListener {
             var intent = Intent(activity, UserDetailsActivity::class.java)
             intent.putExtra("username", displayName )
@@ -368,7 +370,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         courseDao = CourseDao()
         courseRecyclerView = view.findViewById(R.id.FreeCourserecyclerview)
         val courseCollection = courseDao.courseCollection
-        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
+        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING).limitToLast(10)
         val recyclerViewOptions = FirestoreRecyclerOptions.Builder<FreeCourse>().setQuery(query, FreeCourse::class.java).build()
 
         courseAdapter = CourseAdapter(view.context,this, R.layout.home_course_item, recyclerViewOptions)
@@ -380,7 +382,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     private fun setUpJobRecyclerView(view: View){
         jobDao = JobDao()
         val jobCollection = jobDao.jobCollection
-        val query = jobCollection.orderBy("id", Query.Direction.DESCENDING)
+        val query = jobCollection.limitToLast(10).orderBy("id", Query.Direction.DESCENDING)
         val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Job>().setQuery(query, Job::class.java).build()
 
         jobAdapter = JobAdapter(recyclerViewOptions, this, R.layout.home_job_item)
@@ -409,7 +411,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
 
     private fun setUppaidCourses(view: View){
         val courseCollection = paidCourseDao.courseCollection
-        val query = courseCollection.orderBy("category", Query.Direction.DESCENDING)
+        val query = courseCollection.limitToLast(10).orderBy("category", Query.Direction.DESCENDING)
         val recyclerViewOptions = FirestoreRecyclerOptions.Builder<PaidCourse>().setQuery(query, PaidCourse::class.java).build()
 
         paidcourseAdapter = PaidCourseAdapter(view.context,this, R.layout.home_course_item, recyclerViewOptions)
@@ -423,7 +425,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     private fun setUpBlogRecyclerView() {
         postDao = BlogDao()
         val postsCollections = postDao.postCollections
-        val query = postsCollections.orderBy("heading", Query.Direction.DESCENDING)
+        val query = postsCollections.limitToLast(10).orderBy("heading", Query.Direction.DESCENDING)
         val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Blog>().setQuery(query, Blog::class.java).build()
 
         adapter = BlogsAdapter(recyclerViewOptions, this, R.layout.home_blog_item)
@@ -459,10 +461,10 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onbookmarkCLick(itemId: String, itemtype: String) {
-        if(curUser.bookmarks.containsValue(itemId)) {
-            curUser.bookmarks.remove(itemtype, itemId)
+        if(curUser.bookmarks?.containsKey(itemId) == true) {
+            curUser.bookmarks!!.remove(itemId, itemtype)
         } else {
-            curUser.bookmarks[itemtype] = itemId
+            curUser.bookmarks?.set(itemId, itemtype)
         }
         jobDao.addbookmark(itemId)
         auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }

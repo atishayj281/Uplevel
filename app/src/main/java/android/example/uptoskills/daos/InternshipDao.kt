@@ -37,7 +37,7 @@ class InternshipDao {
                     isSuccessful = true
                     auth.currentUser!!.email?.let { job.applied.put(currentUserId, it) }
                     jobCollection.document(jobId).set(job)
-                    UsersDao().ref.child(currentUserId).child("appliedJobs").child(jobId).setValue(job.title).addOnSuccessListener {
+                    UsersDao().ref.child(currentUserId).child("appliedJobs").child(jobId).setValue("Internship").addOnSuccessListener {
                         Log.d("Applied", "YES")
                         Toast.makeText(context, "Successfully Applied", Toast.LENGTH_SHORT).show()
                     }.addOnFailureListener {

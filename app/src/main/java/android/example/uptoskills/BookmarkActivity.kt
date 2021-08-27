@@ -72,12 +72,13 @@ class BookmarkActivity : AppCompatActivity(), JobItemClicked {
                         GlobalScope.launch(Dispatchers.IO) {
                             val bookmarks = ArrayList<Job>()
                             bookmark.forEach {
-                                val jobId: String = it.value.toString()
+                                val jobId: String = it.key.toString()
+                                Log.e("job", jobId)
                                 val job: Job = jobDao.getJobbyId(jobId).await().toObject(Job::class.java)!!
                                 bookmarks.add(job)
                             }
                             withContext(Dispatchers.Main) {
-                                adapter.updateCourses(bookmarks)
+                                adapter.updateJobs(bookmarks)
                                 if(bookmarks.isEmpty()) {
                                     noBookmark.visibility = View.VISIBLE
                                 } else {

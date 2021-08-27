@@ -17,7 +17,7 @@
 
         <item
             android:id="@+id/appliedJobs"
-            android:title="My Jobs"
+            android:title="My Jobs and Internships"
             android:icon="@drawable/ic_job"/>
 
         <item

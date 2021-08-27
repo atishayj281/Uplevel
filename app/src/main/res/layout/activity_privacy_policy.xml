@@ -51,6 +51,11 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/grey_cursor_color"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -66,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="UptoSkills respects and understands the importance of your privacy – and are therefore committed to affording complete protection to the personal information of our customers who use our products and services or visitors of our website, and of the learners whose information we may have access to and when you apply on our website for an open position. It is in recognition of this need for security, our commitment and Secured management of any information received /collected by us that UptoSkills has established this Privacy Policy.This privacy policy is applicable to our websites – https://www.Uptoskills.com and and to our products, including the UptoSkills and shop platform, and any services we provide. It also applies to our marketing practices. We ensure total transparency in all our dealings."
-                android:gravity="center"/>
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -97,7 +102,7 @@ Our websites may include buttons or tools that link to other companies’ servic
 
 \n\n6. Hosted services provided by UptoSkills
 We provide hosted services to many companies that may sometimes require the collection of information through cookies and other technology to collect analytic data required by the product and to understand our users and their likely interests. No information is collected without consent. Management of technified private limited operates the website www.uptoskills.com."
-                android:gravity="center"/>
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -112,7 +117,7 @@ We provide hosted services to many companies that may sometimes require the coll
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Information Collected from Interactive Forms On some of our web pages we offer interactive forms that let you voluntarily submit personal information (such as your e-mail address, name, or organization). This occurs when you are registering for ODL counseling; various tests, quizzes, seminars, workshops, or training sessions offered by Teach Tech Services, downloading admission forms from Teach Tech Services. In those cases, all submitted information is used only for the purposes for which it is intended and is not made available to any third party."
-                android:gravity="center"/>
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -129,7 +134,7 @@ We provide hosted services to many companies that may sometimes require the coll
                 android:text="To fulfil our contractual commitment and to enhance the performance of our contract with you.Allow you use of our products and applications and respond to your requests Provide you with the services, support or information requested and monitor effectiveness Improve our website’s user experience and communicate better to engage users Enhance the effectiveness of our marketing campaigns. To send marketing emails or messages related to our products and services Monitor aggregate metrics to conduct our market research and understand our customers better To process your job application for an open position. Analyze, diagnose and fix issues in our product and service offerings. In all cases this information is not shared with any third party. It is used by UptoSkills as above or to prevent/respond to protection of our websites or applications. In some cases like with hosted services, we may share information with those that provide us with technology services (e.g. web hosting and analytics services), but strictly for the purpose of carrying out our work. All such vendors used by us have signed a Data protection agreement with UptoSkills to secure your data. We may be required to share information with law enforcement or other third parties when compelled to do so by court order or other legal process, to comply with statutes or regulations.
 
 \nIf we merge with or are acquired by another company, and if all of our assets are acquired by another company, this information will most likely be one of the assets to be transferred. However, we will not transfer any personal information of our customers until absolutely necessary to provide you with a continuity of service and only when the new owner maintains and provides the same level of data privacy standards as we do. In such cases, we will provide you with notice and an opportunity to opt-out of the transfer of identifiable data."
-                android:gravity="center"/>
+                />
 
 
 

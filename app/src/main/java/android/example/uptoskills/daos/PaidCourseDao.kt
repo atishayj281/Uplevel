@@ -37,10 +37,11 @@ class PaidCourseDao {
                     isSuccessful = true
                     course.enrolledStudents.put(currentUserId, "No")
                     courseCollection.document(courseId).set(course)
-                    UsersDao().ref.child(currentUserId).child("paidcourses").child(courseId).setValue(course.course_name).addOnSuccessListener {
+                    UsersDao().ref.child(currentUserId).child("paidcourses").child(courseId).setValue("NO").addOnSuccessListener {
                         Log.d("Enrolled", "YES")
                         Toast.makeText(context, "Successfully Enrolled", Toast.LENGTH_SHORT).show()
                     }.addOnFailureListener {
+                        Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
                         Log.d("failure", it.message.toString())
                     }
                 } else {

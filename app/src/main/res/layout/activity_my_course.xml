@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MyCourseActivity"
-    android:background="?attr/mbgc"
     >
 
     <LinearLayout
@@ -34,6 +33,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -42,13 +45,30 @@
                 android:id="@+id/back"
                 android:layout_gravity="center_vertical"/>
 
-            <ImageView
-                android:layout_width="152dp"
-                android:layout_height="50dp"
-                android:layout_gravity="right|center_vertical"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/uptoskills"
-                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Courses"
+                android:layout_marginLeft="10dp"
+                android:textColor="?attr/tC"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:id="@+id/search"
+                    android:background="@android:color/transparent"
+                    android:padding="10dp"
+                    android:gravity="right"
+                    android:drawableRight="@drawable/ic_baseline_search_24"
+                    android:focusableInTouchMode="true"
+                    android:cursorVisible="false"
+                    />
+
+            </LinearLayout>
+
 
         </FrameLayout>
 
@@ -57,11 +77,18 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/grey_cursor_color"/>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/courseTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            app:tabIndicatorColor="#00BEA3"
             app:tabSelectedTextColor="?attr/tC">
 
             <com.google.android.material.tabs.TabItem

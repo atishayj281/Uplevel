@@ -40,11 +40,29 @@
                     style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/navigation_view_background"
-                    android:elevation="2dp"
                     android:layout_margin="4dp"
-                    app:navigationIcon="@drawable/ic_menu"
-                    >
+                    android:background="@drawable/navigation_view_background"
+                    android:elevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/menuBar"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            app:srcCompat="@drawable/ic_menu"
+                            android:layout_gravity="center_vertical"/>
+
+                        <ImageView
+                            android:id="@+id/uptoskillsLogo"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:src="@drawable/uptoskills" />
+
+                    </LinearLayout>
+
 
                 </com.google.android.material.appbar.MaterialToolbar>
 
@@ -97,8 +115,10 @@
                                         <TextView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="70dp"
-                                            android:layout_marginRight="70dp"
+                                            android:layout_gravity="center"
+                                            android:paddingLeft="50dp"
+                                            android:paddingRight="50dp"
+                                            android:layout_marginBottom="10dp"
                                             android:gravity="center_horizontal"
                                             android:text="Begin your career in data science earn scholarship upto Rs 40,000"
                                             android:textColor="@color/white" />
@@ -241,7 +261,7 @@
                                             android:layout_gravity="bottom"
                                             android:padding="10dp"
                                             android:layout_marginBottom="20dp"
-                                            app:cardBackgroundColor="@color/AndroidGreen"
+                                            app:cardBackgroundColor="#00BEA3"
                                             app:cardCornerRadius="2.5dp"
                                             app:cardElevation="2dp">
 

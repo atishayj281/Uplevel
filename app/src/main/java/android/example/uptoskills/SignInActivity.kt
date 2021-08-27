@@ -23,7 +23,6 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.*
 import java.util.*
-import kotlin.collections.HashMap
 
 
 class SignInActivity : AppCompatActivity() {
@@ -55,8 +54,9 @@ class SignInActivity : AppCompatActivity() {
 
         binding.createAccount.setOnClickListener {
             var signUpintent = Intent(this, SignUpActivity::class.java)
-            startActivity(signUpintent)
+
             signUpintent.putExtra("ReferId", intent.getStringExtra("ReferId"))
+            startActivity(signUpintent)
             finish()
         }
 
@@ -182,7 +182,7 @@ class SignInActivity : AppCompatActivity() {
             binding.signInprogressbar.visibility = View.GONE
         }
     }
-    fun startMainActivity(){
+    private fun startMainActivity(){
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         binding.signInprogressbar.visibility = View.GONE

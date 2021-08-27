@@ -48,7 +48,7 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked): Recycler
         return jobs.size
     }
 
-    fun updateCourses(job: ArrayList<Job>) {
+    fun updateJobs(job: ArrayList<Job>) {
         jobs.clear()
         jobs.addAll(job)
         notifyDataSetChanged()

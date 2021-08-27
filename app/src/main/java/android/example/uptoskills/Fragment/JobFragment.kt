@@ -69,7 +69,7 @@ class JobFragment : Fragment() {
     private lateinit var viewPager: ViewPager
     private lateinit var auth: FirebaseAuth
     private lateinit var userDao: UsersDao
-    private lateinit var curUser: Users
+    private var curUser: Users = Users()
 
     private lateinit var hometoolBar: MaterialToolbar
     private lateinit var homedrawerLayout: DrawerLayout
@@ -79,6 +79,7 @@ class JobFragment : Fragment() {
 
     private val categoryItems = ArrayList<String>()
     private lateinit var spinnerDialog: SpinnerDialog
+    private lateinit var menuBar: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,6 +95,7 @@ class JobFragment : Fragment() {
         homeNavigationView = view.findViewById(R.id.homeNavigationView)
         search = view.findViewById(R.id.search)
         auth = FirebaseAuth.getInstance()
+        menuBar = view.findViewById(R.id.menuBar)
 
 
 
@@ -110,7 +112,7 @@ class JobFragment : Fragment() {
 
         }) }
 
-        hometoolBar.setOnClickListener {
+        menuBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
         }
 
@@ -158,6 +160,10 @@ class JobFragment : Fragment() {
                 R.id.bookmark ->
                 {
                     val intent = Intent(activity, BookmarkActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.appliedJobs -> {
+                    val intent = Intent(activity, MyJobsActivity::class.java)
                     startActivity(intent)
                 }
 

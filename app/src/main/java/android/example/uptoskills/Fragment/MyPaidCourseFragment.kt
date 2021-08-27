@@ -10,8 +10,11 @@ import android.view.ViewGroup
 import android.example.uptoskills.R
 import android.example.uptoskills.daos.PaidCourseDao
 import android.example.uptoskills.daos.UsersDao
+import android.example.uptoskills.models.FreeCourse
 import android.example.uptoskills.models.PaidCourse
 import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +37,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [MyPaidCourseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MyPaidCourseFragment : Fragment(), CourseItemClicked {
+class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -43,6 +46,8 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked {
     private lateinit var auth: FirebaseAuth
     private lateinit var adapter: MyPaidCourseAdapter
     private lateinit var progressBar: ProgressBar
+    private lateinit var noCourse: TextView
+    private val courseList: ArrayList<PaidCourse> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +63,7 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_my_paid_course, container, false)
+        noCourse = view.findViewById(R.id.noCourse)
         setUpCourses(view)
         return view
     }
@@ -81,7 +87,6 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     val paidCourseDao = PaidCourseDao()
-                    var courseList: ArrayList<PaidCourse> = ArrayList()
                     children.forEach {
                         val courseId = it.key
                         if (courseId != null) {
@@ -94,6 +99,9 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked {
                     withContext(Dispatchers.Main) {
                         adapter.updateCourses(courseList)
                         progressBar.visibility = View.GONE
+                        if(courseList.size != 0) {
+                            noCourse.visibility = View.GONE
+                        }
                     }
 
                 }
@@ -132,5 +140,27 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked {
 
     override fun onCourseCLick(courseId: String) {
 
+    }
+
+    override fun updateRecyclerView(query: String) {
+        if(query.trim().isEmpty()) {
+            noCourse.visibility = View.VISIBLE
+            adapter.updateCourses(courseList)
+        } else {
+            val newCourseList = ArrayList<PaidCourse>()
+            courseList.forEach {
+                if(it.category.contains(query.trim(), true) || it.course_name.contains(query.trim(), true)) {
+                    newCourseList.add(it)
+                    noCourse.visibility = View.GONE
+                }
+            }
+            if(newCourseList.isEmpty()) {
+                adapter.updateCourses(newCourseList)
+                noCourse.visibility = View.VISIBLE
+                } else {
+                noCourse.visibility = View.GONE
+                adapter.updateCourses(newCourseList)
+            }
+        }
     }
 }

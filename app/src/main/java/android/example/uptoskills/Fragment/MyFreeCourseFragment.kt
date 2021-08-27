@@ -1,7 +1,9 @@
 package android.example.uptoskills.Fragment
 
+import android.content.Intent
 import android.example.uptoskills.Adapters.CourseItemClicked
 import android.example.uptoskills.Adapters.MyFreeCourseAdapter
+import android.example.uptoskills.CourseVideoActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,7 +13,10 @@ import android.example.uptoskills.R
 import android.example.uptoskills.daos.CourseDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.FreeCourse
+import android.util.Log
 import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -34,8 +39,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [MyFreeCourseFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MyFreeCourseFragment : Fragment(), CourseItemClicked {
-    // TODO: Rename and change types of parameters
+class MyFreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var recyclerView: RecyclerView
@@ -43,6 +47,8 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked {
     private lateinit var auth: FirebaseAuth
     private lateinit var adapter: MyFreeCourseAdapter
     private lateinit var progressBar: ProgressBar
+    private lateinit var noCourse: TextView
+    private val courseList: ArrayList<FreeCourse> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +64,7 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_my_free_course, container, false)
+        noCourse = view.findViewById(R.id.noCourse)
         setUpCourses(view)
         return view
     }
@@ -80,7 +87,6 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     val courseDao = CourseDao()
-                    var courseList: ArrayList<FreeCourse> = ArrayList()
                     children.forEach {
                         val courseId = it.key
                         if (courseId != null) {
@@ -92,11 +98,12 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked {
                     withContext(Dispatchers.Main) {
                         adapter.updateCourses(courseList)
                         progressBar.visibility = View.GONE
+                        if(courseList.size != 0) {
+                            noCourse.visibility = View.GONE
+                        }
                     }
 
                 }
-
-
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -127,6 +134,31 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked {
     }
 
     override fun onCourseCLick(courseId: String) {
+        Log.e("course", courseId)
+        val intent = Intent(activity, CourseVideoActivity::class.java)
+        intent.putExtra("courseId", courseId)
+        startActivity(intent)
+    }
 
+    override fun updateRecyclerView(query: String) {
+        if(query.trim().isEmpty()) {
+            noCourse.visibility = View.VISIBLE
+            adapter.updateCourses(courseList)
+        } else {
+            val newCourseList = ArrayList<FreeCourse>()
+            courseList.forEach {
+                if(it.category.contains(query.trim(), true) || it.course_name.contains(query.trim(), true)) {
+                    newCourseList.add(it)
+                    noCourse.visibility = View.GONE
+                }
+            }
+            if(newCourseList.isEmpty()) {
+                adapter.updateCourses(newCourseList)
+                noCourse.visibility = View.VISIBLE
+                } else {
+                noCourse.visibility = View.GONE
+                adapter.updateCourses(newCourseList)
+            }
+        }
     }
 }

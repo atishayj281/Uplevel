@@ -23,7 +23,9 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="horizontal">
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

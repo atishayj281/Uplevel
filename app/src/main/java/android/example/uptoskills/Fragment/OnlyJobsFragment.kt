@@ -48,7 +48,7 @@ class OnlyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
     private lateinit var adapter: JobAdapter
     private lateinit var jobDao: JobDao
     private lateinit var progressBar: ProgressBar
-    private lateinit var curUser: Users
+    private var curUser: Users = Users()
     private lateinit var userDao: UsersDao
     private lateinit var auth: FirebaseAuth
 
@@ -70,7 +70,8 @@ class OnlyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
         userDao = UsersDao()
         userDao.ref.child(auth.currentUser?.uid!!).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                curUser = snapshot.getValue(Users::class.java)!!
+                val user: Users? = snapshot.getValue(Users::class.java)
+                if(user != null) curUser = user
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -147,10 +148,10 @@ class OnlyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onbookmarkCLick(itemId: String, itemtype: String) {
-        if(curUser.bookmarks.containsValue(itemId)) {
-            curUser.bookmarks.remove(itemtype, itemId)
+        if(curUser.bookmarks?.containsKey(itemId) == true) {
+            curUser.bookmarks!!.remove(itemId, itemtype)
         } else {
-            curUser.bookmarks[itemtype] = itemId
+            curUser.bookmarks?.set(itemId, itemtype)
         }
         jobDao.addbookmark(itemId)
         auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }

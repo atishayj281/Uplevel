@@ -66,12 +66,12 @@
         app:layout_constraintTop_toBottomOf="@id/appbarlayout"
         app:layout_constraintBottom_toBottomOf="parent">
 
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/courseTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        app:tabIndicatorColor="#00BEA3"
         app:tabSelectedTextColor="?attr/tC">
 
         <com.google.android.material.tabs.TabItem
