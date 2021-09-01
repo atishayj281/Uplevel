@@ -29,7 +29,7 @@ class CourseDao {
         return courseCollection.document(courseId).get()
     }
 
-    fun EnrollStudents(courseId: String, context: Context): Boolean {
+    fun EnrollStudents(courseId: String, context: Context, user: Users): Boolean {
         if(courseId.isNotBlank()) {
 
             var isSuccessful = true
@@ -42,11 +42,10 @@ class CourseDao {
                     isSuccessful = true
                     course.enrolledStudents.add(currentUserId)
                     courseCollection.document(courseId).set(course)
-                    UsersDao().ref.child(currentUserId).child("freecourses").child(courseId).setValue(course.course_name).addOnSuccessListener {
-                        Log.d("Enrolled", "YES")
+                    user.freecourses?.put(courseId, course.course_name)
+                    UsersDao().addUser(user, auth.currentUser!!.uid)
+                    withContext(Dispatchers.Main) {
                         Toast.makeText(context, "Successfully Enrolled", Toast.LENGTH_SHORT).show()
-                    }.addOnFailureListener {
-                        Log.d("failure", it.message.toString())
                     }
                 } else {
                     withContext(Dispatchers.Main) {

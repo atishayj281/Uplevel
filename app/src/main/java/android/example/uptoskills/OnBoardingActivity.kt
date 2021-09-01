@@ -123,6 +123,7 @@ class OnBoardingActivity : AppCompatActivity() {
         setFirstTimeStartStatus(false)
         var intent = Intent(this, SignInActivity::class.java)
         intent.putExtra("ReferId", referId)
+        Log.e("ReferId", referId)
         startActivity(intent)
         finish()
     }

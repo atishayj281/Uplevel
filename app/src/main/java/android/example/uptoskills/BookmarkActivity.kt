@@ -6,9 +6,11 @@ import android.example.uptoskills.Adapters.MyJobAdapter
 import android.example.uptoskills.daos.JobDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.Job
+import android.example.uptoskills.models.Users
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -64,37 +66,28 @@ class BookmarkActivity : AppCompatActivity(), JobItemClicked {
     }
 
     private fun setUpBokmarksView() {
-        usersDao.ref.child(auth.currentUser?.uid.toString()).addValueEventListener(object : ValueEventListener{
-            @RequiresApi(Build.VERSION_CODES.N)
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val bookmark = snapshot.child("bookmarks").children
-
-                        GlobalScope.launch(Dispatchers.IO) {
-                            val bookmarks = ArrayList<Job>()
-                            bookmark.forEach {
-                                val jobId: String = it.key.toString()
-                                Log.e("job", jobId)
-                                val job: Job = jobDao.getJobbyId(jobId).await().toObject(Job::class.java)!!
-                                bookmarks.add(job)
-                            }
-                            withContext(Dispatchers.Main) {
-                                adapter.updateJobs(bookmarks)
-                                if(bookmarks.isEmpty()) {
-                                    noBookmark.visibility = View.VISIBLE
-                                } else {
-                                    noBookmark.visibility = View.GONE
-                                }
-                                progressBar.visibility = View.GONE
-                            }
+        GlobalScope.launch(Dispatchers.IO) {
+            val temp = auth.currentUser?.let { usersDao.getUserById(it.uid).await().toObject(Users::class.java) }
+            if(temp != null) {
+                val bookmark = temp.bookmarks
+                val bookmarks = ArrayList<Job>()
+                bookmark?.forEach {
+                    val jobId: String = it.key.toString()
+                    Log.e("job", jobId)
+                    val job: Job = jobDao.getJobbyId(jobId).await().toObject(Job::class.java)!!
+                    bookmarks.add(job)
+                }
+                withContext(Dispatchers.Main) {
+                    adapter.updateJobs(bookmarks)
+                    if(bookmarks.isEmpty()) {
+                        noBookmark.visibility = View.VISIBLE
+                    } else {
+                        noBookmark.visibility = View.GONE
                     }
-
+                    progressBar.visibility = View.GONE
+                }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
+        }
     }
 
     override fun onJobCLick(jobId: String) {

@@ -37,6 +37,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -99,18 +104,13 @@ class JobFragment : Fragment() {
 
 
 
-        auth.currentUser?.let { userDao.ref.child(it.uid).addValueEventListener(object :
-            ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.getValue(Users::class.java)?.also { curUser = it }
+        GlobalScope.launch(Dispatchers.IO) {
+            val temp = auth.currentUser?.uid?.let { userDao.getUserById(it).await().toObject(Users::class.java) }
+            if(temp != null) {
+                curUser = temp
                 displayName = curUser.displayName.toString()
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        }) }
+        }
 
         menuBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
@@ -227,24 +227,23 @@ class JobFragment : Fragment() {
         var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
         val coins: TextView = headerView.findViewById(R.id.coins)
 
+        GlobalScope.launch(Dispatchers.IO) {
+            val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
+            if(temp != null) {
+                withContext(Dispatchers.Main) {
+                    username.text = temp.displayName
+                    displayName = temp.displayName.toString()
+                    email.text = temp.email
+                    coins.text = temp.coins.toString()
+                    val profileImage = temp.userImage
+                    if(profileImage.trim().isNotBlank() && profileImage != "null") {
+                        profile.setImageResource(R.drawable.image_circle)
+                        view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
+                    }
 
-        userDao.ref.addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val profileImage = snapshot.child(auth.currentUser!!.uid).child("userImage").getValue(String::class.java).toString()
-                username.text = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
-                displayName = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
-                email.text = snapshot.child(auth.currentUser?.uid.toString()).child("email").getValue(String::class.java).toString()
-                if(profileImage.isNotEmpty() && !profileImage.equals("null")){
-                    profile.setImageResource(R.drawable.image_circle)
-                    view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
                 }
-                coins.text = snapshot.child(auth.currentUser?.uid.toString()).child("coins").getValue(Int::class.java).toString()
             }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
+        }
 
 
     }

@@ -21,6 +21,11 @@ import com.google.firebase.auth.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.util.*
 
 
@@ -194,46 +199,29 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
 
-        if (user != null) {
-            userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    var ref = snapshot.child(auth.currentUser?.uid.toString())
-                    if (!ref.exists()) {
-                        var user = Users(hashMapOf(),
-                            hashMapOf(),
-                            auth.currentUser?.displayName.toString(),
-                            auth.currentUser?.displayName.toString(),
-                            auth.currentUser?.email.toString(),
-                            "",
-                            "",
-                            "",
-                            auth.currentUser?.photoUrl.toString(),
-                            "",
-                            auth.currentUser?.uid.toString(),
-                            "",
-                            referId,
-                            250)
+        if(user != null) {
+            GlobalScope.launch(Dispatchers.IO) {
+                var upRef: Users? =
+                    userDao.getUserById(intent.getStringExtra("ReferId").toString()).await().toObject(Users::class.java)
+                userDao.userCollection.document(auth.currentUser?.uid.toString()).get().addOnSuccessListener {
+                    if(!it.exists()) {
+                        val user = Users(hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
+                            auth.currentUser?.email.toString(), "", "", "",
+                            auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "",
+                            intent.getStringExtra("ReferId").toString(), 250)
                         userDao.addUser(user, auth.currentUser?.uid.toString())
-
-                        var upRef: Users? =
-                            referId
-                                .let { snapshot.child(it).getValue(Users::class.java) }
-
-                        if (upRef != null) {
+                        if(upRef != null) {
                             upRef.coins += 500
                             Log.e("coins", upRef.coins.toString())
-                            userDao.updateUser(upRef, referId)
+                            userDao.updateUser(upRef, intent.getStringExtra("ReferId").toString())
                         }
                     }
                 }
-
-                override fun onCancelled(error: DatabaseError) {
+                withContext(Dispatchers.Main) {
+                    startMainActivity()
                 }
-            })
-
-            startMainActivity()
+            }
         }
-
     }
 
     fun startMainActivity() {

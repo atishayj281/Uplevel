@@ -39,6 +39,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -199,23 +204,22 @@ class BlogFragment : Fragment(), IBlogAdapter {
         val coins: TextView = headerView.findViewById(R.id.coins)
 
 
-        userDao.ref.addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val profileImage = snapshot.child(auth.currentUser!!.uid).child("userImage").getValue(String::class.java).toString()
-                username.text = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
-                displayName = snapshot.child(auth.currentUser?.uid.toString()).child("displayName").getValue(String::class.java).toString()
-                email.text = snapshot.child(auth.currentUser?.uid.toString()).child("email").getValue(String::class.java).toString()
-                if(profileImage.isNotEmpty() && !profileImage.equals("null")){
-                    profile.setImageResource(R.drawable.image_circle)
-                    view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
+        GlobalScope.launch(Dispatchers.IO) {
+            val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
+            if(temp != null) {
+                withContext(Dispatchers.Main) {
+                    username.text = temp.displayName
+                    displayName = temp.displayName.toString()
+                    email.text = temp.email
+                    coins.text = temp.coins.toString()
+                    val profileImage = temp.userImage
+                    if(profileImage.trim().isNotBlank() && profileImage != "null") {
+                        profile.setImageResource(R.drawable.image_circle)
+                        view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
+                    }
                 }
-                coins.text = snapshot.child(auth.currentUser?.uid.toString()).child("coins").getValue(Int::class.java).toString()
             }
-
-            override fun onCancelled(error: DatabaseError) {
-            }
-
-        })
+        }
 
 
     }

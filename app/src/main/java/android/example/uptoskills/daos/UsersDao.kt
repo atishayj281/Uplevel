@@ -12,6 +12,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +26,10 @@ class UsersDao {
     val ref = database.getReference("users")
     private val storageReference = FirebaseStorage.getInstance().reference
     private val auth = FirebaseAuth.getInstance()
+
+    private val db = FirebaseFirestore.getInstance()
+    val userCollection = db.collection("user")
+
 
     fun addBookMark(itemId: String, itemType: String) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -51,19 +57,20 @@ class UsersDao {
         user?.let {
 
             GlobalScope.launch(Dispatchers.IO) {
-                //usersCollection.document(id).set(it)
+                userCollection.document(id).set(it)
                 ref.child(id).setValue(it)
             }
         }
     }
 
-    fun getUserById(uId: String): Task<DataSnapshot> {
-        return ref.child(uId).get()
+    fun getUserById(uId: String): Task<DocumentSnapshot> {
+        return userCollection.document(uId).get()
     }
 
     fun updateUser(user: Users, id: String){
         GlobalScope.launch {
             ref.child(id).setValue(user)
+            userCollection.document(id).set(user)
         }
     }
 

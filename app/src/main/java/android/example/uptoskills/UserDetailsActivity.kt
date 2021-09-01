@@ -20,6 +20,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import com.razorpay.Checkout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 
 class UserDetailsActivity : AppCompatActivity() {
@@ -61,31 +66,25 @@ class UserDetailsActivity : AppCompatActivity() {
             }
 
             // Updating Resume and ProfileImage
-            userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    var ref = snapshot.child(auth.currentUser?.uid.toString())
-                    if(ref.exists()) {
-                        val freecourses: HashMap<String, String>? = ref.child("freecourses").getValue(object: GenericTypeIndicator<HashMap<String, String>>(){})
-                        val paidcourses: HashMap<String, String>? = ref.child("paidcourses").getValue(object: GenericTypeIndicator<HashMap<String, String>>(){})
-                        val bookmarks: HashMap<String, String>? = ref.child("bookmarks").getValue(object: GenericTypeIndicator<HashMap<String, String>>(){})
-                        val appliedJobs: HashMap<String, String>? = ref.child("appliedJobs").getValue(object: GenericTypeIndicator<HashMap<String, String>>(){})
 
-                        usr =
-                            ref.child("coins").getValue(Int::class.java)?.let { it1 ->
-                                Users(freecourses,paidcourses,
-                                    binding.fullName.editText?.text.toString(),
-                                    displayName,
-                                    binding.email.text.toString(),
-                                    binding.college.text.toString(),
-                                    binding.education.text.toString(),
-                                    binding.currentJob.text.toString(),
-                                    ref.child("userImage").getValue(String::class.java).toString(),
-                                    binding.mobile.text.toString(),
-                                    id.toString(), ref.child("resume").getValue(String::class.java).toString(),
-                                    ref.child("referCode").getValue(String::class.java).toString(),
-                                    it1, bookmarks, appliedJobs)
-                            }!!
-                        if(ref.child("resume").getValue(String::class.java).toString().isNotEmpty()){
+            GlobalScope.launch(Dispatchers.IO) {
+                val curUser = auth.currentUser?.let { it1 -> userDao.getUserById(it1.uid).await().toObject(Users::class.java) }
+                if(curUser != null) {
+                    usr = Users(curUser.freecourses,curUser.paidcourses,
+                        binding.fullName.editText?.text.toString(),
+                        displayName,
+                        binding.email.text.toString(),
+                        binding.college.text.toString(),
+                        binding.education.text.toString(),
+                        binding.currentJob.text.toString(),
+                        curUser.userImage,
+                        binding.mobile.text.toString(),
+                        id.toString(), curUser.resume,
+                        curUser.referCode,
+                        curUser.coins, curUser.bookmarks, curUser.appliedJobs)
+                    withContext(Dispatchers.Main) {
+
+                        if(curUser.resume.trim().isNotBlank()) {
                             binding.resumeImage.setImageResource(R.drawable.ic_resume)
                         }
 
@@ -116,7 +115,7 @@ class UserDetailsActivity : AppCompatActivity() {
                         }
 
                         binding.userDetailsProgressBar.visibility = View.GONE
-                        var isNewUser:String = intent.getStringExtra("Activity").toString()
+                        val isNewUser:String = intent.getStringExtra("Activity").toString()
                         if(isNewUser == "NewUser") {
                             startMainActivity()
                         }
@@ -131,10 +130,10 @@ class UserDetailsActivity : AppCompatActivity() {
                             } else {
                                 if(intent.getBooleanExtra("isJob", true) ) {
                                     val jobDao = JobDao()
-                                    jobDao.applyJob(intent.getStringExtra("jobId")!!, this@UserDetailsActivity)
+                                    jobDao.applyJob(intent.getStringExtra("jobId")!!, this@UserDetailsActivity, usr)
                                 } else {
                                     val internDao = InternshipDao()
-                                    internDao.applyJob(intent.getStringExtra("jobId")!!, this@UserDetailsActivity)
+                                    internDao.applyJob(intent.getStringExtra("jobId")!!, this@UserDetailsActivity, usr)
                                 }
                             }
                         }
@@ -145,13 +144,12 @@ class UserDetailsActivity : AppCompatActivity() {
                             Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
                         }
                     }
+
                 }
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
+
+            }
 
         }
-
 
         //choose and set Profile Image
         binding.addProfileImage.setOnClickListener{
@@ -174,9 +172,9 @@ class UserDetailsActivity : AppCompatActivity() {
             binding.userDetailsProgressBar.visibility = View.VISIBLE
             userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    var ref = snapshot.child(auth.currentUser?.uid.toString())
+                    val ref = snapshot.child(auth.currentUser?.uid.toString())
                     if(ref.exists()) {
-                        var resumeUrl = ref.child("resume").getValue(String::class.java).toString()
+                        val resumeUrl = ref.child("resume").getValue(String::class.java).toString()
                         if(!resumeUrl.isBlank()) {
                             val builder = CustomTabsIntent.Builder()
                             val customTabsIntent = builder.build()
@@ -209,7 +207,7 @@ class UserDetailsActivity : AppCompatActivity() {
 
     private fun resumeChooser() {
         isResumeSelected = true
-        var intent: Intent = Intent()
+        val intent: Intent = Intent()
         intent.type = "application/pdf"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(intent, resumeRequestCode)
@@ -218,7 +216,7 @@ class UserDetailsActivity : AppCompatActivity() {
     // Select the image file
     private fun filechoser() {
         isImageChoose = true
-        var intent = Intent();
+        val intent = Intent();
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(intent, imageRequestCode)
@@ -239,7 +237,7 @@ class UserDetailsActivity : AppCompatActivity() {
     }
 
     fun startMainActivity() {
-        var intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -247,29 +245,29 @@ class UserDetailsActivity : AppCompatActivity() {
     // After Update in the database update the user Profile in the activity
     fun updateProfile(){
         binding.userDetailsProgressBar.visibility = View.VISIBLE
-        userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                var ref = snapshot.child(auth.uid.toString())
-                binding.fullName.editText?.setText(if(ref.child("full_name").value.toString() != "null") ref.child("full_name").value.toString() else "")
-                binding.mobile.setText(if(ref.child("mobileNo").value.toString() != "null") ref.child("mobileNo").value.toString() else "")
-                binding.college.setText(if(ref.child("college_name").value.toString() != "null") ref.child("college_name").value.toString() else "")
-                binding.currentJob.setText(if(ref.child("job").value.toString() != "null") ref.child("job").value.toString() else "")
-                binding.education.setText(if(ref.child("education").value.toString() != "null") ref.child("education").value.toString() else "")
-                binding.username.setText(if(ref.child("displayName").value.toString() != "null") ref.child("displayName").value.toString() else "")
-                binding.email.setText(if(ref.child("email").value.toString() != "null") ref.child("email").value.toString() else "")
-                var image: String = ref.child("userImage").value.toString()
-                if(image.isNotEmpty() && image != "null") {
-                    binding.profileImage.setImageResource(R.drawable.image_circle)
-                    Glide.with(binding.profileImage.context).load(image).circleCrop().into(binding.profileImage)
-                }
-                if(ref.child("resume").value.toString().isNotBlank()) {
-                    binding.resumeImage.setImageResource(R.drawable.ic_resume)
-                }
-                binding.userDetailsProgressBar.visibility = View.GONE
+        GlobalScope.launch(Dispatchers.IO) {
+            val usr = auth.currentUser?.uid?.let { userDao.getUserById(it).await().toObject(Users::class.java) }
+            withContext(Dispatchers.Main) {
+                if(usr != null) {
+                    binding.fullName.editText?.setText(usr.full_name.trim())
+                    binding.mobile.setText(usr.mobileNo.trim())
+                    binding.college.setText(usr.college_name.trim())
+                    binding.currentJob.setText(usr.job.trim())
+                    binding.education.setText(usr.education.trim())
+                    binding.username.setText(usr.displayName?.trim())
+                    binding.email.setText(usr.email.trim())
+                    var image: String = usr.userImage.trim()
+                    if(image.isNotEmpty() && image != "null") {
+                        binding.profileImage.setImageResource(R.drawable.image_circle)
+                        Glide.with(binding.profileImage.context).load(image).circleCrop().into(binding.profileImage)
+                    }
+                    if(usr.resume.trim().isNotBlank()) {
+                        binding.resumeImage.setImageResource(R.drawable.ic_resume)
+                    }
+                    binding.userDetailsProgressBar.visibility = View.GONE
 
+                }
             }
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+        }
     }
 }

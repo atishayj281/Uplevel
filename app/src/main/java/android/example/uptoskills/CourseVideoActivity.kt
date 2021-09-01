@@ -70,15 +70,6 @@ class CourseVideoActivity : AppCompatActivity(), videoItemClicked {
     }
 
     override fun onClicked(id: String, title: String) {
-        Log.e("id", title)
-//        binding.youtubePlayerView.clearFocus()
-//        binding.youtubePlayerView.initialize(YouTubePlayerInitListener { initializedYouTubePlayer ->
-//            initializedYouTubePlayer.addListener(object : AbstractYouTubePlayerListener() {
-//                override fun onReady() {
-//                    initializedYouTubePlayer.loadVideo(id, 0f)
-//                }
-//            })
-//        }, true)
         mInitializedYouTubePlayer.cueVideo(id, 0f)
     }
 

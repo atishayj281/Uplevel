@@ -5,9 +5,13 @@ import android.content.pm.PackageManager
 import android.example.uptoskills.databinding.ActivityCourseEnquiryBinding
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
+import java.lang.Exception
 
 class CourseEnquiryActivity : AppCompatActivity() {
 
@@ -47,6 +51,40 @@ class CourseEnquiryActivity : AppCompatActivity() {
             openWhatsappContact(binding.wContact.text.toString())
         }
 
+        binding.submit.setOnClickListener {
+            val emailsend: String = "info@uptoskills.com"
+            val emailsubject: String = "App Query"
+            val emailbody: String = binding.query.text.toString() + "\nContact No: " + binding.contactNo.text.toString() + "\nMail Id: " + FirebaseAuth.getInstance().currentUser?.email
+
+            // define Intent object
+            // with action attribute as ACTION_SEND
+
+            // define Intent object
+            // with action attribute as ACTION_SEND
+            val intent = Intent(Intent.ACTION_SEND)
+
+            // add three fiels to intent using putExtra function
+
+            // add three fiels to intent using putExtra function
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailsend))
+            intent.putExtra(Intent.EXTRA_SUBJECT, emailsubject)
+            intent.putExtra(Intent.EXTRA_TEXT, emailbody)
+
+            // set type of intent
+
+            // set type of intent
+            intent.type = "message/rfc822"
+
+            // startActivity with intent with chooser
+            // as Email client using createChooser function
+
+            // startActivity with intent with chooser
+            // as Email client using createChooser function
+            startActivity(
+                Intent
+                    .createChooser(intent,
+                        "Choose an Email client :"))
+        }
 
     }
 

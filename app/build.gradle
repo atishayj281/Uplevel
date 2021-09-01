@@ -95,7 +95,7 @@ dependencies {
     implementation 'com.github.MohamedWessam:no-internet-layout:0.1.1'
 
     // Razorpay
-    implementation 'com.razorpay:checkout:1.6.11'
+    implementation 'com.razorpay:checkout:1.6.8'
 
     // searchable spinner
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'

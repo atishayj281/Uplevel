@@ -1,7 +1,9 @@
 package android.example.uptoskills.Fragment
 
+import android.content.Intent
 import android.example.uptoskills.Adapters.JobItemClicked
 import android.example.uptoskills.Adapters.MyJobAdapter
+import android.example.uptoskills.JobViewActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -79,41 +81,29 @@ class MyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
         noJobs = view.findViewById(R.id.noJobs)
         noJobs.visibility = View.VISIBLE
 
-        auth.currentUser?.let { userDao.ref.child(it.uid).addValueEventListener(object : ValueEventListener{
-            @RequiresApi(Build.VERSION_CODES.N)
-            override fun onDataChange(snapshot: DataSnapshot) {
-                GlobalScope.launch {
-                    if(snapshot.exists()) {
-                        curUser = snapshot.getValue(Users::class.java)!!
-                        val jobList: HashMap<String, String>? = curUser.appliedJobs
-                        if (jobList != null) {
-                            if(jobList.isNotEmpty()) {
-                                jobList.forEach { (s, s2) ->
-                                    if (s2 == "Job") {
-                                        val job: Job? =
-                                            jobDao.getJobbyId(s).await().toObject(Job::class.java)
-                                        if (job != null) {
-                                            myJobs.add(job)
-                                        }
-                                    }
+        GlobalScope.launch(Dispatchers.IO) {
+            val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
+            if(temp != null) {
+                curUser = temp
+                val jobList: HashMap<String, String>? = curUser.appliedJobs
+                if (jobList != null) {
+                    if(jobList.isNotEmpty()) {
+                        jobList.forEach { (s, s2) ->
+                            if (s2 == "Job") {
+                                val job: Job? =
+                                    jobDao.getJobbyId(s).await().toObject(Job::class.java)
+                                if (job != null) {
+                                    myJobs.add(job)
                                 }
                             }
                         }
                     }
-                    withContext(Dispatchers.Main) {
-                        setUprecyclerView(view)
-                    }
                 }
-
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
+            withContext(Dispatchers.Main) {
+                setUprecyclerView(view)
             }
-
-        }) }
-
-
+        }
         return view
     }
 
@@ -148,7 +138,10 @@ class MyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
     }
 
     override fun onJobCLick(jobId: String) {
-
+        val intent = Intent(view?.context, JobViewActivity::class.java)
+        intent.putExtra("jobId", jobId)
+        intent.putExtra("category", "job")
+        startActivity(intent)
     }
 
     override fun onbookmarkCLick(itemId: String, itemtype: String) {

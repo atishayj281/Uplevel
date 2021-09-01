@@ -12,6 +12,7 @@ import android.example.uptoskills.daos.PaidCourseDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.FreeCourse
 import android.example.uptoskills.models.PaidCourse
+import android.example.uptoskills.models.Users
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -80,40 +81,29 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-        userDao.ref.child(currentUserId).child("paidcourses").addValueEventListener(object :
-            ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val children = snapshot.children
-
-                GlobalScope.launch(Dispatchers.IO) {
-                    val paidCourseDao = PaidCourseDao()
-                    children.forEach {
-                        val courseId = it.key
-                        if (courseId != null) {
-                            var course: PaidCourse = paidCourseDao.getCoursebyId(courseId).await().toObject(
-                                PaidCourse::class.java)!!
-                            courseList.add(course)
-                        }
+        GlobalScope.launch(Dispatchers.IO) {
+            val paidCourseDao = PaidCourseDao()
+            val temp = userDao.getUserById(auth.currentUser!!.uid).await().toObject(Users::class.java)
+            if(temp != null) {
+                val paidCourses = temp.paidcourses
+                paidCourses?.forEach {
+                    val courseId = it.key
+                    if (courseId != "null") {
+                        val course: PaidCourse = paidCourseDao.getCoursebyId(courseId).await().toObject(
+                            PaidCourse::class.java)!!
+                        courseList.add(course)
                     }
-
-                    withContext(Dispatchers.Main) {
-                        adapter.updateCourses(courseList)
-                        progressBar.visibility = View.GONE
-                        if(courseList.size != 0) {
-                            noCourse.visibility = View.GONE
-                        }
-                    }
-
                 }
 
-
+                withContext(Dispatchers.Main) {
+                    adapter.updateCourses(courseList)
+                    progressBar.visibility = View.GONE
+                    if(courseList.size != 0) {
+                        noCourse.visibility = View.GONE
+                    }
+                }
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
+        }
     }
 
 

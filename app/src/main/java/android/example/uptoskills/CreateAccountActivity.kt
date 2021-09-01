@@ -13,6 +13,10 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 class CreateAccountActivity : AppCompatActivity() {
@@ -46,23 +50,15 @@ class CreateAccountActivity : AppCompatActivity() {
                         binding.crtemail.text.toString(), "", "", "", "", "",
                             it.result.user?.uid!!, "", referId, 250)
                         val userDao = UsersDao()
-                        userDao.addUser(user, it.result.user?.uid.toString())
 
-                        userDao.ref.child(referId).addValueEventListener(object : ValueEventListener{
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val referer = snapshot.getValue(Users::class.java)
-                                if(referer != null) {
-                                    referer.coins += 500
-                                    userDao.updateUser(referer, referId)
-                                }
+                        GlobalScope.launch(Dispatchers.IO) {
+                            val referer = userDao.getUserById(referId).await().toObject(Users::class.java)
+                            if(referer != null) {
+                                referer.coins += 500
+                                userDao.addUser(user, it.result.user?.uid.toString())
+                                userDao.updateUser(referer, referId)
                             }
-
-                            override fun onCancelled(error: DatabaseError) {
-
-                            }
-                        })
-
-
+                        }
                         val id: String? = it.result.user?.uid
                         val intent = Intent(this, UserDetailsActivity::class.java)
                         intent.putExtra("username", binding.crtUsername.text.toString())

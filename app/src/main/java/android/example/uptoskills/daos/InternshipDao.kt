@@ -2,12 +2,14 @@ package android.example.uptoskills.daos
 
 import android.content.Context
 import android.example.uptoskills.models.Job
+import android.example.uptoskills.models.Users
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,7 +26,7 @@ class InternshipDao {
         return jobCollection.document(jobId).get()
     }
 
-    fun applyJob(jobId: String, context: Context): Boolean {
+    fun applyJob(jobId: String, context: Context, user: Users): Boolean {
         if(jobId.isNotBlank()) {
 
             var isSuccessful = true
@@ -37,11 +39,10 @@ class InternshipDao {
                     isSuccessful = true
                     auth.currentUser!!.email?.let { job.applied.put(currentUserId, it) }
                     jobCollection.document(jobId).set(job)
-                    UsersDao().ref.child(currentUserId).child("appliedJobs").child(jobId).setValue("Internship").addOnSuccessListener {
-                        Log.d("Applied", "YES")
+                    user.appliedJobs?.put(jobId, "Internship")
+                    UsersDao().addUser(user, currentUserId)
+                    withContext(Dispatchers.Main){
                         Toast.makeText(context, "Successfully Applied", Toast.LENGTH_SHORT).show()
-                    }.addOnFailureListener {
-                        Log.d("failure", it.message.toString())
                     }
                 } else {
                     withContext(Dispatchers.Main) {

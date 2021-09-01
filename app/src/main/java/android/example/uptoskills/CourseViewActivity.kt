@@ -98,25 +98,19 @@ class CourseViewActivity : AppCompatActivity(), PaymentResultListener {
             }
         }
 
-        userDao.ref.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val user = auth.currentUser?.uid?.let { snapshot.child(it).getValue(Users::class.java) }
-                if(user != null) {
-                    curUser = user
-                }
+        GlobalScope.launch(Dispatchers.IO) {
+            val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
+            if(temp != null) {
+                curUser = temp
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
+        }
 
 
         binding.enroll.setOnClickListener {
             val isFree: Boolean = intent.getStringExtra("courseCategory") == "free"
             if (isFree) {
-                courseDao.EnrollStudents(courseId, this@CourseViewActivity)
+                courseDao.EnrollStudents(courseId, this@CourseViewActivity, curUser)
+
             } else {
                 if(curUser.full_name.trim().isEmpty() || curUser.job.trim().isEmpty()
                     || curUser.education.trim().isEmpty() || curUser.mobileNo.trim().isEmpty()
@@ -158,6 +152,7 @@ class CourseViewActivity : AppCompatActivity(), PaymentResultListener {
     }
 
     // Starting Payment
+    var isCoinsUsed: Boolean = false
     private fun startpayment(email: String, contact: String, wallet: Int){
 
         if(email.isBlank() && contact.isBlank()){
@@ -167,10 +162,11 @@ class CourseViewActivity : AppCompatActivity(), PaymentResultListener {
 
             if(curUser.coins >= 100) {
                 price -= 100
+                isCoinsUsed = true
             }
 
             if(price == 0) {
-                PaidCourseDao().EnrollStudents(courseId, this)
+                PaidCourseDao().EnrollStudents(courseId, this, curUser)
             } else {
                 price *= 100
                 if(price > 0) {
@@ -199,9 +195,12 @@ class CourseViewActivity : AppCompatActivity(), PaymentResultListener {
     override fun onPaymentSuccess(p0: String?) {
 
         Toast.makeText(this, "Successful Payment Id: $p0", Toast.LENGTH_SHORT).show()
-        PaidCourseDao().EnrollStudents(courseId, this)
-        curUser.coins -= 100
-        userDao.updateUser(curUser, auth.currentUser?.uid!!)
+        PaidCourseDao().EnrollStudents(courseId, this, curUser)
+        if(isCoinsUsed) {
+            curUser.coins -= 100
+            userDao.updateUser(curUser, auth.currentUser?.uid!!)
+        }
+
     }
 
     override fun onPaymentError(p0: Int, p1: String?) {

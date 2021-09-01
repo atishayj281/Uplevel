@@ -3,6 +3,7 @@ package android.example.uptoskills.daos
 import android.content.Context
 import android.example.uptoskills.models.FreeCourse
 import android.example.uptoskills.models.Job
+import android.example.uptoskills.models.Users
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
@@ -43,7 +44,7 @@ class JobDao {
         }
     }
 
-    fun applyJob(jobId: String, context: Context): Boolean {
+    fun applyJob(jobId: String, context: Context, user: Users): Boolean {
         if(jobId.isNotBlank()) {
 
             var isSuccessful = true
@@ -56,11 +57,10 @@ class JobDao {
                     isSuccessful = true
                     auth.currentUser!!.email?.let { job.applied.put(currentUserId, it) }
                     jobCollection.document(jobId).set(job)
-                    UsersDao().ref.child(currentUserId).child("appliedJobs").child(jobId).setValue("Job").addOnSuccessListener {
-                        Log.d("Applied", "YES")
+                    user.appliedJobs?.set(jobId, "Job")
+                    UsersDao().addUser(user, currentUserId)
+                    withContext(Dispatchers.Main) {
                         Toast.makeText(context, "Successfully Applied", Toast.LENGTH_SHORT).show()
-                    }.addOnFailureListener {
-                        Log.d("failure", it.message.toString())
                     }
                 } else {
                     withContext(Dispatchers.Main) {

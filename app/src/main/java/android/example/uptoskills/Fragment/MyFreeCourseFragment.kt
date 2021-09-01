@@ -13,6 +13,7 @@ import android.example.uptoskills.R
 import android.example.uptoskills.daos.CourseDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.FreeCourse
+import android.example.uptoskills.models.Users
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -49,6 +50,7 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     private lateinit var progressBar: ProgressBar
     private lateinit var noCourse: TextView
     private val courseList: ArrayList<FreeCourse> = ArrayList()
+    private var curUser = Users()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,37 +82,30 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-        userDao.ref.child(currentUserId).child("freecourses").addValueEventListener(object :
-            ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val children = snapshot.children
-
-                GlobalScope.launch(Dispatchers.IO) {
-                    val courseDao = CourseDao()
-                    children.forEach {
-                        val courseId = it.key
-                        if (courseId != null) {
-                            var course: FreeCourse = courseDao.getCoursebyId(courseId).await().toObject(FreeCourse::class.java)!!
-                            courseList.add(course)
-                        }
+        GlobalScope.launch(Dispatchers.IO) {
+            val temp = userDao.getUserById(auth.currentUser!!.uid).await().toObject(Users::class.java)
+            if(temp != null) {
+                curUser = temp
+                val courseDao = CourseDao()
+                curUser.freecourses?.forEach {
+                    val courseId = it.key
+                    if (courseId != "null") {
+                        val course: FreeCourse = courseDao.getCoursebyId(courseId).await().toObject(FreeCourse::class.java)!!
+                        courseList.add(course)
                     }
+                }
 
-                    withContext(Dispatchers.Main) {
-                        adapter.updateCourses(courseList)
-                        progressBar.visibility = View.GONE
-                        if(courseList.size != 0) {
-                            noCourse.visibility = View.GONE
-                        }
+                withContext(Dispatchers.Main) {
+                    adapter.updateCourses(courseList)
+                    progressBar.visibility = View.GONE
+                    if(courseList.size != 0) {
+                        noCourse.visibility = View.GONE
                     }
-
                 }
             }
 
-            override fun onCancelled(error: DatabaseError) {
 
-            }
-
-        })
+        }
     }
 
     companion object {

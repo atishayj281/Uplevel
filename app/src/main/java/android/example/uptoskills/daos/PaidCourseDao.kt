@@ -3,6 +3,7 @@ package android.example.uptoskills.daos
 import android.content.Context
 import android.example.uptoskills.models.FreeCourse
 import android.example.uptoskills.models.PaidCourse
+import android.example.uptoskills.models.Users
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
@@ -10,8 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 class PaidCourseDao {
@@ -24,7 +24,7 @@ class PaidCourseDao {
         return courseCollection.document(courseId).get()
     }
 
-    fun EnrollStudents(courseId: String, context: Context): Boolean {
+    fun EnrollStudents(courseId: String, context: Context, user: Users): Boolean {
         if(courseId.isNotBlank()) {
 
             var isSuccessful = true
@@ -35,15 +35,11 @@ class PaidCourseDao {
                 val isEnrolled = course.enrolledStudents.contains(currentUserId)
                 if(!isEnrolled) {
                     isSuccessful = true
-                    course.enrolledStudents.put(currentUserId, "No")
+                    course.enrolledStudents[currentUserId] = "NO"
                     courseCollection.document(courseId).set(course)
-                    UsersDao().ref.child(currentUserId).child("paidcourses").child(courseId).setValue("NO").addOnSuccessListener {
-                        Log.d("Enrolled", "YES")
-                        Toast.makeText(context, "Successfully Enrolled", Toast.LENGTH_SHORT).show()
-                    }.addOnFailureListener {
-                        Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
-                        Log.d("failure", it.message.toString())
-                    }
+                    user.paidcourses?.put(courseId, "NO")
+                    auth.currentUser?.uid?.let { UsersDao().addUser(user, it) }
+                    Toast.makeText(context, "Successfully Enrolled", Toast.LENGTH_SHORT).show()
                 } else {
                     isSuccessful = false
                 }
