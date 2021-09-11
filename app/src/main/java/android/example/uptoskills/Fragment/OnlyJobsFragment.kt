@@ -30,6 +30,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,17 +73,12 @@ class OnlyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
         val view = inflater.inflate(R.layout.fragment_only_jobs, container, false)
         auth = FirebaseAuth.getInstance()
         userDao = UsersDao()
-        userDao.ref.child(auth.currentUser?.uid!!).addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val user: Users? = snapshot.getValue(Users::class.java)
-                if(user != null) curUser = user
+        GlobalScope.launch(Dispatchers.IO) {
+            val user = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
+            if(user != null) {
+                curUser = user
             }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
+        }
 
         recyclerView = view.findViewById(R.id.jobrecyclerView)
         progressBar = view.findViewById(R.id.progress_bar)

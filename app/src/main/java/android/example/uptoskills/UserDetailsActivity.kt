@@ -41,12 +41,21 @@ class UserDetailsActivity : AppCompatActivity() {
     private lateinit var resumeUri: Uri
     private lateinit var usr: Users
 
+    override fun onResume() {
+        super.onResume()
+        GlobalScope.launch(Dispatchers.IO) {
+            usr = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }!!
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.userDetailsProgressBar.visibility = View.VISIBLE
+        if(intent.getStringExtra("parent") == "jobActivity") {
+            Toast.makeText(this, "Please Verify your Details...", Toast.LENGTH_SHORT).show()
+        }
 
         Checkout.preload(applicationContext)
         Checkout.clearUserData(this)
@@ -58,12 +67,8 @@ class UserDetailsActivity : AppCompatActivity() {
 
         binding.submit.setOnClickListener {
             val id = auth.currentUser?.uid
-            var displayName: String = ""
+            var displayName: String = binding.username.text.toString()
             binding.userDetailsProgressBar.visibility = View.VISIBLE
-            if(intent.getStringExtra("parent").toString().equals("MoreFragment") || intent.getStringExtra("parent").toString().equals("course")
-                || intent.getStringExtra("parent") == "job"){
-                displayName = binding.username.text.toString()
-            }
 
             // Updating Resume and ProfileImage
 
@@ -97,17 +102,13 @@ class UserDetailsActivity : AppCompatActivity() {
                         }
                         else if(isResumeSelected) {
 
-                            if (usr != null) {
-                                userDao.uploadResume(resumeUri, usr, this@UserDetailsActivity, id.toString())
-                            }
+                            userDao.uploadResume(resumeUri, usr, this@UserDetailsActivity, id.toString())
                             isResumeSelected = false
 
                         }
                         else if(isImageChoose){
 
-                            if (usr != null) {
-                                userDao.uploadProfileImage(ProfileimageUrl, usr, this@UserDetailsActivity, id.toString())
-                            }
+                            userDao.uploadProfileImage(ProfileimageUrl, usr, this@UserDetailsActivity, id.toString())
                             isImageChoose = false
 
                         } else {
@@ -119,7 +120,7 @@ class UserDetailsActivity : AppCompatActivity() {
                         if(isNewUser == "NewUser") {
                             startMainActivity()
                         }
-                        else if(intent.getStringExtra("parent") == "job") {
+                        else if(intent.getStringExtra("parent").toString().trim() == "jobActivity") {
                             if(usr.full_name.trim().isEmpty()  || usr.mobileNo.trim().isEmpty()
                                 || usr.education.trim().isEmpty() || usr.job.trim().isEmpty()
                                 || usr.college_name.trim().isEmpty() || usr.resume.trim().isEmpty()) {
@@ -130,11 +131,12 @@ class UserDetailsActivity : AppCompatActivity() {
                             } else {
                                 if(intent.getBooleanExtra("isJob", true) ) {
                                     val jobDao = JobDao()
-                                    jobDao.applyJob(intent.getStringExtra("jobId")!!, this@UserDetailsActivity, usr)
+                                    jobDao.applyJob(intent.getStringExtra("jobId").toString(), this@UserDetailsActivity, usr)
                                 } else {
                                     val internDao = InternshipDao()
-                                    internDao.applyJob(intent.getStringExtra("jobId")!!, this@UserDetailsActivity, usr)
+                                    internDao.applyJob(intent.getStringExtra("jobId").toString(), this@UserDetailsActivity, usr)
                                 }
+//                                finish()
                             }
                         }
                         else if(intent.getStringExtra("parent") == "course") {
@@ -170,11 +172,11 @@ class UserDetailsActivity : AppCompatActivity() {
         // download resume
         binding.resumeImage.setOnClickListener {
             binding.userDetailsProgressBar.visibility = View.VISIBLE
-            userDao.ref.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val ref = snapshot.child(auth.currentUser?.uid.toString())
-                    if(ref.exists()) {
-                        val resumeUrl = ref.child("resume").getValue(String::class.java).toString()
+            GlobalScope.launch(Dispatchers.IO) {
+                val user = auth.currentUser?.let { it1 -> userDao.getUserById(it1.uid).await().toObject(Users::class.java) }
+                withContext(Dispatchers.Main) {
+                    if(user != null) {
+                        val resumeUrl = user.resume
                         if(!resumeUrl.isBlank()) {
                             val builder = CustomTabsIntent.Builder()
                             val customTabsIntent = builder.build()
@@ -183,17 +185,11 @@ class UserDetailsActivity : AppCompatActivity() {
                         } else {
                             Toast.makeText(this@UserDetailsActivity, "Please upload the Resume", Toast.LENGTH_SHORT).show()
                         }
-
                     }
                 }
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
+            }
         }
     }
-
-
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -222,11 +218,8 @@ class UserDetailsActivity : AppCompatActivity() {
         startActivityForResult(intent, imageRequestCode)
     }
 
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if(requestCode == imageRequestCode && resultCode == RESULT_OK && data?.data != null) {
             ProfileimageUrl = data.data!!
             binding.profileImage.setImageURI(ProfileimageUrl)
@@ -270,4 +263,15 @@ class UserDetailsActivity : AppCompatActivity() {
             }
         }
     }
+
+//    override fun onBackPressed() {
+//        val call: String = intent.getStringExtra("parent").toString().trim()
+//        if(call == "jobActivity") {
+//            val intent = Intent(this, JobViewActivity::class.java)
+//
+//        } else {
+//            super.onBackPressed()
+//        }
+//    }
+//
 }

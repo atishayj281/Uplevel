@@ -6,6 +6,7 @@ import android.example.uptoskills.databinding.ActivityCourseEnquiryBinding
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -52,38 +53,38 @@ class CourseEnquiryActivity : AppCompatActivity() {
         }
 
         binding.submit.setOnClickListener {
-            val emailsend: String = "info@uptoskills.com"
-            val emailsubject: String = "App Query"
-            val emailbody: String = binding.query.text.toString() + "\nContact No: " + binding.contactNo.text.toString() + "\nMail Id: " + FirebaseAuth.getInstance().currentUser?.email
+            if(binding.query.text.toString().trim().isNotEmpty()
+                && binding.contactNo.text.toString().trim().isNotEmpty()) {
+                val emailsend: String = "info@uptoskills.com"
+                val emailsubject: String = "App Query"
 
-            // define Intent object
-            // with action attribute as ACTION_SEND
 
-            // define Intent object
-            // with action attribute as ACTION_SEND
-            val intent = Intent(Intent.ACTION_SEND)
+                val emailbody: String =
+                    binding.query.text.toString() + "\nContact No: " + binding.contactNo.text.toString() + "\nMail Id: " + FirebaseAuth.getInstance().currentUser?.email
 
-            // add three fiels to intent using putExtra function
+                val intent = Intent(Intent.ACTION_SEND)
 
-            // add three fiels to intent using putExtra function
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailsend))
-            intent.putExtra(Intent.EXTRA_SUBJECT, emailsubject)
-            intent.putExtra(Intent.EXTRA_TEXT, emailbody)
+                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailsend))
+                intent.putExtra(Intent.EXTRA_SUBJECT, emailsubject)
+                intent.putExtra(Intent.EXTRA_TEXT, emailbody)
 
-            // set type of intent
+                // set type of intent
 
-            // set type of intent
-            intent.type = "message/rfc822"
+                // set type of intent
+                intent.type = "message/rfc822"
 
-            // startActivity with intent with chooser
-            // as Email client using createChooser function
+                // startActivity with intent with chooser
+                // as Email client using createChooser function
 
-            // startActivity with intent with chooser
-            // as Email client using createChooser function
-            startActivity(
-                Intent
-                    .createChooser(intent,
-                        "Choose an Email client :"))
+                // startActivity with intent with chooser
+                // as Email client using createChooser function
+                startActivity(
+                    Intent
+                        .createChooser(intent,
+                            "Choose an Email client :"))
+            } else {
+                Toast.makeText(this, "Please Provide the Details...", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

@@ -84,13 +84,6 @@
             android:textColor="?attr/tC"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_bookmarked"
-            android:layout_margin="10dp"
-            android:layout_gravity="right"
-            android:id="@+id/isBookmarked"/>
 
     </FrameLayout>
 

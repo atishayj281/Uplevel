@@ -64,7 +64,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="30dp"
             android:orientation="vertical">
 
             <TextView
@@ -131,6 +134,7 @@ We provide hosted services to many companies that may sometimes require the coll
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
                 android:text="To fulfil our contractual commitment and to enhance the performance of our contract with you.Allow you use of our products and applications and respond to your requests Provide you with the services, support or information requested and monitor effectiveness Improve our website’s user experience and communicate better to engage users Enhance the effectiveness of our marketing campaigns. To send marketing emails or messages related to our products and services Monitor aggregate metrics to conduct our market research and understand our customers better To process your job application for an open position. Analyze, diagnose and fix issues in our product and service offerings. In all cases this information is not shared with any third party. It is used by UptoSkills as above or to prevent/respond to protection of our websites or applications. In some cases like with hosted services, we may share information with those that provide us with technology services (e.g. web hosting and analytics services), but strictly for the purpose of carrying out our work. All such vendors used by us have signed a Data protection agreement with UptoSkills to secure your data. We may be required to share information with law enforcement or other third parties when compelled to do so by court order or other legal process, to comply with statutes or regulations.
 
 \nIf we merge with or are acquired by another company, and if all of our assets are acquired by another company, this information will most likely be one of the assets to be transferred. However, we will not transfer any personal information of our customers until absolutely necessary to provide you with a continuity of service and only when the new owner maintains and provides the same level of data privacy standards as we do. In such cases, we will provide you with notice and an opportunity to opt-out of the transfer of identifiable data."

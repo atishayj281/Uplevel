@@ -16,9 +16,6 @@ import com.google.android.material.card.MaterialCardView
 class InternshipAdapter(options: FirestoreRecyclerOptions<Internship>, val listener: JobItemClicked, val itemId: Int) : FirestoreRecyclerAdapter<Internship, InternshipAdapter.InternshipViewholder>(
     options
 ){
-
-
-
     inner class InternshipViewholder(itemview: View): RecyclerView.ViewHolder(itemview) {
         var company_logo = itemview.findViewById<ImageView>(R.id.company_image)
         var job_type = itemView.findViewById<TextView>(R.id.jobtype)

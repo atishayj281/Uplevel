@@ -37,6 +37,12 @@ class CertificateAdapter(val context: Context,val listener: onCertificateClicked
         return course.size
     }
 
+    fun updateCertificate(newCourse: ArrayList<PaidCourse>) {
+        course.clear()
+        course.addAll(newCourse)
+        notifyDataSetChanged()
+    }
+
 
 }
 

@@ -12,5 +12,6 @@ data class PaidCourse(val category: String="",
                       val language: String="",
                       val lectures: Int=0,
                       val mentor_name: String="",
-                      val price: Int=0
+                      val price: Int=0,
+                      val link: String=""
                       )

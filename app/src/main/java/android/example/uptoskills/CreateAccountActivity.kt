@@ -37,8 +37,8 @@ class CreateAccountActivity : AppCompatActivity() {
 
         binding.crtaccount.setOnClickListener {
             binding.createAccountProgressBar.visibility = View.VISIBLE
-            if(binding.crtemail.text.toString().isNotBlank() && binding.crtpass.text.toString()
-                    .isNotBlank() && binding.crtUsername.text.isNotBlank()
+            if(binding.crtemail.text.toString().trim().isNotBlank() && binding.crtpass.text.toString().trim()
+                    .isNotBlank() && binding.crtUsername.text.trim().isNotBlank()
             ){
                 auth.createUserWithEmailAndPassword(binding.crtemail.text.toString(), binding.crtpass.text.toString()).addOnCompleteListener {
                     if(it.isSuccessful){
@@ -51,13 +51,20 @@ class CreateAccountActivity : AppCompatActivity() {
                             it.result.user?.uid!!, "", referId, 250)
                         val userDao = UsersDao()
 
+
                         GlobalScope.launch(Dispatchers.IO) {
-                            val referer = userDao.getUserById(referId).await().toObject(Users::class.java)
-                            if(referer != null) {
-                                referer.coins += 500
-                                userDao.addUser(user, it.result.user?.uid.toString())
-                                userDao.updateUser(referer, referId)
+                            var referer: Users? = null
+                            if(referId.trim().isNotBlank() && referId.trim().lowercase() == "null") {
+
+                                referer =
+                                    userDao.getUserById(referId).await().toObject(Users::class.java)
+                                if (referer != null) {
+                                    referer.coins += 500
+                                    userDao.updateUser(referer, referId)
+                                }
+
                             }
+                            userDao.addUser(user, it.result.user?.uid.toString())
                         }
                         val id: String? = it.result.user?.uid
                         val intent = Intent(this, UserDetailsActivity::class.java)

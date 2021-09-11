@@ -198,11 +198,16 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun updateUI(user: FirebaseUser?) {
-
         if(user != null) {
             GlobalScope.launch(Dispatchers.IO) {
-                var upRef: Users? =
-                    userDao.getUserById(intent.getStringExtra("ReferId").toString()).await().toObject(Users::class.java)
+
+                var upRef: Users? = null
+                Log.e("refer", intent.getStringExtra("ReferId").toString())
+                if(intent.getStringExtra("ReferId").toString().lowercase().trim() != "null" &&
+                    intent.getStringExtra("ReferId").toString().lowercase().trim().isNotBlank()) {
+                    upRef =
+                        userDao.getUserById(intent.getStringExtra("ReferId").toString()).await().toObject(Users::class.java)
+                }
                 userDao.userCollection.document(auth.currentUser?.uid.toString()).get().addOnSuccessListener {
                     if(!it.exists()) {
                         val user = Users(hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),

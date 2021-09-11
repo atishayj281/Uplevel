@@ -15,4 +15,5 @@
     <color name="colorTransparentWhite">#cccccc</color>
     <color name="LightningYellow">#fdc928</color>
     <color name="AndroidGreen">#40db86</color>
+    <color name="darkgoldenRod">#b8860b</color>
 </resources>

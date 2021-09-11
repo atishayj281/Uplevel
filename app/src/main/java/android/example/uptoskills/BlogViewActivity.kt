@@ -5,6 +5,7 @@ import android.example.uptoskills.databinding.ActivityBlogViewBinding
 import android.example.uptoskills.models.Blog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ class BlogViewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var postId: String? = intent.getStringExtra("123")
+        Log.e("blogId", postId.toString().trim())
         binding.blogViewProgressBar.visibility = View.VISIBLE
         updateBlog(postId)
 
@@ -34,7 +36,7 @@ class BlogViewActivity : AppCompatActivity() {
     private fun updateBlog(BlogId: String?) {
         var blogDao = BlogDao()
         GlobalScope.launch(Dispatchers.IO) {
-            blog = blogDao.getBlogById(BlogId.toString()).await().toObject(Blog::class.java)!!
+            blog = blogDao.getBlogById(BlogId.toString().trim()).await().toObject(Blog::class.java)!!
             withContext(Dispatchers.Main) {
                 binding.blogHeading.text = blog.heading
                 binding.blogView.text = blog.description

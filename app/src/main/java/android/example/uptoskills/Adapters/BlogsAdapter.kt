@@ -10,15 +10,16 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.firebase.ui.firestore.paging.FirestorePagingAdapter
+import com.firebase.ui.firestore.paging.FirestorePagingOptions
+import com.squareup.okhttp.internal.DiskLruCache
 
 
-class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogAdapter, val itemId: Int) : FirestoreRecyclerAdapter<Blog, BlogsAdapter.BLogViewHolder>(
+class BlogsAdapter(options: FirestorePagingOptions<Blog>, val listener: IBlogAdapter, val itemId: Int) : FirestorePagingAdapter<Blog, BlogsAdapter.BLogViewHolder>(
     options
 ) {
 
-    class BLogViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class BLogViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val blogImage: ImageView = itemView.findViewById(R.id.blogImage)
         val blogHeading: TextView = itemView.findViewById(R.id.blogHeading)
         val description: TextView = itemView.findViewById(R.id.blogDescription)
@@ -28,7 +29,7 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BLogViewHolder {
         val viewHolder =  BLogViewHolder(LayoutInflater.from(parent.context).inflate(itemId, parent, false))
         viewHolder.blog.setOnClickListener {
-            listener.onBlogClicked(snapshots.getSnapshot(viewHolder.adapterPosition).id)
+            getItem(viewHolder.adapterPosition)?.toObject(Blog::class.java)?.let { listener.onBlogClicked(it) }
         }
         return viewHolder
     }
@@ -41,6 +42,6 @@ class BlogsAdapter(options: FirestoreRecyclerOptions<Blog>, val listener: IBlogA
 }
 
 interface IBlogAdapter {
-    fun onBlogClicked(postId: String)
+    fun onBlogClicked(blog: Blog)
     fun onBookmarkClicked(blogId: String, item: String)
 }

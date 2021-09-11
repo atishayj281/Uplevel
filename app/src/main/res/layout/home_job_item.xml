@@ -42,7 +42,6 @@
                     android:id="@+id/jobtype"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Full Time Job"
                     android:textColor="?attr/tC" />
 
             </FrameLayout>
@@ -52,7 +51,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Android Developer"
                 android:textColor="?attr/tC"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/company_image"
@@ -66,7 +64,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:text="Growagro"
                 android:textColor="?attr/tC"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/company_image"
@@ -78,18 +75,9 @@
                 android:id="@+id/jobLoc"
                 app:layout_constraintTop_toBottomOf="@id/jobname"
                 app:layout_constraintStart_toEndOf="@id/companyname"
-                android:text="Hydrabad"
                 android:layout_margin="10dp"
                 android:textColor="?attr/tC"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            app:srcCompat="@drawable/ic_bookmarked"
-            android:layout_margin="10dp"
-            android:layout_gravity="right"
-            android:id="@+id/isBookmarked"/>
 
     </FrameLayout>
 </com.google.android.material.card.MaterialCardView>

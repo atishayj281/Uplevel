@@ -3,7 +3,6 @@ package android.example.uptoskills.Adapters
 import android.content.Context
 import android.example.uptoskills.R
 import android.example.uptoskills.models.Job
-import android.example.uptoskills.models.PaidCourse
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.auth.FirebaseAuth
 
-class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemId: Int): RecyclerView.Adapter<MyJobAdapter.JobViewHolder>() {
+class BookmarkedJobAdapter(val context: Context, val listener: JobItemClicked): RecyclerView.Adapter<BookmarkedJobAdapter.JobViewHolder>() {
 
     private var jobs: ArrayList<Job> = ArrayList()
 
@@ -28,7 +28,7 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemI
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
-        val viewholder = JobViewHolder(LayoutInflater.from(parent.context).inflate(itemId, parent, false))
+        val viewholder = JobViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.internship_item, parent, false))
         viewholder.job_box.setOnClickListener {
             listener.onJobCLick(jobs[viewholder.adapterPosition].id)
         }
@@ -42,6 +42,7 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemI
         holder.jobtitle.text = jobs[position].title
         Glide.with(holder.company_logo.context).load(jobs[position].company_logo_url)
             .circleCrop().placeholder(R.drawable.uptoskills).into(holder.company_logo)
+
     }
 
     override fun getItemCount(): Int {

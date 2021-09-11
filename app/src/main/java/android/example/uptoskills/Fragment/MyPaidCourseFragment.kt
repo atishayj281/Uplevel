@@ -1,7 +1,9 @@
 package android.example.uptoskills.Fragment
 
+import android.content.Intent
 import android.example.uptoskills.Adapters.CourseItemClicked
 import android.example.uptoskills.Adapters.MyPaidCourseAdapter
+import android.example.uptoskills.PaidCourseViewActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +15,7 @@ import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.FreeCourse
 import android.example.uptoskills.models.PaidCourse
 import android.example.uptoskills.models.Users
+import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -100,6 +103,9 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
                     progressBar.visibility = View.GONE
                     if(courseList.size != 0) {
                         noCourse.visibility = View.GONE
+                    } else {
+                        noCourse.visibility = View.VISIBLE
+//                        Toast.makeText(view.context, "No Course Found", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -129,12 +135,15 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     }
 
     override fun onCourseCLick(courseId: String) {
-
+        val intent = Intent(activity, PaidCourseViewActivity::class.java)
+//        Log.e("courseId", courseId)
+        intent.putExtra("courseId", courseId.trim())
+        startActivity(intent)
     }
 
     override fun updateRecyclerView(query: String) {
         if(query.trim().isEmpty()) {
-            noCourse.visibility = View.VISIBLE
+            noCourse.visibility = View.GONE
             adapter.updateCourses(courseList)
         } else {
             val newCourseList = ArrayList<PaidCourse>()
@@ -147,6 +156,7 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
             if(newCourseList.isEmpty()) {
                 adapter.updateCourses(newCourseList)
                 noCourse.visibility = View.VISIBLE
+//                Toast.makeText(view?.context, "No Course Found", Toast.LENGTH_SHORT).show()
                 } else {
                 noCourse.visibility = View.GONE
                 adapter.updateCourses(newCourseList)

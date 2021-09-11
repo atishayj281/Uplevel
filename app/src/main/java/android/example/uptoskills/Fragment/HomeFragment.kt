@@ -19,12 +19,14 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.facebook.FacebookSdk
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
@@ -32,9 +34,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
@@ -228,6 +227,10 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
             homedrawerLayout.closeDrawer(GravityCompat.START)
 
             when(menuItem.itemId){
+                R.id.help -> {
+                    val intent = Intent(activity, CourseEnquiryActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.MyCourses -> {
                     val intent = Intent(activity, MyCourseActivity::class.java)
                     startActivity(intent)
@@ -274,7 +277,10 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
                     val intent = Intent(activity, CertificateActivity::class.java)
                     startActivity(intent)
                 }
-
+                R.id.TermsCondition -> {
+                    val intent = Intent(activity, TermsAndConditionActivity::class.java)
+                    startActivity(intent)
+                }
             }
             menuItem.isChecked = false
 
@@ -427,7 +433,11 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         postDao = BlogDao()
         val postsCollections = postDao.postCollections
         val query = postsCollections.limitToLast(10).orderBy("heading", Query.Direction.DESCENDING)
-        val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Blog>().setQuery(query, Blog::class.java).build()
+        val config: PagedList.Config = PagedList.Config.Builder()
+            .setInitialLoadSizeHint(10)
+            .setPageSize(3)
+            .build()
+        val recyclerViewOptions = FirestorePagingOptions.Builder<Blog>().setQuery(query, config, Blog::class.java).build()
 
         adapter = BlogsAdapter(recyclerViewOptions, this, R.layout.home_blog_item)
 
@@ -436,10 +446,11 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     }
 
 
-    override fun onBlogClicked(postId: String) {
+    override fun onBlogClicked(blog: Blog) {
         var intent = Intent(view?.context, BlogViewActivity::class.java)
-        intent.putExtra("123", postId)
+        intent.putExtra("123", blog.id)
         startActivity(intent)
+//        Log.e("postId", blog.id)
     }
 
     override fun onBookmarkClicked(blogId: String, item: String) {

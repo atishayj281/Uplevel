@@ -94,17 +94,17 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
                         courseList.add(course)
                     }
                 }
-
                 withContext(Dispatchers.Main) {
                     adapter.updateCourses(courseList)
                     progressBar.visibility = View.GONE
                     if(courseList.size != 0) {
                         noCourse.visibility = View.GONE
+                    } else {
+//                        Toast.makeText(view.context, "No Course Found", Toast.LENGTH_SHORT).show()
+                        noCourse.visibility = View.VISIBLE
                     }
                 }
             }
-
-
         }
     }
 
@@ -137,7 +137,7 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
 
     override fun updateRecyclerView(query: String) {
         if(query.trim().isEmpty()) {
-            noCourse.visibility = View.VISIBLE
+            noCourse.visibility = View.GONE
             adapter.updateCourses(courseList)
         } else {
             val newCourseList = ArrayList<FreeCourse>()
@@ -150,6 +150,7 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
             if(newCourseList.isEmpty()) {
                 adapter.updateCourses(newCourseList)
                 noCourse.visibility = View.VISIBLE
+//                Toast.makeText(view?.context, "No Course Found", Toast.LENGTH_SHORT).show()
                 } else {
                 noCourse.visibility = View.GONE
                 adapter.updateCourses(newCourseList)

@@ -23,7 +23,6 @@ import com.google.firebase.database.ValueEventListener
 class JobAdapter(options: FirestoreRecyclerOptions<Job>, val listener: JobItemClicked, val itemId: Int) : FirestoreRecyclerAdapter<Job, JobAdapter.JobViewholder>(
     options
 ){
-    private lateinit var auth: FirebaseAuth
     inner class JobViewholder(itemview: View): RecyclerView.ViewHolder(itemview) {
         var company_logo = itemview.findViewById<ImageView>(R.id.company_image)
         var job_type = itemView.findViewById<TextView>(R.id.jobtype)
@@ -31,19 +30,14 @@ class JobAdapter(options: FirestoreRecyclerOptions<Job>, val listener: JobItemCl
         var comapny_name = itemview.findViewById<TextView>(R.id.companyname)
         var jobLocation = itemview.findViewById<TextView>(R.id.jobLoc)
         var job_box = itemview.findViewById<MaterialCardView>(R.id.job_container)
-        var isBookmarked: ImageView = itemview.findViewById(R.id.isBookmarked)
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewholder {
-        auth = FirebaseAuth.getInstance()
         val viewHolder = JobViewholder(LayoutInflater.from(parent.context)
             .inflate(itemId, parent, false))
         viewHolder.job_box.setOnClickListener {
             listener.onJobCLick(snapshots.getSnapshot(viewHolder.adapterPosition).id)
-        }
-        viewHolder.isBookmarked.setOnClickListener {
-            listener.onbookmarkCLick(snapshots.getSnapshot(viewHolder.adapterPosition).id, "Job")
         }
         return viewHolder
     }
@@ -55,12 +49,6 @@ class JobAdapter(options: FirestoreRecyclerOptions<Job>, val listener: JobItemCl
         holder.jobtitle.text = model.title
         Glide.with(holder.company_logo.context).load(model.company_logo_url)
             .circleCrop().placeholder(R.drawable.uptoskills).into(holder.company_logo)
-            val isBookmark = model.bookmark.contains(auth.currentUser?.uid.toString())
-            if(isBookmark) {
-                holder.isBookmarked.setImageDrawable(ContextCompat.getDrawable(holder.isBookmarked.context, R.drawable.ic_bookmarked))
-            } else {
-                holder.isBookmarked.setImageDrawable(ContextCompat.getDrawable(holder.isBookmarked.context, R.drawable.ic_unbookmark))
-            }
     }
 
 

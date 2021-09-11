@@ -19,11 +19,12 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class UsersDao {
 
-    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
-    val ref = database.getReference("users")
+//    private val database: FirebaseDatabase = FirebaseDatabase.getInstance()
+//    val ref = database.getReference("users")
     private val storageReference = FirebaseStorage.getInstance().reference
     private val auth = FirebaseAuth.getInstance()
 
@@ -33,22 +34,15 @@ class UsersDao {
 
     fun addBookMark(itemId: String, itemType: String) {
         GlobalScope.launch(Dispatchers.IO) {
-            ref.child(auth.currentUser?.uid.toString()).addValueEventListener(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user: Users = snapshot.getValue(Users::class.java)!!
-                    if(user.bookmarks?.containsKey(itemId) == true) {
-                        user.bookmarks.remove(itemId)
-                    } else {
-                        user.bookmarks?.put(itemId, itemType)
-                    }
-                    ref.child(auth.currentUser?.uid.toString()).setValue(user)
+            val user = auth.currentUser?.uid?.let { getUserById(it).await().toObject(Users::class.java) }
+            if(user != null) {
+                if(user.bookmarks?.containsKey(itemId) == true) {
+                    user.bookmarks.remove(itemId)
+                } else {
+                    user.bookmarks?.put(itemId, itemType)
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
+                auth.currentUser?.uid?.let { updateUser(user, it) }
+            }
         }
 
     }
@@ -58,7 +52,6 @@ class UsersDao {
 
             GlobalScope.launch(Dispatchers.IO) {
                 userCollection.document(id).set(it)
-                ref.child(id).setValue(it)
             }
         }
     }
@@ -69,13 +62,12 @@ class UsersDao {
 
     fun updateUser(user: Users, id: String){
         GlobalScope.launch {
-            ref.child(id).setValue(user)
             userCollection.document(id).set(user)
         }
     }
 
     fun uploadProfileImage(imageUri: Uri,user: Users, context: Context, id: String) {
-        if(imageUri.toString().isNotBlank()) {
+        if(imageUri.toString().isNotBlank() && imageUri.toString().trim() != "null") {
             var fileRef: StorageReference = storageReference.child("users/"+auth.currentUser?.uid+"/profile."+getFileExtension(imageUri, context))
             fileRef.putFile(imageUri).addOnSuccessListener {
                 fileRef.downloadUrl.addOnSuccessListener {

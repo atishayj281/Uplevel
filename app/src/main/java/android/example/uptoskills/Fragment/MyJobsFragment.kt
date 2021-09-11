@@ -17,6 +17,7 @@ import android.example.uptoskills.models.Users
 import android.os.Build
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -108,7 +109,7 @@ class MyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
     }
 
     private fun setUprecyclerView(view: View) {
-        adapter = MyJobAdapter(view.context, this)
+        adapter = MyJobAdapter(view.context, this, R.layout.internship_item)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
         adapter.updateJobs(myJobs)
@@ -141,6 +142,7 @@ class MyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
         val intent = Intent(view?.context, JobViewActivity::class.java)
         intent.putExtra("jobId", jobId)
         intent.putExtra("category", "job")
+        intent.putExtra("parent", "applied")
         startActivity(intent)
     }
 
@@ -161,12 +163,13 @@ class MyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
                     newjobs.add(it)
                 }
             }
-            if(newjobs.isEmpty()) {
-                noJobs.visibility = View.VISIBLE
-                adapter.updateJobs(newjobs)
-            } else {
+            if(newjobs.size != 0) {
                 adapter.updateJobs(newjobs)
                 noJobs.visibility = View.GONE
+            } else {
+                noJobs.visibility = View.VISIBLE
+//                Toast.makeText(view?.context, "No Job Found...", Toast.LENGTH_SHORT).show()
+                adapter.updateJobs(newjobs)
             }
         }
     }

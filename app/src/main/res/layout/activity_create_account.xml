@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
-                    android:text="Username *"
+                    android:text="Full Name *"
                     android:textColor="@color/black"
                     android:textSize="13.3sp"/>
 
@@ -116,6 +116,7 @@
                     android:layout_marginTop="11.7dp"
                     android:background="@drawable/back"
                     android:maxLines="1"
+                    android:maxLength="10"
                     android:paddingRight="44.3dp"
                     android:textColor="#000000"
                     android:textColorHint="#000000"

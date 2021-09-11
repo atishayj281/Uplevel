@@ -7,6 +7,7 @@ import android.example.uptoskills.models.Users
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,7 +22,7 @@ class JobDao {
 
     private val db = FirebaseFirestore.getInstance()
     val jobCollection = db.collection("jobs")
-    val auth = Firebase.auth
+    val auth = FirebaseAuth.getInstance()
     private val usersDao = UsersDao()
 
     fun getJobbyId(jobId: String): Task<DocumentSnapshot> {

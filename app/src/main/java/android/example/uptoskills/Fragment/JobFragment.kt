@@ -122,6 +122,10 @@ class JobFragment : Fragment() {
             homedrawerLayout.closeDrawer(GravityCompat.START)
 
             when(menuItem.itemId){
+                R.id.help -> {
+                    val intent = Intent(activity, CourseEnquiryActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.MyCourses -> {
                     val intent = Intent(activity, MyCourseActivity::class.java)
                     startActivity(intent)
@@ -167,6 +171,10 @@ class JobFragment : Fragment() {
                     startActivity(intent)
                 }
 
+                R.id.TermsCondition -> {
+                    val intent = Intent(activity, TermsAndConditionActivity::class.java)
+                    startActivity(intent)
+                }
             }
             menuItem.isChecked = false
 

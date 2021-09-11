@@ -5,4 +5,5 @@ data class Blog (
     val createdBy: String="",
     val description: String="",
     val heading: String="",
-    val image: String="")
+    val image: String="",
+    val id: String="")

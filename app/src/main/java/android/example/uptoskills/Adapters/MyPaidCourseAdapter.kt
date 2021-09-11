@@ -26,6 +26,9 @@ class MyPaidCourseAdapter(val context: Context, val listener: CourseItemClicked)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewholder {
         val viewholder = CourseViewholder(LayoutInflater.from(parent.context).inflate(R.layout.item_course, parent, false))
+        viewholder.course.setOnClickListener {
+            listener.onCourseCLick(courses[viewholder.adapterPosition].id)
+        }
         return viewholder
     }
 

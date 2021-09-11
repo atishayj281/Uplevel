@@ -3,21 +3,34 @@ package android.example.uptoskills.Fragment
 import android.app.Activity
 import android.content.Intent
 import android.example.uptoskills.*
+import android.example.uptoskills.Adapters.BlogsAdapter
+import android.example.uptoskills.Adapters.EventsAdapter
+import android.example.uptoskills.Adapters.IBlogAdapter
+import android.example.uptoskills.Adapters.IEventClickListener
+import android.example.uptoskills.daos.BlogDao
+import android.example.uptoskills.daos.EventDao
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.example.uptoskills.daos.UsersDao
+import android.example.uptoskills.models.Blog
+import android.example.uptoskills.models.Events
 import android.example.uptoskills.models.Users
 import android.net.Uri
 import android.util.Log
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.facebook.FacebookSdk
+import com.firebase.ui.firestore.paging.FirestorePagingOptions
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
@@ -28,6 +41,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,7 +58,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [EventFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EventFragment : Fragment() {
+class EventFragment : Fragment(), IEventClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -57,6 +71,11 @@ class EventFragment : Fragment() {
     private lateinit var menuBar: ImageView
     private lateinit var userDao: UsersDao
     private lateinit var auth: FirebaseAuth
+    private lateinit var eventDao: EventDao
+    private lateinit var adapter: EventsAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var postDao: BlogDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +98,10 @@ class EventFragment : Fragment() {
         homeNavigationView = view.findViewById(R.id.homeNavigationView)
         menuBar = view.findViewById(R.id.menuBar)
         auth = FirebaseAuth.getInstance()
+        recyclerView = view.findViewById(R.id.eventsRecyclerView)
+        progressBar = view.findViewById(R.id.progress_bar)
 
+        progressBar.visibility = View.VISIBLE
         menuBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
         }
@@ -100,6 +122,10 @@ class EventFragment : Fragment() {
             homedrawerLayout.closeDrawer(GravityCompat.START)
 
             when(menuItem.itemId){
+                R.id.help -> {
+                    val intent = Intent(activity, CourseEnquiryActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.MyCourses -> {
                     val intent = Intent(activity, MyCourseActivity::class.java)
                     startActivity(intent)
@@ -145,6 +171,10 @@ class EventFragment : Fragment() {
                     val intent = Intent(activity, MyJobsActivity::class.java)
                     startActivity(intent)
                 }
+                R.id.TermsCondition -> {
+                    val intent = Intent(activity, TermsAndConditionActivity::class.java)
+                    startActivity(intent)
+                }
 
             }
             menuItem.isChecked = false
@@ -163,6 +193,7 @@ class EventFragment : Fragment() {
             startActivity(intent)
         }
 
+        setUpRecyclerView()
         return view
     }
 
@@ -240,6 +271,43 @@ class EventFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         activity?.let { setUpNavigationViewHeader(it) }
+        adapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.stopListening()
+    }
+
+    private fun setUpRecyclerView() {
+        eventDao = EventDao()
+        val collection = eventDao.postCollections
+        val query = collection.orderBy("id", Query.Direction.DESCENDING)
+        val config: PagedList.Config = PagedList.Config.Builder()
+            .setInitialLoadSizeHint(10)
+            .setPageSize(3)
+            .build()
+        val recyclerViewOptions = FirestorePagingOptions.Builder<Events>().setQuery(query, config, Events::class.java).build()
+
+        adapter = EventsAdapter(recyclerViewOptions, this, R.layout.event_item)
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(view?.context)
+        progressBar.visibility = View.GONE
+//        postDao = BlogDao()
+//        val postsCollections = postDao.postCollections
+//        val query = postsCollections.orderBy("heading", Query.Direction.DESCENDING)
+//        val config: PagedList.Config = PagedList.Config.Builder()
+//            .setInitialLoadSizeHint(10)
+//            .setPageSize(3)
+//            .build()
+//        val recyclerViewOptions = FirestorePagingOptions.Builder<Blog>().setQuery(query, config, Blog::class.java).build()
+//
+//        adapter = BlogsAdapter(recyclerViewOptions, this, R.layout.blog_item)
+//
+//        recyclerView.adapter = adapter
+//        recyclerView.layoutManager = LinearLayoutManager(view?.context)
+//        progressBar.visibility = View.GONE
     }
 
     companion object {
@@ -260,5 +328,11 @@ class EventFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onClick(event: Events) {
+        val intent = Intent(activity, EventViewActivity::class.java)
+        intent.putExtra("eventId", event.id)
+        startActivity(intent)
     }
 }
