@@ -9,25 +9,19 @@ import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityCertificateBinding
 import android.example.uptoskills.models.PaidCourse
 import android.example.uptoskills.models.Users
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.*
 import android.graphics.pdf.PdfDocument
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -35,13 +29,15 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.Exception
-import java.time.temporal.ValueRange
+import android.example.uptoskills.mail.JavaMailAPI
+
+
+
 
 class CertificateActivity : AppCompatActivity(), onCertificateClicked {
 
     private lateinit var binding: ActivityCertificateBinding
-    private var user = Users()
+    private lateinit var user: Users
     private lateinit var usersDao: UsersDao
     private lateinit var auth: FirebaseAuth
     private val completedCourseId = ArrayList<String>()
@@ -52,7 +48,10 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
     private lateinit var paint: Paint
     private lateinit var file: File
     private lateinit var adapter: CertificateAdapter
+    private lateinit var bitmap: Bitmap
+    private lateinit var scaleBitmap: Bitmap
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCertificateBinding.inflate(layoutInflater)
@@ -64,39 +63,49 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
         binding.back.setOnClickListener {
             finish()
         }
+        bitmap = BitmapFactory.decodeResource(resources, R.drawable.certificate)
+        scaleBitmap = Bitmap.createScaledBitmap(bitmap, 1280, 720, false)
 
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), PackageManager.PERMISSION_GRANTED)
+        ActivityCompat.requestPermissions(this,
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            PackageManager.PERMISSION_GRANTED)
 
         paidCourseDao = PaidCourseDao()
         auth = FirebaseAuth.getInstance()
         usersDao = UsersDao()
 
         GlobalScope.launch(Dispatchers.IO) {
-            val temp = auth.currentUser?.let { usersDao.getUserById(it.uid).await().toObject(Users::class.java) }
-            if(temp != null) {
-                user = temp;
+            val temp = auth.currentUser?.let {
+                usersDao.getUserById(it.uid).await().toObject(Users::class.java)
+            }
+            if (temp != null) {
+                user = temp
                 user.paidcourses?.forEach { (s, s2) ->
-                    if(s2.lowercase() == "yes") {
+                    if (s2.lowercase() == "yes") {
                         completedCourseId.add(s)
                     }
                     Log.e("crtificate", s2)
                 }
-                if(completedCourseId.isNotEmpty()) {
+                if (completedCourseId.isNotEmpty()) {
                     GlobalScope.launch {
                         completedCourseId
                             .forEach {
-                                val course = paidCourseDao.getCoursebyId(it).await().toObject(PaidCourse::class.java)
-                                if(course != null) {
+                                val course = paidCourseDao.getCoursebyId(it).await()
+                                    .toObject(PaidCourse::class.java)
+                                if (course != null) {
                                     completedCourse.add(course)
                                 }
                             }
                         withContext(Dispatchers.Main) {
                             adapter.updateCertificate(completedCourse)
-                            if(completedCourse.size == 0) {
-                                Toast.makeText(this@CertificateActivity, "No Certificate Found", Toast.LENGTH_SHORT).show()
+
+                            if (completedCourse.size == 0) {
+
+                                Toast.makeText(this@CertificateActivity,
+                                    "No Certificate Found",
+                                    Toast.LENGTH_SHORT).show()
                                 binding.noCertificate.visibility = View.VISIBLE
-                            }
-                            else {
+                            } else {
                                 binding.noCertificate.visibility = View.GONE
                             }
                         }
@@ -104,35 +113,65 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
                 }
             }
         }
+
     }
 
 
+
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun createCertificate(user: Users, course: PaidCourse) {
         binding.progressBar.visibility = View.VISIBLE
         pdfDocument = PdfDocument()
         paint = Paint()
 
-        val pageInfo: PdfDocument.PageInfo = PdfDocument.PageInfo.Builder(900, 695, 1).create()
+        val pageInfo: PdfDocument.PageInfo = PdfDocument.PageInfo.Builder(1280, 720, 1).create()
         val page1 = pdfDocument.startPage(pageInfo)
         canvas = page1.canvas
-        paint.textAlign = Paint.Align.CENTER
-        paint.textSize = 35f
-        paint.color = ContextCompat.getColor(this, R.color.darkgoldenRod)
-        canvas.drawText("CERTIFICATE", (pageInfo.pageWidth/2).toFloat(), 40f, paint)
-        paint.textSize = 28f
-        canvas.drawText("OF COMPLETION", (pageInfo.pageWidth/2).toFloat(), 80f, paint)
-        paint.textSize = 20f
-        paint.color = ContextCompat.getColor(this, R.color.black)
-        canvas.drawText("This Certificate is Proudly Presented to:",
-            (pageInfo.pageWidth/2).toFloat(), 112f, paint)
-        paint.textSize = 35f
-        paint.color = ContextCompat.getColor(this, R.color.darkgoldenRod)
-        canvas.drawText(user.full_name.uppercase(), (pageInfo.pageWidth/2).toFloat(), 150f, paint)
 
-        paint.color = ContextCompat.getColor(this, R.color.black)
-        canvas.drawLine(45f, 185f, 855f, 185f, paint)
+        canvas.drawBitmap(scaleBitmap, 0f, 0f, paint)
+        paint.textSize = 60f
+        paint.color = ContextCompat.getColor(this, R.color.orange)
+        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        canvas.drawText(user.full_name, 140f, 380f, paint)
+        Toast.makeText(this, user.full_name, Toast.LENGTH_SHORT).show()
 
+        paint.color = ContextCompat.getColor(this, R.color.green)
 
+        paint.textAlign = Paint.Align.LEFT
+        paint.textSize = 45f
+        canvas.drawText(course.course_name,
+            1280f - (pageInfo.pageWidth / 3) - 2 * course.course_name.length,
+            590f,
+            paint)
+
+        val college: String = user.college_name
+        val a = college.length
+        when {
+            a < 10 -> {
+                paint.textSize = 60f
+                paint.color = ContextCompat.getColor(this, R.color.orange)
+                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                canvas.drawText(college, 140f, 460f, paint)
+            }
+            a < 20 -> {
+                paint.textSize = 40f
+                paint.color = ContextCompat.getColor(this, R.color.orange)
+                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                canvas.drawText(college, 140f, 460f, paint)
+            }
+            a < 30 -> {
+                paint.textSize = 40f
+                paint.color = ContextCompat.getColor(this, R.color.orange)
+                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                canvas.drawText(college, 100f, 460f, paint)
+            }
+            else -> {
+                paint.textSize = 35f
+                paint.color = ContextCompat.getColor(this, R.color.orange)
+                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                canvas.drawText(college, 80f, 460f, paint)
+            }
+        }
 
         pdfDocument.finishPage(page1)
         file = File(this.externalCacheDir!!.absolutePath, "/${course.id}.pdf")
@@ -143,9 +182,11 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
             e.message?.let { Log.e("Certificate Error", it) }
         }
         binding.progressBar.visibility = View.GONE
+
         pdfDocument.close()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onClicked(course: PaidCourse) {
         createCertificate(user, course)
     }

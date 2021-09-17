@@ -106,4 +106,8 @@ dependencies {
     // Youtube Api
     implementation 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:7.0.1'
 
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
+    implementation files('libs/mail.jar')
+
 }

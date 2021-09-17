@@ -16,4 +16,6 @@
     <color name="LightningYellow">#fdc928</color>
     <color name="AndroidGreen">#40db86</color>
     <color name="darkgoldenRod">#b8860b</color>
+    <color name="orange">#FF6D34</color>
+    <color name="green">#00BEA3</color>
 </resources>

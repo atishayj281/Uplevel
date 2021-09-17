@@ -1,6 +1,7 @@
 package android.example.uptoskills.daos
 
 import android.content.Context
+import android.example.uptoskills.mail.JavaMailAPI
 import android.example.uptoskills.models.Job
 import android.example.uptoskills.models.Users
 import android.util.Log
@@ -26,6 +27,20 @@ class InternshipDao {
         return jobCollection.document(jobId).get()
     }
 
+    private fun sendMail(job: String, context: Context, user: Users) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val mail: String = "atishay.tca1909005@tmu.ac.in"
+            val message: String = "Name: ${user.full_name}\nCurrent Position: ${user.job}\nOrganisation: ${user.college_name}\nMobile No.: ${user.mobileNo}"+
+                    "\nHighest Qualification: ${user.education}\nResume: ${user.resume}\nEmail: ${user.email}\n has been applied for " + job
+            val subject: String = "${user.full_name} has been applied for " + job
+
+            //Send Mail
+            val javaMailAPI = JavaMailAPI(context, mail, subject, message)
+            javaMailAPI.sendMail()
+        }
+
+    }
+
     fun applyJob(jobId: String, context: Context, user: Users): Boolean {
         if(jobId.isNotBlank()) {
 
@@ -42,6 +57,7 @@ class InternshipDao {
                     user.appliedJobs?.put(jobId, "Internship")
                     UsersDao().addUser(user, currentUserId)
                     withContext(Dispatchers.Main){
+                        sendMail(job.title, context, user)
                         Toast.makeText(context, "Successfully Applied", Toast.LENGTH_SHORT).show()
                     }
                 } else {
