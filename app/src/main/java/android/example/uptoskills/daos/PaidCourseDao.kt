@@ -1,6 +1,7 @@
 package android.example.uptoskills.daos
 
 import android.content.Context
+import android.example.uptoskills.mail.JavaMailAPI
 import android.example.uptoskills.models.FreeCourse
 import android.example.uptoskills.models.PaidCourse
 import android.example.uptoskills.models.Users
@@ -24,6 +25,19 @@ class PaidCourseDao {
         return courseCollection.document(courseId).get()
     }
 
+    private fun sendMail(course: String, context: Context, user: Users) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val mail: String = "atishay.tca1909005@tmu.ac.in"
+            val message: String = "Name: ${user.full_name}\nCurrent Position: ${user.job}\nOrganisation: ${user.college_name}\nMobile No.: ${user.mobileNo}"+
+                    "\nHighest Qualification: ${user.education}\nResume: ${user.resume}\nEmail: ${user.email}\n has been enrolled for " + course
+            val subject: String = "${user.full_name} has been applied for " + course
+
+            //Send Mail
+            val javaMailAPI = JavaMailAPI(context, mail, subject, message)
+            javaMailAPI.sendMail()
+        }
+    }
+
     fun EnrollStudents(courseId: String, context: Context, user: Users): Boolean {
         if(courseId.isNotBlank()) {
 
@@ -39,7 +53,11 @@ class PaidCourseDao {
                     courseCollection.document(courseId).set(course)
                     user.paidcourses?.put(courseId, "NO")
                     auth.currentUser?.uid?.let { UsersDao().addUser(user, it) }
-                    Toast.makeText(context, "Successfully Enrolled", Toast.LENGTH_SHORT).show()
+                    withContext(Dispatchers.Main) {
+                        sendMail(course.course_name, context, user)
+                        Toast.makeText(context, "Successfully Enrolled", Toast.LENGTH_SHORT).show()
+                    }
+
                 } else {
                     isSuccessful = false
                 }

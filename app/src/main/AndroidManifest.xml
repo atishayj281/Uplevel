@@ -24,6 +24,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GetWork">
         <activity
+            android:name=".ResumeInputActivity"
+            android:exported="true" >
+
+
+
+        </activity>
+        <activity
             android:name=".PaidCourseViewActivity"
             android:exported="true" />
         <activity

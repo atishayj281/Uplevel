@@ -1,8 +1,10 @@
 package android.example.uptoskills
 
+import android.content.Intent
 import android.example.uptoskills.daos.PaidCourseDao
 import android.example.uptoskills.databinding.ActivityPaidCourseViewBinding
 import android.example.uptoskills.models.PaidCourse
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +28,6 @@ class PaidCourseViewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         courseId = intent.getStringExtra("courseId").toString()
-//        Log.e("courseId", courseId)
         if (courseId != "null" && courseId.trim().isNotEmpty()) {
             GlobalScope.launch(Dispatchers.IO) {
                 paidCourse =
@@ -40,6 +41,7 @@ class PaidCourseViewActivity : AppCompatActivity() {
                     binding.duration.text = paidCourse.course_duration
                     binding.language.text = paidCourse.language
                     binding.lectures.text = paidCourse.lectures.toString()
+                    binding.classtime.text = paidCourse.start_time.trim()
                     binding.price.text =
                         if (paidCourse.price == 0) "Free" else paidCourse.price.toString()
                     binding.courseCurriculum.text = String.format(paidCourse.curriculum)
@@ -52,7 +54,10 @@ class PaidCourseViewActivity : AppCompatActivity() {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
         }
         binding.join.setOnClickListener {
-
+            val intent = Intent()
+            intent.setData(Uri.parse(paidCourse.link))
+            intent.action = Intent.ACTION_VIEW
+            startActivity(intent)
         }
     }
 }

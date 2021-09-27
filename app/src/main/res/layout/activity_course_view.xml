@@ -120,16 +120,15 @@
                 android:background="#d5d5d5" />
 
             <TextView
+                android:id="@+id/CourseDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/CourseDescription"
                 android:layout_below="@id/CourseCategory"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:textColor="?attr/tC"
-                android:gravity="center"/>
+                android:textColor="?attr/tC" />
 
             <View
                 android:layout_width="wrap_content"

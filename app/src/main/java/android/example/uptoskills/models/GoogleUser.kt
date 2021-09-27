@@ -1,6 +1,11 @@
 package android.example.uptoskills.models
 
-data class GoogleUser(var courses: HashMap<String, String>? = HashMap(),
+data class GoogleUser(
+
+                        val skills: String="",
+                        val address: String = "",
+                        val experience: Pair<String, String>,
+                        var courses: HashMap<String, String>? = HashMap(),
                         val uid: String = "",
                       val displayName: String? = "",
                       val education: String="",
@@ -10,4 +15,5 @@ data class GoogleUser(var courses: HashMap<String, String>? = HashMap(),
                       val college_name: String="",
                       val userImage: String="",
                       val mobileNo: String="",
-                      val resume: String="")
+                      val resume: String=""
+                      )

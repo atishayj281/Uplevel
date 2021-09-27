@@ -253,7 +253,7 @@ class SignInActivity : AppCompatActivity() {
                 }
                 userDao.userCollection.document(auth.currentUser?.uid.toString()).get().addOnSuccessListener {
                     if(!it.exists()) {
-                        val user = Users(hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
+                        val user = Users("", "", "", "",hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
                             auth.currentUser?.email.toString(), "", "", "",
                             auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "",
                             intent.getStringExtra("ReferId").toString(), 250)

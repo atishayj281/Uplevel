@@ -1,6 +1,10 @@
 package android.example.uptoskills.models
 
 data class Users(
+    val skills: String="",
+    val address: String = "",
+    val experiencetitle: String = "",
+    val experienceDesc: String = "",
     var freecourses: HashMap<String, String>? = HashMap(),
     var paidcourses: HashMap<String, String>? = HashMap(),
     var full_name: String="",
@@ -16,5 +20,6 @@ data class Users(
     var referCode: String="",
     var coins: Int = 0,
     val bookmarks: HashMap<String, String>? = HashMap(),
-    val appliedJobs: HashMap<String, String>? = HashMap()
+    val appliedJobs: HashMap<String, String>? = HashMap(),
+
 )

@@ -197,7 +197,6 @@ class EventFragment : Fragment(), IEventClickListener {
         return view
     }
 
-
     private fun setUpNavigationViewHeader(activity: Activity) {
         val navigationView = activity.findViewById<NavigationView>(R.id.homeNavigationView)
         val headerView: View = navigationView.getHeaderView(0)
@@ -205,7 +204,7 @@ class EventFragment : Fragment(), IEventClickListener {
         val email: TextView = headerView.findViewById(R.id.email)
         var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
         val coins: TextView = headerView.findViewById(R.id.coins)
-
+        val profileCompleted: TextView = headerView.findViewById(R.id.profileCompleted)
 
         GlobalScope.launch(Dispatchers.IO) {
             val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
@@ -215,16 +214,35 @@ class EventFragment : Fragment(), IEventClickListener {
                     displayName = temp.displayName.toString()
                     email.text = temp.email
                     coins.text = temp.coins.toString()
+                    val profilePrecentage: String = (profileComplete(temp)*10).toString() + "%"
+                    profileCompleted.text = profilePrecentage
                     val profileImage = temp.userImage
                     if(profileImage.trim().isNotBlank() && profileImage != "null") {
                         profile.setImageResource(R.drawable.image_circle)
                         view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
                     }
+
                 }
             }
         }
+    }
 
+    // Calculating Profile Completeness
+    private fun profileComplete(user: Users): Int {
+        var ans = 0
 
+        if(user.displayName?.trim()?.isNotEmpty() == true){ ans++ }
+        if(user.full_name.trim().isNotEmpty()){ ans++ }
+        if(user.college_name.trim().isNotEmpty()){ ans++ }
+        if(user.mobileNo.trim().isNotEmpty()){ ans++ }
+        if(user.address.trim().isNotEmpty()){ ans++ }
+        if(user.education.trim().isNotEmpty()){ ans++ }
+        if(user.job.trim().isNotEmpty()){ ans++ }
+        if(user.email.trim().isNotEmpty()){ ans++ }
+        if(user.skills.trim().isNotEmpty()){ ans++ }
+        if(user.experienceDesc.trim().isNotEmpty()){ ans++ }
+
+        return ans
     }
 
     // create referral link
@@ -240,31 +258,33 @@ class EventFragment : Fragment(), IEventClickListener {
         Log.e("sharelink", link)
         // shorten the link
 
-        val shortLinkTask = FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse(link))
-            .setDomainUriPrefix("https://uptoskills.page.link") // Set parameters
-            // ...
-            .buildShortDynamicLink()
-            .addOnCompleteListener(activity
-            ) { task ->
-                if (task.isSuccessful) {
-                    // Short link created
-                    val shortLink = task.result.shortLink
-                    val flowchartLink = task.result.previewLink
-                    Log.e("short link", ""+shortLink)
+        val shortLinkTask = activity?.let {
+            FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse(link))
+                .setDomainUriPrefix("https://uptoskills.page.link") // Set parameters
+                // ...
+                .buildShortDynamicLink()
+                .addOnCompleteListener(it
+                ) { task ->
+                    if (task.isSuccessful) {
+                        // Short link created
+                        val shortLink = task.result.shortLink
+                        val flowchartLink = task.result.previewLink
+                        Log.e("short link", ""+shortLink)
 
-                    val intent = Intent()
-                    intent.action = Intent.ACTION_SEND
-                    intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
-                    intent.type = "text/plain"
-                    startActivity(intent)
-                    // ------ click -> link -> google play store -> installed/not ---------
+                        val intent = Intent()
+                        intent.action = Intent.ACTION_SEND
+                        intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        intent.type = "text/plain"
+                        startActivity(intent)
+                        // ------ click -> link -> google play store -> installed/not ---------
 
-                } else {
-                    // Error
-                    // ...
+                    } else {
+                        // Error
+                        // ...
+                    }
                 }
-            }
+        }
 //                    Log.e("long link", ""+dynamicLinkUri)
     }
 

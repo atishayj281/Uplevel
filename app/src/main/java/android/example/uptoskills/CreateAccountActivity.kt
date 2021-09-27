@@ -46,7 +46,7 @@ class CreateAccountActivity : AppCompatActivity() {
                         binding.createAccountProgressBar.visibility = View.GONE
 
                         //adding user to db
-                        val user: Users = Users(hashMapOf(), hashMapOf(),binding.crtUsername.text.toString(), binding.crtUsername.text.toString(),
+                        val user: Users = Users("", "", "", "", hashMapOf(), hashMapOf(),binding.crtUsername.text.toString(), binding.crtUsername.text.toString(),
                         binding.crtemail.text.toString(), "", "", "", "", "",
                             it.result.user?.uid!!, "", referId, 250)
                         val userDao = UsersDao()

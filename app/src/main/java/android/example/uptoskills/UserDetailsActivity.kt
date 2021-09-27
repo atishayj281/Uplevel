@@ -8,6 +8,7 @@ import android.example.uptoskills.models.Users
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
@@ -40,6 +41,7 @@ class UserDetailsActivity : AppCompatActivity() {
     private val READ_EXTERNAL_STORAGE_CODE: Int = 9
     private lateinit var resumeUri: Uri
     private lateinit var usr: Users
+    private lateinit var userDetailsLayout: LinearLayout
 
     override fun onResume() {
         super.onResume()
@@ -56,6 +58,8 @@ class UserDetailsActivity : AppCompatActivity() {
         if(intent.getStringExtra("parent") == "jobActivity") {
             Toast.makeText(this, "Please Verify your Details...", Toast.LENGTH_SHORT).show()
         }
+
+        userDetailsLayout = binding.userDetailsLayout
 
         Checkout.preload(applicationContext)
         Checkout.clearUserData(this)
@@ -75,7 +79,9 @@ class UserDetailsActivity : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.IO) {
                 val curUser = auth.currentUser?.let { it1 -> userDao.getUserById(it1.uid).await().toObject(Users::class.java) }
                 if(curUser != null) {
-                    usr = Users(curUser.freecourses,curUser.paidcourses,
+                    usr = Users(binding.skills.editText?.text.toString(), binding.address.editText?.text.toString(),
+                        binding.exptitle.editText?.text.toString(),
+                        binding.expdesc.editText?.text.toString(),curUser.freecourses,curUser.paidcourses,
                         binding.fullName.editText?.text.toString(),
                         displayName,
                         binding.email.text.toString(),
@@ -189,6 +195,13 @@ class UserDetailsActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // Download Resume
+        binding.downloadProfile.setOnClickListener {
+            val resume = Resume(usr, this)
+            resume.createResume()
+        }
+
     }
 
     override fun onRequestPermissionsResult(
@@ -242,6 +255,10 @@ class UserDetailsActivity : AppCompatActivity() {
             val usr = auth.currentUser?.uid?.let { userDao.getUserById(it).await().toObject(Users::class.java) }
             withContext(Dispatchers.Main) {
                 if(usr != null) {
+                    binding.address.editText?.setText(usr.address.trim())
+                    binding.skills.editText?.setText(usr.skills.trim())
+                    binding.exptitle.editText?.setText(usr.experiencetitle.trim())
+                    binding.expdesc.editText?.setText(usr.experienceDesc.trim())
                     binding.fullName.editText?.setText(usr.full_name.trim())
                     binding.mobile.setText(usr.mobileNo.trim())
                     binding.college.setText(usr.college_name.trim())

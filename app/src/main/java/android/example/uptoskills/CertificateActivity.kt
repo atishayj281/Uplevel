@@ -84,7 +84,6 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
                     if (s2.lowercase() == "yes") {
                         completedCourseId.add(s)
                     }
-                    Log.e("crtificate", s2)
                 }
                 if (completedCourseId.isNotEmpty()) {
                     GlobalScope.launch {
