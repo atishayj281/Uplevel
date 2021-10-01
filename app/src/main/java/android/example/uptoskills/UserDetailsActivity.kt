@@ -79,20 +79,29 @@ class UserDetailsActivity : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.IO) {
                 val curUser = auth.currentUser?.let { it1 -> userDao.getUserById(it1.uid).await().toObject(Users::class.java) }
                 if(curUser != null) {
-                    usr = Users(binding.skills.editText?.text.toString(), binding.address.editText?.text.toString(),
-                        binding.exptitle.editText?.text.toString(),
-                        binding.expdesc.editText?.text.toString(),curUser.freecourses,curUser.paidcourses,
-                        binding.fullName.editText?.text.toString(),
-                        displayName,
-                        binding.email.text.toString(),
-                        binding.college.text.toString(),
-                        binding.education.text.toString(),
-                        binding.currentJob.text.toString(),
+                    usr = Users(binding.achievements.editText?.text.toString().trim(),
+                        binding.projecttitle.editText?.text.toString().trim(),
+                        binding.Projectdesc.editText?.text.toString().trim(),
+                        binding.skills.editText?.text.toString().trim(),
+                        binding.address.editText?.text.toString().trim(),
+                        binding.exptitle.editText?.text.toString().trim(),
+                        binding.expdesc.editText?.text.toString().trim(),
+                        curUser.freecourses,
+                        curUser.paidcourses,
+                        binding.fullName.editText?.text.toString().trim(),
+                        displayName.trim(),
+                        binding.email.text.toString().trim(),
+                        binding.college.text.toString().trim(),
+                        binding.education.text.toString().trim(),
+                        binding.currentJob.text.toString().trim(),
                         curUser.userImage,
-                        binding.mobile.text.toString(),
-                        id.toString(), curUser.resume,
+                        binding.mobile.text.toString().trim(),
+                        id.toString().trim(),
+                        curUser.resume,
                         curUser.referCode,
-                        curUser.coins, curUser.bookmarks, curUser.appliedJobs)
+                        curUser.coins,
+                        curUser.bookmarks,
+                        curUser.appliedJobs)
                     withContext(Dispatchers.Main) {
 
                         if(curUser.resume.trim().isNotBlank()) {
@@ -255,6 +264,8 @@ class UserDetailsActivity : AppCompatActivity() {
             val usr = auth.currentUser?.uid?.let { userDao.getUserById(it).await().toObject(Users::class.java) }
             withContext(Dispatchers.Main) {
                 if(usr != null) {
+                    binding.projecttitle.editText?.setText(usr.projectTitle.trim())
+                    binding.Projectdesc.editText?.setText(usr.projectDesc.trim())
                     binding.address.editText?.setText(usr.address.trim())
                     binding.skills.editText?.setText(usr.skills.trim())
                     binding.exptitle.editText?.setText(usr.experiencetitle.trim())
@@ -266,6 +277,7 @@ class UserDetailsActivity : AppCompatActivity() {
                     binding.education.setText(usr.education.trim())
                     binding.username.setText(usr.displayName?.trim())
                     binding.email.setText(usr.email.trim())
+                    binding.achievements.editText?.setText(usr.achievements.trim())
                     var image: String = usr.userImage.trim()
                     if(image.isNotEmpty() && image != "null") {
                         binding.profileImage.setImageResource(R.drawable.image_circle)
@@ -280,15 +292,4 @@ class UserDetailsActivity : AppCompatActivity() {
             }
         }
     }
-
-//    override fun onBackPressed() {
-//        val call: String = intent.getStringExtra("parent").toString().trim()
-//        if(call == "jobActivity") {
-//            val intent = Intent(this, JobViewActivity::class.java)
-//
-//        } else {
-//            super.onBackPressed()
-//        }
-//    }
-//
 }

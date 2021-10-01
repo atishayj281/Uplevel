@@ -1,6 +1,7 @@
 package android.example.uptoskills
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.example.uptoskills.Adapters.CertificateAdapter
 import android.example.uptoskills.Adapters.onCertificateClicked
@@ -30,8 +31,9 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import android.example.uptoskills.mail.JavaMailAPI
-
-
+import android.net.Uri
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 
 class CertificateActivity : AppCompatActivity(), onCertificateClicked {
@@ -43,13 +45,8 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
     private val completedCourseId = ArrayList<String>()
     private val completedCourse = ArrayList<PaidCourse>()
     private lateinit var paidCourseDao: PaidCourseDao
-    private lateinit var pdfDocument: PdfDocument
-    private lateinit var canvas: Canvas
-    private lateinit var paint: Paint
-    private lateinit var file: File
     private lateinit var adapter: CertificateAdapter
-    private lateinit var bitmap: Bitmap
-    private lateinit var scaleBitmap: Bitmap
+    private lateinit var storageReference: StorageReference
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,14 +54,15 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
         binding = ActivityCertificateBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.progressBar.visibility = View.VISIBLE
+
+        storageReference = FirebaseStorage.getInstance().reference
         adapter = CertificateAdapter(this, this)
         binding.certificateRecyclerView.adapter = adapter
         binding.certificateRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.back.setOnClickListener {
             finish()
         }
-        bitmap = BitmapFactory.decodeResource(resources, R.drawable.certificate)
-        scaleBitmap = Bitmap.createScaledBitmap(bitmap, 1280, 720, false)
 
         ActivityCompat.requestPermissions(this,
             arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -97,9 +95,9 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
                             }
                         withContext(Dispatchers.Main) {
                             adapter.updateCertificate(completedCourse)
-
+                            binding.progressBar.visibility = View.GONE
                             if (completedCourse.size == 0) {
-
+                                Log.e("No Certificate", "No")
                                 Toast.makeText(this@CertificateActivity,
                                     "No Certificate Found",
                                     Toast.LENGTH_SHORT).show()
@@ -118,75 +116,13 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
 
 
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun createCertificate(user: Users, course: PaidCourse) {
-        binding.progressBar.visibility = View.VISIBLE
-        pdfDocument = PdfDocument()
-        paint = Paint()
-
-        val pageInfo: PdfDocument.PageInfo = PdfDocument.PageInfo.Builder(1280, 720, 1).create()
-        val page1 = pdfDocument.startPage(pageInfo)
-        canvas = page1.canvas
-
-        canvas.drawBitmap(scaleBitmap, 0f, 0f, paint)
-        paint.textSize = 60f
-        paint.color = ContextCompat.getColor(this, R.color.orange)
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        canvas.drawText(user.full_name, 140f, 380f, paint)
-        Toast.makeText(this, user.full_name, Toast.LENGTH_SHORT).show()
-
-        paint.color = ContextCompat.getColor(this, R.color.green)
-
-        paint.textAlign = Paint.Align.LEFT
-        paint.textSize = 45f
-        canvas.drawText(course.course_name,
-            1280f - (pageInfo.pageWidth / 3) - 2 * course.course_name.length,
-            590f,
-            paint)
-
-        val college: String = user.college_name
-        val a = college.length
-        when {
-            a < 10 -> {
-                paint.textSize = 60f
-                paint.color = ContextCompat.getColor(this, R.color.orange)
-                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                canvas.drawText(college, 140f, 460f, paint)
-            }
-            a < 20 -> {
-                paint.textSize = 40f
-                paint.color = ContextCompat.getColor(this, R.color.orange)
-                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                canvas.drawText(college, 140f, 460f, paint)
-            }
-            a < 30 -> {
-                paint.textSize = 40f
-                paint.color = ContextCompat.getColor(this, R.color.orange)
-                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                canvas.drawText(college, 100f, 460f, paint)
-            }
-            else -> {
-                paint.textSize = 35f
-                paint.color = ContextCompat.getColor(this, R.color.orange)
-                paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                canvas.drawText(college, 80f, 460f, paint)
-            }
-        }
-
-        pdfDocument.finishPage(page1)
-        file = File(this.externalCacheDir!!.absolutePath, "/${course.id}.pdf")
-        try {
-            pdfDocument.writeTo(FileOutputStream(file))
-            Toast.makeText(this, file.absolutePath, Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
-            e.message?.let { Log.e("Certificate Error", it) }
-        }
-        binding.progressBar.visibility = View.GONE
-
-        pdfDocument.close()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onClicked(course: PaidCourse) {
-        createCertificate(user, course)
+        binding.progressBar.visibility = View.VISIBLE
+        var fileRef: StorageReference = storageReference.child("users/"+auth.currentUser?.uid+"/${course.id.trim()}.pdf")
+        fileRef.downloadUrl.addOnSuccessListener {
+            val intent = Intent(Intent.ACTION_VIEW, it)
+            startActivity(intent)
+            binding.progressBar.visibility = View.GONE
+        }
     }
 }

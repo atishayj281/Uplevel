@@ -1,6 +1,9 @@
 package android.example.uptoskills.models
 
 data class Users(
+    val achievements:String = "",
+    val projectTitle: String = "",
+    val projectDesc: String = "",
     val skills: String="",
     val address: String = "",
     val experiencetitle: String = "",

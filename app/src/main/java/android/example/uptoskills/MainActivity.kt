@@ -6,6 +6,7 @@ import android.example.uptoskills.databinding.ActivityMainBinding
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+        FirebaseMessaging.getInstance().subscribeToTopic("Notification")
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, HomeFragment())
