@@ -28,7 +28,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="300dp"
+                        android:layout_height="200dp"
                         android:background="@color/blue"
                         android:padding="20dp">
 
@@ -66,13 +66,28 @@
 
                     </RelativeLayout>
 
-                    <ImageView
-                        android:id="@+id/downloadProfile"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:layout_margin="20dp"
-                        app:srcCompat="@drawable/ic_download" />
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Download Profile"
+                            android:textColor="?attr/tC"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/downloadProfile"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_margin="20dp"
+                            app:srcCompat="@drawable/ic_download" />
+
+                    </LinearLayout>
+
                 </FrameLayout>
 
                 <LinearLayout
@@ -149,7 +164,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:hint="Highest Education with CGPA"
+                        android:hint="Highest Qualification"
                         app:boxStrokeColor="@color/blue"
                         app:hintTextColor="?attr/tC">
 
@@ -392,11 +407,6 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp">
 
-                        <ImageView
-                            android:id="@+id/resumeImage"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            app:srcCompat="@drawable/ic_pdf" />
 
                         <TextView
                             android:id="@+id/uploadResume"
