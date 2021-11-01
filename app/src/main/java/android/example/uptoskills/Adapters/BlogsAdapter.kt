@@ -37,7 +37,7 @@ class BlogsAdapter(options: FirestorePagingOptions<Blog>, val listener: IBlogAda
     override fun onBindViewHolder(holder: BLogViewHolder, position: Int, model: Blog) {
         holder.blogHeading.text = model.heading
         holder.description.text = model.description
-        Glide.with(holder.blogImage.context).load(model.image).centerCrop().into(holder.blogImage)
+        Glide.with(holder.blogImage.context).load(model.image).into(holder.blogImage)
     }
 }
 

@@ -6,10 +6,12 @@ import android.example.uptoskills.daos.*
 import android.example.uptoskills.databinding.ActivityUserDetailsBinding
 import android.example.uptoskills.models.Users
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
@@ -50,6 +52,7 @@ class UserDetailsActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
@@ -104,9 +107,9 @@ class UserDetailsActivity : AppCompatActivity() {
                         curUser.appliedJobs)
                     withContext(Dispatchers.Main) {
 
-                        if(curUser.resume.trim().isNotBlank()) {
+                    /*    if(curUser.resume.trim().isNotBlank()) {
                             binding.resumeImage.setImageResource(R.drawable.ic_resume)
-                        }
+                        }*/
 
                         if(isImageChoose && isResumeSelected) {
                             if(ProfileimageUrl.toString().isNotEmpty() && resumeUri.toString().isNotEmpty()){
@@ -185,7 +188,7 @@ class UserDetailsActivity : AppCompatActivity() {
         }
 
         // download resume
-        binding.resumeImage.setOnClickListener {
+        /*binding.resumeImage.setOnClickListener {
             binding.userDetailsProgressBar.visibility = View.VISIBLE
             GlobalScope.launch(Dispatchers.IO) {
                 val user = auth.currentUser?.let { it1 -> userDao.getUserById(it1.uid).await().toObject(Users::class.java) }
@@ -203,7 +206,7 @@ class UserDetailsActivity : AppCompatActivity() {
                     }
                 }
             }
-        }
+        }*/
 
         // Download Resume
         binding.downloadProfile.setOnClickListener {
@@ -247,7 +250,7 @@ class UserDetailsActivity : AppCompatActivity() {
             binding.profileImage.setImageURI(ProfileimageUrl)
         } else if(requestCode == resumeRequestCode && resultCode == RESULT_OK && data?.data != null) {
             resumeUri = data.data!! // Return the pdf uri
-            binding.resumeImage.setImageResource(R.drawable.ic_resume)
+            /*binding.resumeImage.setImageResource(R.drawable.ic_resume)*/
         }
     }
 
@@ -283,9 +286,9 @@ class UserDetailsActivity : AppCompatActivity() {
                         binding.profileImage.setImageResource(R.drawable.image_circle)
                         Glide.with(binding.profileImage.context).load(image).circleCrop().into(binding.profileImage)
                     }
-                    if(usr.resume.trim().isNotBlank()) {
+                    /*if(usr.resume.trim().isNotBlank()) {
                         binding.resumeImage.setImageResource(R.drawable.ic_resume)
-                    }
+                    }*/
                     binding.userDetailsProgressBar.visibility = View.GONE
 
                 }

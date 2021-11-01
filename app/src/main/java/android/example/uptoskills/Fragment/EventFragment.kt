@@ -257,6 +257,7 @@ class EventFragment : Fragment(), IEventClickListener {
         // https://uptoskills.page.link?apn=android.example.getwork&ibi=com.example.ios&link=https%3A%2F%2Fwww.uptoskills.com%2F
         Log.e("sharelink", link)
         // shorten the link
+        val msg = "Hey! I have a wonderful gift for you. Enroll UptoSkills Value  added Skill Courses & Avail EXTRA ₹ 100 OFF on your EVERY Paid Course. Click on this link to enjoy referral benefits.\nDownload the app: \n"
 
         val shortLinkTask = activity?.let {
             FirebaseDynamicLinks.getInstance().createDynamicLink()
@@ -270,11 +271,11 @@ class EventFragment : Fragment(), IEventClickListener {
                         // Short link created
                         val shortLink = task.result.shortLink
                         val flowchartLink = task.result.previewLink
-                        Log.e("short link", ""+shortLink)
+                        Log.e("short link", msg+shortLink)
 
                         val intent = Intent()
                         intent.action = Intent.ACTION_SEND
-                        intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        intent.putExtra(Intent.EXTRA_TEXT, msg + shortLink.toString())
                         intent.type = "text/plain"
                         startActivity(intent)
                         // ------ click -> link -> google play store -> installed/not ---------
@@ -314,20 +315,6 @@ class EventFragment : Fragment(), IEventClickListener {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view?.context)
         progressBar.visibility = View.GONE
-//        postDao = BlogDao()
-//        val postsCollections = postDao.postCollections
-//        val query = postsCollections.orderBy("heading", Query.Direction.DESCENDING)
-//        val config: PagedList.Config = PagedList.Config.Builder()
-//            .setInitialLoadSizeHint(10)
-//            .setPageSize(3)
-//            .build()
-//        val recyclerViewOptions = FirestorePagingOptions.Builder<Blog>().setQuery(query, config, Blog::class.java).build()
-//
-//        adapter = BlogsAdapter(recyclerViewOptions, this, R.layout.blog_item)
-//
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(view?.context)
-//        progressBar.visibility = View.GONE
     }
 
     companion object {

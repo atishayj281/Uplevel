@@ -3,6 +3,7 @@ package android.example.uptoskills
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.example.uptoskills.databinding.ActivityCourseEnquiryBinding
+import android.example.uptoskills.mail.JavaMailAPI
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.internal.InternalTokenProvider
 import com.google.firebase.ktx.Firebase
 import java.lang.Exception
 
@@ -55,38 +57,19 @@ class CourseEnquiryActivity : AppCompatActivity() {
         binding.submit.setOnClickListener {
             if(binding.query.text.toString().trim().isNotEmpty()
                 && binding.contactNo.text.toString().trim().isNotEmpty()) {
-                val emailsend: String = "info@uptoskills.com"
+                val emailsend: String = "atishayj281@gmail.com"
                 val emailsubject: String = "App Query"
-
 
                 val emailbody: String =
                     binding.query.text.toString() + "\nContact No: " + binding.contactNo.text.toString() + "\nMail Id: " + FirebaseAuth.getInstance().currentUser?.email
 
-                val intent = Intent(Intent.ACTION_SEND)
-
-                intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailsend))
-                intent.putExtra(Intent.EXTRA_SUBJECT, emailsubject)
-                intent.putExtra(Intent.EXTRA_TEXT, emailbody)
-
-                // set type of intent
-
-                // set type of intent
-                intent.type = "message/rfc822"
-
-                // startActivity with intent with chooser
-                // as Email client using createChooser function
-
-                // startActivity with intent with chooser
-                // as Email client using createChooser function
-                startActivity(
-                    Intent
-                        .createChooser(intent,
-                            "Choose an Email client :"))
+                val javaMailAPI = JavaMailAPI(this, emailsend, emailsubject, emailbody)
+                javaMailAPI.sendMail()
+                Toast.makeText(this, "Query Submitted Successfully...", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Please Provide the Details...", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     private fun openWhatsappContact(number: String) {
@@ -115,5 +98,17 @@ class CourseEnquiryActivity : AppCompatActivity() {
                 call(binding.contact2.text.toString())
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if(parent == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+        else {
+            super.onBackPressed()
+        }
+
     }
 }

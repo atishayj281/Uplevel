@@ -93,6 +93,7 @@ class BookmarkActivity : AppCompatActivity(), JobItemClicked {
                 bookmark?.forEach {
                     val jobId: String = it.key.toString()
                     Log.e("job", jobId)
+
                     val job: Job = jobDao.getJobbyId(jobId).await().toObject(Job::class.java)!!
                     bookmarks.add(job)
                 }
@@ -117,8 +118,18 @@ class BookmarkActivity : AppCompatActivity(), JobItemClicked {
         startActivity(intent)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onbookmarkCLick(itemId: String, itemtype: String) {
 
     }
+
+    override fun onBackPressed() {
+        if(parent == null) {
+            val intnt = Intent(this, MainActivity::class.java)
+            startActivity(intnt)
+            finish()
+        }
+
+        super.onBackPressed()
+    }
+
 }

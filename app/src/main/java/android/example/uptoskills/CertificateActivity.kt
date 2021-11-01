@@ -79,7 +79,7 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
             if (temp != null) {
                 user = temp
                 user.paidcourses?.forEach { (s, s2) ->
-                    if (s2.lowercase() == "yes") {
+                    if (s2.lowercase() != "no") {
                         completedCourseId.add(s)
                     }
                 }
@@ -107,10 +107,13 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
                             }
                         }
                     }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        binding.progressBar.visibility = View.GONE
+                    }
                 }
             }
         }
-
     }
 
 
@@ -124,5 +127,14 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
             startActivity(intent)
             binding.progressBar.visibility = View.GONE
         }
+    }
+    override fun onBackPressed() {
+        if(parent == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        super.onBackPressed()
     }
 }

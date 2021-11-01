@@ -1,32 +1,39 @@
 package android.example.uptoskills
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.example.uptoskills.models.Users
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.provider.ContactsContract
-import android.system.Os.mkdir
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
-import com.razorpay.MySMSBroadcastReciever
+import androidx.core.content.ContextCompat.startActivity
 import java.io.File
 import java.io.FileOutputStream
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+
+
+
+
+
+
 
 class Resume(val user: Users, val context: Context) {
     private lateinit var pdfDocument: PdfDocument
     private lateinit var canvas: Canvas
     private lateinit var paint: Paint
     private lateinit var file: File
-    private lateinit var bitmap: Bitmap
-    private lateinit var scaleBitmap: Bitmap
 
     @RequiresApi(Build.VERSION_CODES.R)
     fun createResume() {
@@ -57,7 +64,7 @@ class Resume(val user: Users, val context: Context) {
         paint.textSize = 25f
         paint.color = ContextCompat.getColor(context, R.color.darkGray)
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        canvas.drawText("340, South Krishnapuri, Muzaffarnagar", x_heading, 200f, paint)
+        canvas.drawText(user.address, x_heading, 200f, paint)
         canvas.drawText(user.mobileNo, x_heading, 240f, paint)
         canvas.drawText(user.email, x_heading, 280f, paint)
         paint.strokeWidth = 3f
@@ -144,16 +151,27 @@ class Resume(val user: Users, val context: Context) {
 
         pdfDocument.finishPage(page1)
 
-        file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)!!.absolutePath, "/${user.full_name}_resume.pdf")
+        var fullpath = context.externalCacheDir?.absolutePath?.split('/')
+        val n = fullpath?.size?.minus(5)
+        var path = ""
+        for(i in 0..n!!) {
+            path += "${fullpath?.get(i)}/"
+        }
+
+        file = File("${path}UptoSkills", "/${user.full_name}_resume.pdf")
+        val f1 = File("${path}UptoSkills")
 
             try {
+                if(!f1.exists()) {
+                    f1.mkdir()
+                }
                 pdfDocument.writeTo(FileOutputStream(file))
-                Toast.makeText(context, file.absolutePath, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "File is saved at ${file.absolutePath}", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 e.message?.let { Log.e("Certificate Error", it) }
             }
         pdfDocument.close()
-
-
     }
+
 }
+

@@ -50,8 +50,8 @@
 
                         <ImageView
                             android:id="@+id/menuBar"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             app:srcCompat="@drawable/ic_menu"
                             android:layout_gravity="center_vertical"/>
 
@@ -59,7 +59,7 @@
                             android:id="@+id/uptoskillsLogo"
                             android:layout_width="match_parent"
                             android:layout_height="52dp"
-                            android:src="@drawable/uptoskills" />
+                            app:srcCompat="@drawable/ic__uptoskillslogo" />
 
                     </LinearLayout>
 
@@ -197,7 +197,7 @@
                                 android:gravity="center"
                                 android:text="Welcome to UptoSkills"
                                 android:textColor="?attr/tC"
-                                android:textSize="31sp" />
+                                android:textSize="24sp" />
 
 
                             <com.google.android.material.card.MaterialCardView
@@ -486,10 +486,26 @@
                                     android:id="@+id/InterviewQuestionsrecyclerview"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginBottom="10dp"
-                                    android:orientation="horizontal" />
+                                    android:layout_marginBottom="10dp"/>
 
 
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Refer and Earn"
+                                        android:textColor="?attr/tC"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+                                </FrameLayout>
 
 
                                 <com.google.android.material.card.MaterialCardView
@@ -497,6 +513,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="150dp"
                                     android:layout_margin="10dp"
+                                    android:layout_marginTop="20dp"
                                     app:cardCornerRadius="12dp"
                                     app:cardElevation="7dp">
 

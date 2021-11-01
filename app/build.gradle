@@ -94,8 +94,6 @@ dependencies {
 
     implementation 'com.github.scottyab:showhidepasswordedittext:0.8'
 
-    // no-Internet-Layout
-    implementation 'com.github.MohamedWessam:no-internet-layout:0.1.1'
 
     // Razorpay
     implementation 'com.razorpay:checkout:1.6.8'
@@ -110,5 +108,7 @@ dependencies {
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
+
+    implementation 'uk.co.samuelwall:material-tap-target-prompt:3.3.0'
 
 }

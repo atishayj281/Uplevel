@@ -45,6 +45,9 @@ class JobViewActivity : AppCompatActivity() {
         userDao = UsersDao()
         auth = FirebaseAuth.getInstance()
         jobDao = JobDao()
+        if(!isJob) {
+            binding.isBookmarked.visibility = View.GONE
+        }
         GlobalScope.launch(Dispatchers.IO) {
             curUser = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }!!
 
@@ -143,5 +146,15 @@ class JobViewActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if(parent == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        super.onBackPressed()
     }
 }

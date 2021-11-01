@@ -1,7 +1,6 @@
 package android.example.uptoskills.Fragment
 
 import android.content.Intent
-import android.example.uptoskills.Adapters.BlogsAdapter
 import android.example.uptoskills.Adapters.CourseAdapter
 import android.example.uptoskills.Adapters.CourseItemClicked
 import android.example.uptoskills.CourseViewActivity
@@ -11,12 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.example.uptoskills.R
-import android.example.uptoskills.daos.BlogDao
 import android.example.uptoskills.daos.CourseDao
-import android.example.uptoskills.models.Blog
 import android.example.uptoskills.models.FreeCourse
-import android.net.Uri
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions

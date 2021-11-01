@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,6 +53,7 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     private lateinit var progressBar: ProgressBar
     private lateinit var noCourse: TextView
     private val courseList: ArrayList<PaidCourse> = ArrayList()
+    private var curUser: Users? = Users()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,9 +82,15 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
         val currentUserId: String = auth.currentUser!!.uid
         progressBar = view.findViewById(R.id.progress_bar)
         progressBar.visibility = View.VISIBLE
-        adapter = MyPaidCourseAdapter(view.context, this)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(view.context)
+        GlobalScope.launch(Dispatchers.IO) {
+            curUser = userDao.getUserById(currentUserId).await().toObject(Users::class.java)
+            withContext(Dispatchers.Main) {
+                adapter = curUser?.let { MyPaidCourseAdapter(view.context, this@MyPaidCourseFragment, it) }!!
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(view.context)
+            }
+        }
+
 
         GlobalScope.launch(Dispatchers.IO) {
             val paidCourseDao = PaidCourseDao()
@@ -135,10 +143,14 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     }
 
     override fun onCourseCLick(courseId: String) {
-        val intent = Intent(activity, PaidCourseViewActivity::class.java)
+        if(curUser?.paidcourses?.get(courseId)?.lowercase()  != "no") {
+                Toast.makeText(view?.context, "Already Completed", Toast.LENGTH_SHORT).show()
+        } else {
+            val intent = Intent(activity, PaidCourseViewActivity::class.java)
 //        Log.e("courseId", courseId)
-        intent.putExtra("courseId", courseId.trim())
-        startActivity(intent)
+            intent.putExtra("courseId", courseId.trim())
+            startActivity(intent)
+        }
     }
 
     override fun updateRecyclerView(query: String) {

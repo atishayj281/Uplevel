@@ -14,6 +14,7 @@ import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
@@ -41,30 +42,8 @@ class OnBoardingActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-
-        FirebaseDynamicLinks.getInstance()
-            .getDynamicLink(intent)
-            .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                // Get deep link from result (may be null if no link is found)
-                var deepLink: Uri? = null
-                if (pendingDynamicLinkData != null) {
-                    deepLink = pendingDynamicLinkData.link
-                    Log.e("my refer link", deepLink.toString())
-                    var referralLink = deepLink.toString()
-                    try {
-                        referralLink = referralLink.substring(referralLink.lastIndexOf("=")+1)
-                        Log.e("subReferLink", referralLink)
-                        referId = referralLink.substring(0, referralLink.indexOf("-"))
-                        Log.e("refer", referId.toString())
-                        val productId: String = referralLink.substring(referralLink.indexOf("-")+1)
-
-                    } catch (e: Exception) {
-                        Log.e("error", e.message.toString())
-                    }
-
-                }
-            }
-            .addOnFailureListener(this) { e -> Log.w("starting Activity", "getDynamicLink:onFailure", e) }
+        referId = intent.getStringExtra("referId").toString()
+        Toast.makeText(this, referId, Toast.LENGTH_SHORT).show()
 
         slideViewPager = findViewById(R.id.slideViewPager)
         dotsLayout = findViewById(R.id.dotLayout)

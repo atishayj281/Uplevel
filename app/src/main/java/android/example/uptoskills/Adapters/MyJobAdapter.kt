@@ -42,6 +42,7 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemI
         holder.jobtitle.text = jobs[position].title
         Glide.with(holder.company_logo.context).load(jobs[position].company_logo_url)
             .circleCrop().placeholder(R.drawable.uptoskills).into(holder.company_logo)
+
     }
 
     override fun getItemCount(): Int {

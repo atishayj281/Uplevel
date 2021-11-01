@@ -10,9 +10,10 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <queries>
         <package android:name="com.facebook.katana" />
@@ -28,12 +29,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GetWork">
         <activity
-            android:name=".ResumeInputActivity"
-            android:exported="true" >
+            android:name=".QuestionActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SplashScreenActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <activity
+            android:name=".ResumeInputActivity"
+            android:exported="true" />
         <activity
             android:name=".PaidCourseViewActivity"
             android:exported="true" />
@@ -65,13 +74,7 @@
             android:parentActivityName=".SignUpActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".SignInActivity" />
-        <activity android:name=".OnBoardingActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".OnBoardingActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleInstance">

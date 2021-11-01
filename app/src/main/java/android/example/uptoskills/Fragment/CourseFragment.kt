@@ -292,6 +292,7 @@ class CourseFragment: Fragment() {
         // https://uptoskills.page.link?apn=android.example.getwork&ibi=com.example.ios&link=https%3A%2F%2Fwww.uptoskills.com%2F
         Log.e("sharelink", link)
         // shorten the link
+        val msg = "Hey! I have a wonderful gift for you. Enroll UptoSkills Value  added Skill Courses & Avail EXTRA ₹ 100 OFF on your EVERY Paid Course. Click on this link to enjoy referral benefits.\nDownload the app: \n"
 
         val shortLinkTask = activity?.let {
             FirebaseDynamicLinks.getInstance().createDynamicLink()
@@ -305,11 +306,11 @@ class CourseFragment: Fragment() {
                         // Short link created
                         val shortLink = task.result.shortLink
                         val flowchartLink = task.result.previewLink
-                        Log.e("short link", ""+shortLink)
+                        Log.e("short link", msg+shortLink)
 
                         val intent = Intent()
                         intent.action = Intent.ACTION_SEND
-                        intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        intent.putExtra(Intent.EXTRA_TEXT, msg + shortLink.toString())
                         intent.type = "text/plain"
                         startActivity(intent)
                         // ------ click -> link -> google play store -> installed/not ---------

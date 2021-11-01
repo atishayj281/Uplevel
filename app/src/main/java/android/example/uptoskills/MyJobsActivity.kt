@@ -1,5 +1,6 @@
 package android.example.uptoskills
 
+import android.content.Intent
 import android.example.uptoskills.Adapters.CourseViewPagerAdapter
 import android.example.uptoskills.Fragment.MyFreeCourseFragment
 import android.example.uptoskills.Fragment.MyInternshipsFragment
@@ -60,5 +61,15 @@ class MyJobsActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onBackPressed() {
+        if(parent == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        super.onBackPressed()
     }
 }

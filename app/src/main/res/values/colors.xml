@@ -18,4 +18,6 @@
     <color name="darkgoldenRod">#b8860b</color>
     <color name="orange">#FF6D34</color>
     <color name="green">#00BEA3</color>
+    <color name="blue">#3F51B5</color>
+    <color name="darkGray">#686666</color>
 </resources>

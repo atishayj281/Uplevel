@@ -1,5 +1,6 @@
 package android.example.uptoskills
 
+import android.content.Intent
 import android.example.uptoskills.daos.BlogDao
 import android.example.uptoskills.databinding.ActivityBlogViewBinding
 import android.example.uptoskills.models.Blog
@@ -42,11 +43,20 @@ class BlogViewActivity : AppCompatActivity() {
                 binding.blogView.text = blog.description
                 binding.creatorName.text = blog.createdBy
                 binding.blogViewProgressBar.visibility = View.GONE
-                Glide.with(this@BlogViewActivity).load(blog.image).centerCrop().into(binding.creatorImage)
+                Glide.with(this@BlogViewActivity).load(blog.image).into(binding.creatorImage)
             }
         }
 
     }
 
+    override fun onBackPressed() {
+        if(parent == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        super.onBackPressed()
+    }
 
 }

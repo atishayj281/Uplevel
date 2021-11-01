@@ -1,10 +1,13 @@
 package android.example.uptoskills
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.example.uptoskills.Fragment.*
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityMainBinding
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -20,7 +23,9 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         FirebaseMessaging.getInstance().subscribeToTopic("Notification")
-
+        ActivityCompat.requestPermissions(this,
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            PackageManager.PERMISSION_GRANTED)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, HomeFragment())
         transaction.commit()

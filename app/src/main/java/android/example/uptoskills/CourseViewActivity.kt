@@ -208,5 +208,15 @@ class CourseViewActivity : AppCompatActivity(), PaymentResultListener {
         Log.d("Payment", p0.toString())
     }
 
+    override fun onBackPressed() {
+        if(parent == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        super.onBackPressed()
+    }
+
 
 }

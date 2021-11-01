@@ -1,5 +1,6 @@
 package android.example.uptoskills
 
+import android.content.Intent
 import android.example.uptoskills.databinding.ActivityTermsAndConditionBinding
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,4 +27,15 @@ class TermsAndConditionActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onBackPressed() {
+        if(parent == null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        super.onBackPressed()
+    }
+
 }

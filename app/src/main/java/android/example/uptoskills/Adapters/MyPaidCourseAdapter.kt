@@ -3,6 +3,8 @@ package android.example.uptoskills.Adapters
 import android.content.Context
 import android.example.uptoskills.R
 import android.example.uptoskills.models.PaidCourse
+import android.example.uptoskills.models.Users
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 
-class MyPaidCourseAdapter(val context: Context, val listener: CourseItemClicked): RecyclerView.Adapter<MyPaidCourseAdapter.CourseViewholder>() {
+class MyPaidCourseAdapter(val context: Context, val listener: CourseItemClicked, val curUser: Users): RecyclerView.Adapter<MyPaidCourseAdapter.CourseViewholder>() {
 
     private var courses: ArrayList<PaidCourse> = ArrayList()
+
 
     inner class CourseViewholder(itemview: View): RecyclerView.ViewHolder(itemview) {
         var courseImage: ImageView = itemview.findViewById(R.id.courseImage)
@@ -22,6 +25,7 @@ class MyPaidCourseAdapter(val context: Context, val listener: CourseItemClicked)
         var courseName: TextView = itemview.findViewById(R.id.CourseName)
         var courseDescription: TextView = itemview.findViewById(R.id.CourseDescription)
         var course: MaterialCardView = itemview.findViewById(R.id.course)
+        val isCompleted: TextView = itemview.findViewById(R.id.isComplete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewholder {
@@ -37,6 +41,14 @@ class MyPaidCourseAdapter(val context: Context, val listener: CourseItemClicked)
         holder.courseDescription.text = courses[position].course_description
         holder.courseName.text = courses[position].course_name
         Glide.with(holder.courseImage.context).load(courses[position].course_image).centerCrop().into(holder.courseImage)
+//        curUser.paidcourses?.get((courses[position]))?.let { Log.e(courses[position].id, it.toString()) }
+        if(curUser.paidcourses?.get(courses[position].id)?.lowercase()  == "no") {
+            holder.isCompleted.visibility = View.VISIBLE
+            curUser.paidcourses?.get(courses[position].id)?.lowercase()?.let {
+                Log.e("isCompleted",
+                    it)
+            }
+        }
     }
 
     override fun getItemCount(): Int {

@@ -44,15 +44,15 @@
             android:elevation="2dp">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 app:srcCompat="@drawable/ic_menu"
                 android:id="@+id/menuBar"/>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:src="@drawable/uptoskills"
+                app:srcCompat="@drawable/ic__uptoskillslogo"
                 />
 
         </com.google.android.material.appbar.MaterialToolbar>

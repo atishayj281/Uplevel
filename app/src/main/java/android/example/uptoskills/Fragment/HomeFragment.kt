@@ -58,7 +58,8 @@ interface onMenuItemSelectedListener{
     fun onItemSelected(itemId: Int)
 }
 
-class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, paidCourseclicked {
+class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, paidCourseclicked,
+    IQueslistener {
     private var param1: String? = null
     private var param2: String? = null
 
@@ -102,6 +103,8 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     private lateinit var homeNavigationView: NavigationView
     private var displayName: String = ""
     private lateinit var menuBar: ImageView
+    private lateinit var interViewQuesRecyclerView: RecyclerView
+    private lateinit var interViewQuesAdapter: InterviewQuesAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -152,7 +155,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         recyclerView = view.findViewById(R.id.blogrecyclerview)
         progressBar = view.findViewById(R.id.homeProgressbar)
         jobRecyclerView = view.findViewById(R.id.HomeJobrecyclerview)
-
+        interViewQuesRecyclerView = view.findViewById(R.id.InterviewQuestionsrecyclerview)
 
         progressBar.visibility = View.VISIBLE
         menuBar.setOnClickListener {
@@ -163,8 +166,8 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         setUpBlogRecyclerView()
         setUpcourses(view)
         setUppaidCourses(view)
+        setUpInterviewQuestions(view)
 
-        progressBar.visibility = View.GONE
 
         // Initialising "view All" textViews
         val allFreeCourses = view.findViewById<TextView>(R.id.viewFreeAllCourses)
@@ -299,7 +302,21 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         }
 
 
+        progressBar.visibility = View.GONE
         return view
+    }
+
+    private fun setUpInterviewQuestions(view: View?) {
+        if (view != null) {
+            //Log.e("interview", "questions")
+            interViewQuesAdapter = InterviewQuesAdapter(view.context, this)
+            interViewQuesRecyclerView.adapter = interViewQuesAdapter
+            interViewQuesRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+    private fun startIntrodution(view: View){
+
     }
 
     private fun setUpNavigationViewHeader(activity: Activity) {
@@ -362,6 +379,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         // https://uptoskills.page.link?apn=android.example.getwork&ibi=com.example.ios&link=https%3A%2F%2Fwww.uptoskills.com%2F
         Log.e("sharelink", link)
         // shorten the link
+        val msg = "Hey! I have a wonderful gift for you. Enroll UptoSkills Value  added Skill Courses & Avail EXTRA ₹ 100 OFF on your EVERY Paid Course. Click on this link to enjoy referral benefits.\nDownload the app: \n"
 
         val shortLinkTask = activity?.let {
             FirebaseDynamicLinks.getInstance().createDynamicLink()
@@ -375,11 +393,11 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
                         // Short link created
                         val shortLink = task.result.shortLink
                         val flowchartLink = task.result.previewLink
-                        Log.e("short link", ""+shortLink)
+                        Log.e("short link", msg+shortLink)
 
                         val intent = Intent()
                         intent.action = Intent.ACTION_SEND
-                        intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        intent.putExtra(Intent.EXTRA_TEXT, msg + shortLink.toString())
                         intent.type = "text/plain"
                         startActivity(intent)
                         // ------ click -> link -> google play store -> installed/not ---------
@@ -507,6 +525,14 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         val intent = Intent(activity, CourseViewActivity::class.java)
         intent.putExtra("courseId", courseId)
         intent.putExtra("courseCategory", "paid")
+        startActivity(intent)
+    }
+
+    override fun onClick(ques: ArrayList<String>) {
+        var bundle = Bundle()
+        bundle.putStringArrayList("Ques", ques)
+        val intent = Intent(view?.context, QuestionActivity::class.java)
+        intent.putExtra("ques", bundle)
         startActivity(intent)
     }
 }
