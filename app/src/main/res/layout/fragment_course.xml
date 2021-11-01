@@ -42,9 +42,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:background="@drawable/navigation_view_background"
-            android:elevation="2dp"
-
-            app:navigationIcon="@drawable/ic_menu">
+            android:elevation="2dp">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@drawable/ic_menu"
+                android:id="@+id/menuBar"
+                android:layout_marginRight="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -53,7 +57,8 @@
                 android:hint="Search Courses by category"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:id="@+id/search"/>
+                android:id="@+id/search"
+                android:layout_marginLeft="10dp"/>
 
         </com.google.android.material.appbar.MaterialToolbar>
 
