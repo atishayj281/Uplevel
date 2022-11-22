@@ -24,5 +24,5 @@ data class Users(
     var coins: Int = 0,
     val bookmarks: HashMap<String, String>? = HashMap(),
     val appliedJobs: HashMap<String, String>? = HashMap(),
-
-)
+    val events: ArrayList<String> = ArrayList(),
+    )

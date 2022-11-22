@@ -19,7 +19,7 @@ class InterviewQuesAdapter(val context: Context, val listener: IQueslistener): R
 
     private val ques = Questions()
     private var images = ques.images
-    private val question = arrayListOf(ques.python, ques.java, ques.cpp)
+    private val question = arrayListOf(ques.python, ques.java)
 
 
     inner class QuesViewHolder(itemview: View): RecyclerView.ViewHolder(itemview) {
@@ -44,8 +44,7 @@ class InterviewQuesAdapter(val context: Context, val listener: IQueslistener): R
     }
 
     override fun getItemCount(): Int {
-        Log.e("imageSize", images.size.toString())
-        return images.size
+        return question.size
     }
 
     fun updateQues() {

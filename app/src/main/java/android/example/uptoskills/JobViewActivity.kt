@@ -97,7 +97,6 @@ class JobViewActivity : AppCompatActivity() {
             }
             jobDao.addbookmark(jobId)
             auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }
-//            Log.e(itemtype, itemId)
         }
 
     }
@@ -107,7 +106,7 @@ class JobViewActivity : AppCompatActivity() {
             if(isJob) {
                 val jobDao = JobDao()
                 val job: Job? = jobDao.getJobbyId(jobId.trim()).await().toObject(Job::class.java)
-                Log.e("job", jobId)
+
                 if(job != null) {
                     withContext(Dispatchers.Main) {
                         binding.basicQualification.text = job.basic_requirements
@@ -121,7 +120,7 @@ class JobViewActivity : AppCompatActivity() {
 
                     }
                 } else {
-                    Log.e("job is null", "Job is null")
+
                 }
             } else {
                 val internshipDao = InternshipDao()

@@ -48,7 +48,7 @@ class JobAdapter(options: FirestoreRecyclerOptions<Job>, val listener: JobItemCl
         holder.job_type.text = model.job_type
         holder.jobtitle.text = model.title
         Glide.with(holder.company_logo.context).load(model.company_logo_url)
-            .circleCrop().placeholder(R.drawable.uptoskills).into(holder.company_logo)
+            .circleCrop().into(holder.company_logo)
     }
 
 

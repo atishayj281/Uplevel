@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -105,6 +106,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     private lateinit var menuBar: ImageView
     private lateinit var interViewQuesRecyclerView: RecyclerView
     private lateinit var interViewQuesAdapter: InterviewQuesAdapter
+    private lateinit var chatbot: ImageView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -119,6 +121,10 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         }
     }
 
+    private lateinit var bannerTitle: TextView
+    private lateinit var bannerDate: TextView
+    private lateinit var bannerLink: MaterialCardView
+    private lateinit var banner: Banner
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -128,10 +134,15 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+
+        bannerTitle = view.findViewById(R.id.banner_title)
+        bannerDate = view.findViewById(R.id.banner_date)
+        bannerLink = view.findViewById(R.id.popUpKnowMore)
         hometoolBar = view.findViewById(R.id.hometoolBar)
         homedrawerLayout = view.findViewById(R.id.homedrawerLayout)
         homeNavigationView = view.findViewById(R.id.homeNavigationView)
         menuBar = view.findViewById(R.id.menuBar)
+        chatbot = view.findViewById(R.id.chatbot)
 
 
         courseEnqClosebtn = view.findViewById(R.id.delNotification)
@@ -161,7 +172,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         menuBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
         }
-
+        setUpBanner(view)
         setUpJobRecyclerView(view)
         setUpBlogRecyclerView()
         setUpcourses(view)
@@ -188,6 +199,11 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         allJobs.setOnClickListener {
             menuItemSelectedListener.onItemSelected(R.id.Job)
         }
+        chatbot.setOnClickListener {
+            val intent = Intent(view.context, ChatbotActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+        }
 
         // Refreshing fragment
         refreshLayout.setOnRefreshListener {
@@ -209,7 +225,10 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         }
 
         popUpKnowMore.setOnClickListener {
-            
+            val url = banner.link;
+            val builder:CustomTabsIntent.Builder = CustomTabsIntent.Builder();
+            val customTabsIntent:CustomTabsIntent = builder.build();
+            customTabsIntent.launchUrl(view.context, Uri.parse(url));
         }
 
         referandEarnCardView.setOnClickListener {
@@ -284,6 +303,11 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
                     val intent = Intent(activity, TermsAndConditionActivity::class.java)
                     startActivity(intent)
                 }
+
+                R.id.myevents -> {
+                    val intent = Intent(activity, MyEventsActivity::class.java)
+                    startActivity(intent)
+                }
             }
             menuItem.isChecked = false
 
@@ -306,9 +330,19 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         return view
     }
 
+    private fun setUpBanner(view: View?) {
+        val bannerDao = BannerDao()
+        GlobalScope.launch(Dispatchers.IO) {
+            banner = bannerDao.getBannerById("banner").await().toObject(Banner::class.java)!!
+            withContext(Dispatchers.Main) {
+                bannerTitle.text = banner.title
+                bannerDate.text = "Valid till ${banner.date}"
+            }
+        }
+    }
+
     private fun setUpInterviewQuestions(view: View?) {
         if (view != null) {
-            //Log.e("interview", "questions")
             interViewQuesAdapter = InterviewQuesAdapter(view.context, this)
             interViewQuesRecyclerView.adapter = interViewQuesAdapter
             interViewQuesRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
@@ -369,22 +403,20 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
 
     // create referral link
     private fun createReferLink(uId: String, productId: String) {
-        var link: String = "https://uptoskills.page.link/?"+
-                "link=https://www.uptoskills.com/myrefer.php?uId="+uId+"-"+productId+
+        var link: String = "https://uptoskill.page.link/?"+
+                "link=https://www.uptoskill.com/myrefer.php?uId="+uId+"-"+productId+
                 "&apn="+activity?.packageName+
                 "&st=Join me on UptoSkills"+
-                "&sd=Reward UsCash 500"+
+                "&sd=Reward UsCash 250"+
                 "&si=https://www.uptoskills.com/wp-content/uploads/2019/10/logo-dark.png"
 
-        // https://uptoskills.page.link?apn=android.example.getwork&ibi=com.example.ios&link=https%3A%2F%2Fwww.uptoskills.com%2F
-        Log.e("sharelink", link)
         // shorten the link
         val msg = "Hey! I have a wonderful gift for you. Enroll UptoSkills Value  added Skill Courses & Avail EXTRA ₹ 100 OFF on your EVERY Paid Course. Click on this link to enjoy referral benefits.\nDownload the app: \n"
 
         val shortLinkTask = activity?.let {
             FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse(link))
-                .setDomainUriPrefix("https://uptoskills.page.link") // Set parameters
+                .setDomainUriPrefix("https://uptoskill.page.link") // Set parameters
                 // ...
                 .buildShortDynamicLink()
                 .addOnCompleteListener(it
@@ -393,7 +425,6 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
                         // Short link created
                         val shortLink = task.result.shortLink
                         val flowchartLink = task.result.previewLink
-                        Log.e("short link", msg+shortLink)
 
                         val intent = Intent()
                         intent.action = Intent.ACTION_SEND
@@ -408,7 +439,6 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
                     }
                 }
         }
-//                    Log.e("long link", ""+dynamicLinkUri)
     }
 
     private fun setUpcourses(view: View) {
@@ -488,7 +518,6 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         var intent = Intent(view?.context, BlogViewActivity::class.java)
         intent.putExtra("123", blog.id)
         startActivity(intent)
-//        Log.e("postId", blog.id)
     }
 
     override fun onBookmarkClicked(blogId: String, item: String) {
@@ -518,7 +547,6 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         }
         jobDao.addbookmark(itemId)
         auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }
-        Log.e(itemtype, itemId)
     }
 
     override fun onpaidCourseClicked(courseId: String) {

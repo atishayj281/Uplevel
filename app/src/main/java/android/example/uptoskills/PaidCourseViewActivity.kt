@@ -27,8 +27,8 @@ class PaidCourseViewActivity : AppCompatActivity() {
         binding = ActivityPaidCourseViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        courseId = intent.getStringExtra("courseId").toString()
-        if (courseId != "null" && courseId.trim().isNotEmpty()) {
+        courseId = intent.getStringExtra("courseId").toString().trim()
+        if (courseId != "null" && courseId.isNotEmpty()) {
             GlobalScope.launch(Dispatchers.IO) {
                 paidCourse =
                     PaidCourseDao().getCoursebyId(courseId.trim()).await()
@@ -55,7 +55,7 @@ class PaidCourseViewActivity : AppCompatActivity() {
         }
         binding.join.setOnClickListener {
             val intent = Intent()
-            intent.setData(Uri.parse(paidCourse.link))
+            intent.setData(Uri.parse(paidCourse.link.trim()))
             intent.action = Intent.ACTION_VIEW
             startActivity(intent)
         }

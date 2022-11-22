@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/uptoskills"
+        app:srcCompat="@drawable/ic__uptoskillslogo"
         android:id="@+id/logo"/>
 
 </FrameLayout>

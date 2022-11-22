@@ -40,7 +40,6 @@ class EventsAdapter(options: FirestorePagingOptions<Events>, private val listene
             .centerCrop()
             .into(holder.image)
     }
-
 }
 
 interface IEventClickListener{

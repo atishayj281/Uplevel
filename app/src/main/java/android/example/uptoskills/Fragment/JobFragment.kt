@@ -5,20 +5,15 @@ import android.app.Activity
 import android.content.Intent
 import android.example.uptoskills.*
 import android.example.uptoskills.Adapters.CourseViewPagerAdapter
-import android.example.uptoskills.MainActivity
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.Users
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -33,9 +28,6 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -55,7 +47,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 
-interface onJobSearch{
+interface onJobSearch {
     fun updateRecyclerView(query: String)
 }
 
@@ -70,6 +62,7 @@ class JobFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager
     private lateinit var auth: FirebaseAuth
@@ -105,8 +98,10 @@ class JobFragment : Fragment() {
 
 
         GlobalScope.launch(Dispatchers.IO) {
-            val temp = auth.currentUser?.uid?.let { userDao.getUserById(it).await().toObject(Users::class.java) }
-            if(temp != null) {
+            val temp = auth.currentUser?.uid?.let {
+                userDao.getUserById(it).await().toObject(Users::class.java)
+            }
+            if (temp != null) {
                 curUser = temp
                 displayName = curUser.displayName.toString()
             }
@@ -121,7 +116,7 @@ class JobFragment : Fragment() {
             menuItem.isChecked = true
             homedrawerLayout.closeDrawer(GravityCompat.START)
 
-            when(menuItem.itemId){
+            when (menuItem.itemId) {
                 R.id.help -> {
                     val intent = Intent(activity, CourseEnquiryActivity::class.java)
                     startActivity(intent)
@@ -134,7 +129,7 @@ class JobFragment : Fragment() {
                     val intent = Intent(activity, CertificateActivity::class.java)
                     startActivity(intent)
                 }
-                R.id.LogOut ->{
+                R.id.LogOut -> {
                     val gso =
                         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
 
@@ -161,8 +156,7 @@ class JobFragment : Fragment() {
                     auth.currentUser?.let { createReferLink(it.uid, "1234533dsd") }
                 }
 
-                R.id.bookmark ->
-                {
+                R.id.bookmark -> {
                     val intent = Intent(activity, BookmarkActivity::class.java)
                     startActivity(intent)
                 }
@@ -173,6 +167,10 @@ class JobFragment : Fragment() {
 
                 R.id.TermsCondition -> {
                     val intent = Intent(activity, TermsAndConditionActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.myevents -> {
+                    val intent = Intent(activity, MyEventsActivity::class.java)
                     startActivity(intent)
                 }
             }
@@ -186,7 +184,7 @@ class JobFragment : Fragment() {
         val headerView: View = homeNavigationView.getHeaderView(0)
         headerView.findViewById<MaterialCardView>(R.id.profile).setOnClickListener {
             var intent = Intent(activity, UserDetailsActivity::class.java)
-            intent.putExtra("username", displayName )
+            intent.putExtra("username", displayName)
             intent.putExtra("id", FirebaseAuth.getInstance().currentUser?.uid.toString())
             intent.putExtra("parent", "MoreFragment")
             startActivity(intent)
@@ -198,7 +196,8 @@ class JobFragment : Fragment() {
         tabLayout = view.findViewById(R.id.courseTabLayout)
         viewPager = view.findViewById(R.id.courseViewPager)
         tabLayout.post { tabLayout.setupWithViewPager(viewPager) }
-        var adapter = CourseViewPagerAdapter(parentFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+        var adapter = CourseViewPagerAdapter(parentFragmentManager,
+            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
         adapter.addFragment(jobFragment, "Jobs")
         adapter.addFragment(internshipFragment, "Internships")
         viewPager.adapter = adapter
@@ -209,7 +208,11 @@ class JobFragment : Fragment() {
         categoryItems.add("Google");
 
         spinnerDialog =
-            SpinnerDialog(activity,categoryItems,"Select or Search Category",R.style.DialogAnimations_SmileWindow,"Close")
+            SpinnerDialog(activity,
+                categoryItems,
+                "Select or Search Category",
+                R.style.DialogAnimations_SmileWindow,
+                "Close")
 
         spinnerDialog.setCancellable(true); // for cancellable
         spinnerDialog.setShowKeyboard(false);// for open keyboard by default
@@ -236,19 +239,23 @@ class JobFragment : Fragment() {
         val profileCompleted: TextView = headerView.findViewById(R.id.profileCompleted)
 
         GlobalScope.launch(Dispatchers.IO) {
-            val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
-            if(temp != null) {
+            val temp = auth.currentUser?.let {
+                userDao.getUserById(it.uid).await().toObject(Users::class.java)
+            }
+            if (temp != null) {
                 withContext(Dispatchers.Main) {
                     username.text = temp.displayName
                     displayName = temp.displayName.toString()
                     email.text = temp.email
                     coins.text = temp.coins.toString()
-                    val profilePrecentage: String = (profileComplete(temp)*10).toString() + "%"
+                    val profilePrecentage: String = (profileComplete(temp) * 10).toString() + "%"
                     profileCompleted.text = profilePrecentage
                     val profileImage = temp.userImage
-                    if(profileImage.trim().isNotBlank() && profileImage != "null") {
+                    if (profileImage.trim().isNotBlank() && profileImage != "null") {
                         profile.setImageResource(R.drawable.image_circle)
-                        view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
+                        view?.context?.let {
+                            Glide.with(it).load(profileImage).circleCrop().into(profile)
+                        }
                     }
 
                 }
@@ -260,33 +267,52 @@ class JobFragment : Fragment() {
     private fun profileComplete(user: Users): Int {
         var ans = 0
 
-        if(user.displayName?.trim()?.isNotEmpty() == true){ ans++ }
-        if(user.full_name.trim().isNotEmpty()){ ans++ }
-        if(user.college_name.trim().isNotEmpty()){ ans++ }
-        if(user.mobileNo.trim().isNotEmpty()){ ans++ }
-        if(user.address.trim().isNotEmpty()){ ans++ }
-        if(user.education.trim().isNotEmpty()){ ans++ }
-        if(user.job.trim().isNotEmpty()){ ans++ }
-        if(user.email.trim().isNotEmpty()){ ans++ }
-        if(user.skills.trim().isNotEmpty()){ ans++ }
-        if(user.experienceDesc.trim().isNotEmpty()){ ans++ }
+        if (user.displayName?.trim()?.isNotEmpty() == true) {
+            ans++
+        }
+        if (user.full_name.trim().isNotEmpty()) {
+            ans++
+        }
+        if (user.college_name.trim().isNotEmpty()) {
+            ans++
+        }
+        if (user.mobileNo.trim().isNotEmpty()) {
+            ans++
+        }
+        if (user.address.trim().isNotEmpty()) {
+            ans++
+        }
+        if (user.education.trim().isNotEmpty()) {
+            ans++
+        }
+        if (user.job.trim().isNotEmpty()) {
+            ans++
+        }
+        if (user.email.trim().isNotEmpty()) {
+            ans++
+        }
+        if (user.skills.trim().isNotEmpty()) {
+            ans++
+        }
+        if (user.experienceDesc.trim().isNotEmpty()) {
+            ans++
+        }
 
         return ans
     }
 
     // create referral link
     private fun createReferLink(uId: String, productId: String) {
-        var link: String = "https://uptoskills.page.link/?"+
-                "link=https://www.uptoskills.com/myrefer.php?uId="+uId+"-"+productId+
-                "&apn="+activity?.packageName+
-                "&st=Join me on UptoSkills"+
-                "&sd=Reward UsCash 500"+
+        var link: String = "https://uptoskill.page.link/?" +
+                "link=https://www.uptoskill.com/myrefer.php?uId=" + uId + "-" + productId +
+                "&apn=" + activity?.packageName +
+                "&st=Join me on UptoSkills" +
+                "&sd=Reward UsCash 250" +
                 "&si=https://www.uptoskills.com/wp-content/uploads/2019/10/logo-dark.png"
 
-        // https://uptoskills.page.link?apn=android.example.getwork&ibi=com.example.ios&link=https%3A%2F%2Fwww.uptoskills.com%2F
-        Log.e("sharelink", link)
         // shorten the link
-        val msg = "Hey! I have a wonderful gift for you. Enroll UptoSkills Value  added Skill Courses & Avail EXTRA ₹ 100 OFF on your EVERY Paid Course. Click on this link to enjoy referral benefits.\nDownload the app: \n"
+        val msg =
+            "Hey! I have a wonderful gift for you. Enroll UptoSkills Value  added Skill Courses & Avail EXTRA ₹ 100 OFF on your EVERY Paid Course. Click on this link to enjoy referral benefits.\nDownload the app: \n"
 
         val shortLinkTask = activity?.let {
             FirebaseDynamicLinks.getInstance().createDynamicLink()
@@ -300,7 +326,6 @@ class JobFragment : Fragment() {
                         // Short link created
                         val shortLink = task.result.shortLink
                         val flowchartLink = task.result.previewLink
-                        Log.e("short link", msg+shortLink)
 
                         val intent = Intent()
                         intent.action = Intent.ACTION_SEND
@@ -315,7 +340,6 @@ class JobFragment : Fragment() {
                     }
                 }
         }
-//                    Log.e("long link", ""+dynamicLinkUri)
     }
 
 
@@ -323,8 +347,6 @@ class JobFragment : Fragment() {
         super.onStart()
         activity?.let { setUpNavigationViewHeader(it) }
     }
-
-
 
 
     companion object {

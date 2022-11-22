@@ -41,7 +41,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="right|center_vertical"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/uptoskills"
+                    app:srcCompat="@drawable/ic__uptoskillslogo"
                     />
 
             </FrameLayout>

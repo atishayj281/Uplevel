@@ -20,6 +20,12 @@
             android:title="My Jobs and Internships"
             android:icon="@drawable/ic_job"/>
 
+
+        <item
+            android:id="@+id/myevents"
+            android:title="My Events"
+            android:icon="@drawable/ic_events"/>
+
         <item
             android:id="@+id/certificate"
             android:title="Certificates"
@@ -35,12 +41,7 @@
 
 
     <group>
-        <item
-            android:id="@+id/aboutUs"
-            android:title="About Us"
-            android:icon="@drawable/ic_about_us"
-            android:iconTint="@color/com_facebook_blue"
-            />
+
 
         <item
             android:id="@+id/faq"

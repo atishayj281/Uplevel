@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
-import com.squareup.okhttp.internal.DiskLruCache
 
 
 class BlogsAdapter(options: FirestorePagingOptions<Blog>, val listener: IBlogAdapter, val itemId: Int) : FirestorePagingAdapter<Blog, BlogsAdapter.BLogViewHolder>(

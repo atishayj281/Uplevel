@@ -32,7 +32,7 @@ class CourseDao {
 
     private fun sendMail(course: String, context: Context, user: Users) {
         GlobalScope.launch(Dispatchers.IO) {
-            val mail: String = "atishay.tca1909005@tmu.ac.in"
+            val mail: String = "hr.uptoskills@gmail.com"
             val message: String = "Name: ${user.full_name}\nCurrent Position: ${user.job}\nOrganisation: ${user.college_name}\nMobile No.: ${user.mobileNo}"+
                     "\nHighest Qualification: ${user.education}\nResume: ${user.resume}\nEmail: ${user.email}\n has been enrolled for " + course
             val subject: String = "${user.full_name} has been applied for " + course

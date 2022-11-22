@@ -90,8 +90,8 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
                 curUser.freecourses?.forEach {
                     val courseId = it.key
                     if (courseId != "null") {
-                        val course: FreeCourse = courseDao.getCoursebyId(courseId).await().toObject(FreeCourse::class.java)!!
-                        courseList.add(course)
+                        val course: FreeCourse? = courseDao.getCoursebyId(courseId).await().toObject(FreeCourse::class.java)
+                        if(course != null) courseList.add(course)
                     }
                 }
                 withContext(Dispatchers.Main) {
@@ -129,7 +129,6 @@ class MyFreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     }
 
     override fun onCourseCLick(courseId: String) {
-        Log.e("course", courseId)
         val intent = Intent(activity, CourseVideoActivity::class.java)
         intent.putExtra("courseId", courseId)
         startActivity(intent)

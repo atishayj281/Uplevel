@@ -177,14 +177,21 @@ class SignInActivity : AppCompatActivity() {
 
     private fun resetPassword() {
         binding.signInprogressbar.visibility = View.VISIBLE
-        FirebaseAuth.getInstance().sendPasswordResetEmail(binding.passwordResetEmail.text.toString()).addOnCompleteListener {
-            if(it.isSuccessful){
-                Toast.makeText(this, "Email Sent Successfully", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, it.exception?.message.toString(), Toast.LENGTH_SHORT).show()
-            }
-            binding.passwordresetlayout.visibility = View.GONE
-            binding.signInprogressbar.visibility = View.GONE
+        if(binding.passwordResetEmail.text.toString().trim().isNotEmpty() && binding.passwordResetEmail.text.toString().trim() != "null") {
+            FirebaseAuth.getInstance()
+                .sendPasswordResetEmail(binding.passwordResetEmail.text.toString())
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(this, "Email Sent Successfully", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, it.exception?.message.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    binding.passwordresetlayout.visibility = View.GONE
+                    binding.signInprogressbar.visibility = View.GONE
+                }
+        } else {
+            Toast.makeText(this, "Please Enter the Email...", Toast.LENGTH_SHORT).show()
         }
     }
     private fun startMainActivity(){
@@ -245,7 +252,7 @@ class SignInActivity : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.IO) {
 
                 var upRef: Users? = null
-                Log.e("refer", intent.getStringExtra("ReferId").toString())
+
                 if(intent.getStringExtra("ReferId").toString().lowercase().trim() != "null" &&
                     intent.getStringExtra("ReferId").toString().lowercase().trim().isNotBlank()) {
                     upRef =
@@ -253,14 +260,14 @@ class SignInActivity : AppCompatActivity() {
                 }
                 userDao.userCollection.document(auth.currentUser?.uid.toString()).get().addOnSuccessListener {
                     if(!it.exists()) {
+                        //Toast.makeText(this@SignInActivity, "creating user", Toast.LENGTH_SHORT).show()
                         val user = Users("","", "", "", "","", "", hashMapOf(),hashMapOf(), auth.currentUser?.displayName.toString(), auth.currentUser?.displayName.toString(),
                             auth.currentUser?.email.toString(), "", "", "",
                             auth.currentUser?.photoUrl.toString(), "", auth.currentUser?.uid.toString(), "",
                             intent.getStringExtra("ReferId").toString(), 250)
                         userDao.addUser(user, auth.currentUser?.uid.toString())
                         if(upRef != null) {
-                            upRef.coins += 500
-                            Log.e("coins", upRef.coins.toString())
+                            upRef.coins += 250
                             userDao.updateUser(upRef, intent.getStringExtra("ReferId").toString())
                         }
                     }

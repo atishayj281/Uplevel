@@ -155,13 +155,10 @@ class OnlyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
         }
         jobDao.addbookmark(itemId)
         auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }
-        Log.e(itemtype, itemId)
     }
 
     override fun updateRecyclerView(query: String) {
-        if(query.isEmpty()) {
-            Log.e("Checked", "Empty")
-        }
+
         view?.let { setUpJobRecyclerView(it, query) }
     }
 }

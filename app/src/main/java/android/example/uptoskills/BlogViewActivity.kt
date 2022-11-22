@@ -24,7 +24,6 @@ class BlogViewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var postId: String? = intent.getStringExtra("123")
-        Log.e("blogId", postId.toString().trim())
         binding.blogViewProgressBar.visibility = View.VISIBLE
         updateBlog(postId)
 

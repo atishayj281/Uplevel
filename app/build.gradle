@@ -6,13 +6,20 @@ plugins {
     id 'com.google.gms.google-services'
 }
 apply plugin: 'com.google.firebase.crashlytics'
+repositories
+        {
+            maven
+                    {
+                        url 'https://maven.cashfree.com/release'
+                    }
+        }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
-        applicationId "android.example.getwork"
-        minSdkVersion 19
+        applicationId "android.example.uptoskills"
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -73,6 +80,7 @@ dependencies {
     implementation 'android.arch.paging:runtime:1.0.1'
     implementation 'com.google.firebase:firebase-dynamic-links:20.1.0'
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.google.firebase:firebase-analytics:20.0.2'
 
     // Testing
     testImplementation "junit:junit:$rootProject.junitVersion"
@@ -107,8 +115,14 @@ dependencies {
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')
+
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
 
     implementation 'uk.co.samuelwall:material-tap-target-prompt:3.3.0'
+    implementation "androidx.browser:browser:1.3.0"
+
+    // CashFree
+    implementation 'com.cashfree.pg:android-sdk:1.7.14'
+
 
 }

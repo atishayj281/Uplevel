@@ -53,8 +53,6 @@ class SignUpActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         referId = intent.getStringExtra("ReferId").toString()
-//        Log.e("referId", referId)
-//        Log.e("differ", "")
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -202,7 +200,6 @@ class SignUpActivity : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.IO) {
 
                 var upRef: Users? = null
-                Log.e("refer", intent.getStringExtra("ReferId").toString())
                 if(intent.getStringExtra("ReferId").toString().lowercase().trim() != "null" &&
                     intent.getStringExtra("ReferId").toString().lowercase().trim().isNotBlank()) {
                     upRef =
@@ -216,8 +213,7 @@ class SignUpActivity : AppCompatActivity() {
                             intent.getStringExtra("ReferId").toString(), 250)
                         userDao.addUser(user, auth.currentUser?.uid.toString())
                         if(upRef != null) {
-                            upRef.coins += 500
-                            Log.e("coins", upRef.coins.toString())
+                            upRef.coins += 250
                             userDao.updateUser(upRef, intent.getStringExtra("ReferId").toString())
                         }
                     }

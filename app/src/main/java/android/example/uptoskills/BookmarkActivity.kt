@@ -91,9 +91,7 @@ class BookmarkActivity : AppCompatActivity(), JobItemClicked {
                 val bookmark = temp.bookmarks
                 val bookmarks = ArrayList<Job>()
                 bookmark?.forEach {
-                    val jobId: String = it.key.toString()
-                    Log.e("job", jobId)
-
+                    val jobId: String = it.key
                     val job: Job = jobDao.getJobbyId(jobId).await().toObject(Job::class.java)!!
                     bookmarks.add(job)
                 }
@@ -111,7 +109,6 @@ class BookmarkActivity : AppCompatActivity(), JobItemClicked {
     }
 
     override fun onJobCLick(jobId: String) {
-        Log.e("job", jobId)
         val intent = Intent(this, JobViewActivity::class.java)
         intent.putExtra("jobId", jobId)
         intent.putExtra("category", "job")

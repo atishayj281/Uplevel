@@ -4,28 +4,23 @@ import android.content.Intent
 import android.example.uptoskills.Adapters.CourseItemClicked
 import android.example.uptoskills.Adapters.MyPaidCourseAdapter
 import android.example.uptoskills.PaidCourseViewActivity
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.example.uptoskills.R
 import android.example.uptoskills.daos.PaidCourseDao
 import android.example.uptoskills.daos.UsersDao
-import android.example.uptoskills.models.FreeCourse
 import android.example.uptoskills.models.PaidCourse
 import android.example.uptoskills.models.Users
+import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.auth.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -85,7 +80,11 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
         GlobalScope.launch(Dispatchers.IO) {
             curUser = userDao.getUserById(currentUserId).await().toObject(Users::class.java)
             withContext(Dispatchers.Main) {
-                adapter = curUser?.let { MyPaidCourseAdapter(view.context, this@MyPaidCourseFragment, it) }!!
+                adapter = curUser?.let {
+                    MyPaidCourseAdapter(view.context,
+                        this@MyPaidCourseFragment,
+                        it)
+                }!!
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(view.context)
             }
@@ -94,22 +93,24 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
 
         GlobalScope.launch(Dispatchers.IO) {
             val paidCourseDao = PaidCourseDao()
-            val temp = userDao.getUserById(auth.currentUser!!.uid).await().toObject(Users::class.java)
-            if(temp != null) {
+            val temp =
+                userDao.getUserById(auth.currentUser!!.uid).await().toObject(Users::class.java)
+            if (temp != null) {
                 val paidCourses = temp.paidcourses
                 paidCourses?.forEach {
                     val courseId = it.key
                     if (courseId != "null") {
-                        val course: PaidCourse = paidCourseDao.getCoursebyId(courseId).await().toObject(
-                            PaidCourse::class.java)!!
-                        courseList.add(course)
+                        val course: PaidCourse? =
+                            paidCourseDao.getCoursebyId(courseId).await().toObject(
+                                PaidCourse::class.java)
+                        if(course != null) courseList.add(course)
                     }
                 }
 
                 withContext(Dispatchers.Main) {
                     adapter.updateCourses(courseList)
                     progressBar.visibility = View.GONE
-                    if(courseList.size != 0) {
+                    if (courseList.size != 0) {
                         noCourse.visibility = View.GONE
                     } else {
                         noCourse.visibility = View.VISIBLE
@@ -119,7 +120,6 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
             }
         }
     }
-
 
 
     companion object {
@@ -143,33 +143,34 @@ class MyPaidCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
     }
 
     override fun onCourseCLick(courseId: String) {
-        if(curUser?.paidcourses?.get(courseId)?.lowercase()  != "no") {
-                Toast.makeText(view?.context, "Already Completed", Toast.LENGTH_SHORT).show()
+        if (curUser?.paidcourses?.get(courseId.trim())?.lowercase()?.trim() != "no") {
+            Toast.makeText(view?.context, "Already Completed", Toast.LENGTH_SHORT).show()
         } else {
             val intent = Intent(activity, PaidCourseViewActivity::class.java)
-//        Log.e("courseId", courseId)
             intent.putExtra("courseId", courseId.trim())
             startActivity(intent)
         }
     }
 
     override fun updateRecyclerView(query: String) {
-        if(query.trim().isEmpty()) {
+        if (query.trim().isEmpty()) {
             noCourse.visibility = View.GONE
             adapter.updateCourses(courseList)
         } else {
             val newCourseList = ArrayList<PaidCourse>()
             courseList.forEach {
-                if(it.category.contains(query.trim(), true) || it.course_name.contains(query.trim(), true)) {
+                if (it.category.contains(query.trim(),
+                        true) || it.course_name.contains(query.trim(), true)
+                ) {
                     newCourseList.add(it)
                     noCourse.visibility = View.GONE
                 }
             }
-            if(newCourseList.isEmpty()) {
+            if (newCourseList.isEmpty()) {
                 adapter.updateCourses(newCourseList)
                 noCourse.visibility = View.VISIBLE
 //                Toast.makeText(view?.context, "No Course Found", Toast.LENGTH_SHORT).show()
-                } else {
+            } else {
                 noCourse.visibility = View.GONE
                 adapter.updateCourses(newCourseList)
             }

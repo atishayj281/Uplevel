@@ -29,6 +29,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GetWork">
         <activity
+            android:name=".MyEventsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ChatbotActivity"
+            android:exported="true" />
+        <activity
             android:name=".QuestionActivity"
             android:exported="true" />
         <activity
@@ -40,9 +46,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ResumeInputActivity"
-            android:exported="true" />
         <activity
             android:name=".PaidCourseViewActivity"
             android:exported="true" />
@@ -74,7 +77,7 @@
             android:parentActivityName=".SignUpActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".SignInActivity" />
-        <activity android:name=".OnBoardingActivity"></activity>
+        <activity android:name=".OnBoardingActivity" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleInstance">
@@ -90,12 +93,10 @@
             </intent-filter>
         </activity>
 
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <meta-data
-            android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_F0iAWBwH6yyKb9" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -113,6 +114,23 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".services.MyNotifications"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="upi" android:host="pay"/>
+        </intent>
+        <package android:name="com.android.chrome" />
+    </queries>
 
 </manifest>

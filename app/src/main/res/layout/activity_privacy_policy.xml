@@ -40,7 +40,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="right|center_vertical"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/uptoskills"
+                    app:srcCompat="@drawable/ic__uptoskillslogo"
                     />
 
             </FrameLayout>
@@ -71,77 +71,11 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/policy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="UptoSkills respects and understands the importance of your privacy – and are therefore committed to affording complete protection to the personal information of our customers who use our products and services or visitors of our website, and of the learners whose information we may have access to and when you apply on our website for an open position. It is in recognition of this need for security, our commitment and Secured management of any information received /collected by us that UptoSkills has established this Privacy Policy.This privacy policy is applicable to our websites – https://www.Uptoskills.com and and to our products, including the UptoSkills and shop platform, and any services we provide. It also applies to our marketing practices. We ensure total transparency in all our dealings."
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="WHAT INFORMATION IS COLLECTED?"
-                android:layout_marginTop="20dp"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="1. Personal information collected on our website
-As a general practice, no personal Information is collected about a visitor to the website, apart from the personal information submitted by the visitor himself/herself in a ‘contact us’ form or ‘submit resume’ link. We shall use such Personal Information for the purpose you share it with us. However, at times, certain information may be collected from you when you visit the website. Such information is aggregated to measure the number of visits, average time spent on the website, pages viewed etc. This gives us an idea of which parts of our website users are visiting, in order that we may improve the content to offer you better services. We do not link IP addresses to anything personally identifiable. This means that a user’s session will be tracked, but the user will be anonymous.
-
-\n\n2.ID, Customer information for support and maintenance
-When you register to use a UptoSkills product, create an ID with us or use our services for development or support we collect information that is unique to you and identifies you. This may include your name, email address, phone number or payment information all in accordance with applicable law. Some information is required and other information is optional. Sometimes information regarding eligibility may be required. At times we may rely on information from public sources.
-
-\n\n3. Information collected while using our online products and applications especially during activation and automatic updates
-When our product/application is used information may be collected on how it is used. We may collect information (like an IP address, or the type of device used) that your browser or device typically sends to our servers whenever you use our website, product or application. We may use information that led you to our website – for example the search terms used or the device being used - through cookies and similar technologies. Often this information is anonymous and if associated with you kept strictly confidential. If you do not want us to collect this information, you can tell us by opting out or by either declining or customising cookie settings on our website
-
-\n\n4. UptoSkills emails
-We do contact organisation or executives as a part of our marketing campaigns. We do so, as we believe we have legitimate interest to promote our products and services and it also benefits our prospects. We do not do any mass mailing and carefully reach out to selected professional with a personalised approach. The emails we send you as part of our marketing campaigns allow us to know if you have received or opened the email, or clicked a link within the email. If you do not want us to collect this information from marketing emails, you can opt out of receiving such emails by clicking on the unsubscribe button.
-
-\n\n5. Buttons or tools on our websites related to other companies and social media pages
-Our websites may include buttons or tools that link to other companies’ services (for example, a Facebook or Google button). We may collect information about your use of these features. In addition, when you see or interact with these buttons, tools, or content, or view a UptoSkills web page containing them, some information from your browser may automatically be sent to the other company. Please read that company’s privacy policy for more information, as these sites may have their own privacy statements in place, which we recommend you review if you visit any linked Web sites. We are not responsible for the content of linked sites or any use of the sites or for the privacy practices of those other Web sites.We may collect information when you interact with our social networking pages or use the sign-on features.
-
-\n\n6. Hosted services provided by UptoSkills
-We provide hosted services to many companies that may sometimes require the collection of information through cookies and other technology to collect analytic data required by the product and to understand our users and their likely interests. No information is collected without consent. Management of technified private limited operates the website www.uptoskills.com."
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="HOW DO WE USE THE INFORMATION COLLECTED?"
-                android:layout_marginTop="20dp"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Information Collected from Interactive Forms On some of our web pages we offer interactive forms that let you voluntarily submit personal information (such as your e-mail address, name, or organization). This occurs when you are registering for ODL counseling; various tests, quizzes, seminars, workshops, or training sessions offered by Teach Tech Services, downloading admission forms from Teach Tech Services. In those cases, all submitted information is used only for the purposes for which it is intended and is not made available to any third party."
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="We use this information to:"
-                android:layout_marginTop="20dp"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="40dp"
-                android:text="To fulfil our contractual commitment and to enhance the performance of our contract with you.Allow you use of our products and applications and respond to your requests Provide you with the services, support or information requested and monitor effectiveness Improve our website’s user experience and communicate better to engage users Enhance the effectiveness of our marketing campaigns. To send marketing emails or messages related to our products and services Monitor aggregate metrics to conduct our market research and understand our customers better To process your job application for an open position. Analyze, diagnose and fix issues in our product and service offerings. In all cases this information is not shared with any third party. It is used by UptoSkills as above or to prevent/respond to protection of our websites or applications. In some cases like with hosted services, we may share information with those that provide us with technology services (e.g. web hosting and analytics services), but strictly for the purpose of carrying out our work. All such vendors used by us have signed a Data protection agreement with UptoSkills to secure your data. We may be required to share information with law enforcement or other third parties when compelled to do so by court order or other legal process, to comply with statutes or regulations.
-
-\nIf we merge with or are acquired by another company, and if all of our assets are acquired by another company, this information will most likely be one of the assets to be transferred. However, we will not transfer any personal information of our customers until absolutely necessary to provide you with a continuity of service and only when the new owner maintains and provides the same level of data privacy standards as we do. In such cases, we will provide you with notice and an opportunity to opt-out of the transfer of identifiable data."
-                />
-
-
-
+            />
         </LinearLayout>
 
 

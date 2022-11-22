@@ -1,6 +1,8 @@
 package android.example.uptoskills
 
 import android.Manifest
+import android.app.DownloadManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.example.uptoskills.Adapters.CertificateAdapter
@@ -47,6 +49,7 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
     private lateinit var paidCourseDao: PaidCourseDao
     private lateinit var adapter: CertificateAdapter
     private lateinit var storageReference: StorageReference
+    private lateinit var downloadManager: DownloadManager
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,7 +100,6 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
                             adapter.updateCertificate(completedCourse)
                             binding.progressBar.visibility = View.GONE
                             if (completedCourse.size == 0) {
-                                Log.e("No Certificate", "No")
                                 Toast.makeText(this@CertificateActivity,
                                     "No Certificate Found",
                                     Toast.LENGTH_SHORT).show()
@@ -121,12 +123,14 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onClicked(course: PaidCourse) {
         binding.progressBar.visibility = View.VISIBLE
-        var fileRef: StorageReference = storageReference.child("users/"+auth.currentUser?.uid+"/${course.id.trim()}.pdf")
-        fileRef.downloadUrl.addOnSuccessListener {
-            val intent = Intent(Intent.ACTION_VIEW, it)
+
+
+        val url: String? = user.paidcourses?.get(course.id.trim())
+        if(url != null) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
-            binding.progressBar.visibility = View.GONE
         }
+        binding.progressBar.visibility = View.GONE
     }
     override fun onBackPressed() {
         if(parent == null) {

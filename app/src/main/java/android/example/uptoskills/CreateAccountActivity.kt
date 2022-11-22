@@ -59,7 +59,7 @@ class CreateAccountActivity : AppCompatActivity() {
                                 referer =
                                     userDao.getUserById(referId).await().toObject(Users::class.java)
                                 if (referer != null) {
-                                    referer.coins += 500
+                                    referer.coins += 250
                                     userDao.updateUser(referer, referId)
                                 }
 

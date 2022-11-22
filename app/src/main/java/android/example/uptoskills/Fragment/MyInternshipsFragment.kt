@@ -141,7 +141,7 @@ class MyInternshipsFragment : Fragment(), JobItemClicked, onJobSearch {
 
     override fun onJobCLick(jobId: String) {
         val intent = Intent(view?.context, JobViewActivity::class.java)
-        Log.e("jobId", jobId)
+
         intent.putExtra("jobId", jobId.trim())
         intent.putExtra("category", "internship")
         intent.putExtra("parent", "applied")

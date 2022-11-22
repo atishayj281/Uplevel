@@ -36,12 +36,12 @@ class UserDetailsActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var userDao: UsersDao
     private val imageRequestCode = 123
-    private lateinit var ProfileimageUrl: Uri
+    private var ProfileimageUrl: Uri = Uri.EMPTY
     private var isImageChoose: Boolean = false
     private var isResumeSelected: Boolean = false
     private val resumeRequestCode: Int = 2
     private val READ_EXTERNAL_STORAGE_CODE: Int = 9
-    private lateinit var resumeUri: Uri
+    private var resumeUri: Uri = Uri.EMPTY
     private lateinit var usr: Users
     private lateinit var userDetailsLayout: LinearLayout
 
@@ -104,7 +104,8 @@ class UserDetailsActivity : AppCompatActivity() {
                         curUser.referCode,
                         curUser.coins,
                         curUser.bookmarks,
-                        curUser.appliedJobs)
+                        curUser.appliedJobs,
+                        curUser.events)
                     withContext(Dispatchers.Main) {
 
                     /*    if(curUser.resume.trim().isNotBlank()) {
@@ -187,26 +188,6 @@ class UserDetailsActivity : AppCompatActivity() {
 
         }
 
-        // download resume
-        /*binding.resumeImage.setOnClickListener {
-            binding.userDetailsProgressBar.visibility = View.VISIBLE
-            GlobalScope.launch(Dispatchers.IO) {
-                val user = auth.currentUser?.let { it1 -> userDao.getUserById(it1.uid).await().toObject(Users::class.java) }
-                withContext(Dispatchers.Main) {
-                    if(user != null) {
-                        val resumeUrl = user.resume
-                        if(!resumeUrl.isBlank()) {
-                            val builder = CustomTabsIntent.Builder()
-                            val customTabsIntent = builder.build()
-                            customTabsIntent.launchUrl(this@UserDetailsActivity, Uri.parse(resumeUrl))
-                            binding.userDetailsProgressBar.visibility = View.GONE
-                        } else {
-                            Toast.makeText(this@UserDetailsActivity, "Please upload the Resume", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
-        }*/
 
         // Download Resume
         binding.downloadProfile.setOnClickListener {
@@ -286,13 +267,17 @@ class UserDetailsActivity : AppCompatActivity() {
                         binding.profileImage.setImageResource(R.drawable.image_circle)
                         Glide.with(binding.profileImage.context).load(image).circleCrop().into(binding.profileImage)
                     }
-                    /*if(usr.resume.trim().isNotBlank()) {
-                        binding.resumeImage.setImageResource(R.drawable.ic_resume)
-                    }*/
                     binding.userDetailsProgressBar.visibility = View.GONE
 
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if (parent == null) {
+            startMainActivity()
+        }
+        super.onBackPressed()
     }
 }

@@ -41,7 +41,7 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemI
         holder.job_type.text = jobs[position].job_type
         holder.jobtitle.text = jobs[position].title
         Glide.with(holder.company_logo.context).load(jobs[position].company_logo_url)
-            .circleCrop().placeholder(R.drawable.uptoskills).into(holder.company_logo)
+            .circleCrop().into(holder.company_logo)
 
     }
 

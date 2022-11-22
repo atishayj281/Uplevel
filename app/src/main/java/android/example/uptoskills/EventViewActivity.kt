@@ -1,8 +1,10 @@
 package android.example.uptoskills
 
 import android.example.uptoskills.daos.EventDao
+import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityEventViewBinding
 import android.example.uptoskills.models.Events
+import android.example.uptoskills.models.Users
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -23,6 +25,8 @@ class EventViewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEventViewBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var curUserId: String
+    private lateinit var curUser: Users
+    private lateinit var userDao: UsersDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +34,10 @@ class EventViewActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = FirebaseAuth.getInstance()
         curUserId = auth.currentUser?.uid.toString()
+        userDao = UsersDao()
+        GlobalScope.launch(Dispatchers.IO) {
+            curUser = userDao.getUserById(curUserId).await().toObject(Users::class.java)!!
+        }
 
 
         binding.back.setOnClickListener {
@@ -40,7 +48,9 @@ class EventViewActivity : AppCompatActivity() {
             if(curUserId.trim().isNotEmpty() && curUserId.trim() != "null") {
                 if(!event.enrolled.contains(curUserId)) {
                     event.enrolled.add(curUserId)
+                    curUser.events.add(eventId)
                     eventDao.enrollinEvent(event, eventId, this)
+                    userDao.addUser(curUser, curUserId)
                 } else {
                     Toast.makeText(this, "Already Enrolled...", Toast.LENGTH_SHORT).show()
                 }

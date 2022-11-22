@@ -41,13 +41,9 @@ class MyPaidCourseAdapter(val context: Context, val listener: CourseItemClicked,
         holder.courseDescription.text = courses[position].course_description
         holder.courseName.text = courses[position].course_name
         Glide.with(holder.courseImage.context).load(courses[position].course_image).centerCrop().into(holder.courseImage)
-//        curUser.paidcourses?.get((courses[position]))?.let { Log.e(courses[position].id, it.toString()) }
-        if(curUser.paidcourses?.get(courses[position].id)?.lowercase()  == "no") {
+        if(curUser.paidcourses?.get(courses[position].id)?.lowercase()  != "no") {
             holder.isCompleted.visibility = View.VISIBLE
-            curUser.paidcourses?.get(courses[position].id)?.lowercase()?.let {
-                Log.e("isCompleted",
-                    it)
-            }
+
         }
     }
 

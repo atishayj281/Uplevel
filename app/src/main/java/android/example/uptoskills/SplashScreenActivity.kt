@@ -45,13 +45,12 @@ class SplashScreenActivity : AppCompatActivity() {
                           var deepLink: Uri? = null
                           if (pendingDynamicLinkData != null) {
                               deepLink = pendingDynamicLinkData.link
-                              //Log.e("my refer link", deepLink.toString())
                               var referralLink = deepLink.toString()
                               try {
                                   referralLink = referralLink.substring(referralLink.lastIndexOf("=")+1)
-                                  //Log.e("subReferLink", referralLink)
+
                                   referId = referralLink.substring(0, referralLink.indexOf("-"))
-                                  //Log.e("refer", referId.toString())
+
                                   val productId: String = referralLink.substring(referralLink.indexOf("-")+1)
                                   val intent = Intent(this, OnBoardingActivity::class.java)
                                   intent.putExtra("referId", referId)
@@ -59,17 +58,15 @@ class SplashScreenActivity : AppCompatActivity() {
                                   finish()
 
                               } catch (e: Exception) {
-                                  Log.e("error", e.message.toString())
                               }
 
                           }
                       }
                       .addOnCanceledListener {
-                          Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show()
+
                       }
                       .addOnFailureListener(this) {
                               e -> Log.w("starting Activity", "getDynamicLink:onFailure", e)
-                          /*Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()*/
                               }
                   val intent = Intent(this, OnBoardingActivity::class.java)
 

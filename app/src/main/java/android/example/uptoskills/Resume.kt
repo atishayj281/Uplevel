@@ -22,13 +22,6 @@ import java.io.FileOutputStream
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 
-
-
-
-
-
-
-
 class Resume(val user: Users, val context: Context) {
     private lateinit var pdfDocument: PdfDocument
     private lateinit var canvas: Canvas
@@ -168,7 +161,7 @@ class Resume(val user: Users, val context: Context) {
                 pdfDocument.writeTo(FileOutputStream(file))
                 Toast.makeText(context, "File is saved at ${file.absolutePath}", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
-                e.message?.let { Log.e("Certificate Error", it) }
+
             }
         pdfDocument.close()
     }

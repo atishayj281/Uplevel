@@ -43,8 +43,6 @@ class OnBoardingActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         referId = intent.getStringExtra("referId").toString()
-        Toast.makeText(this, referId, Toast.LENGTH_SHORT).show()
-
         slideViewPager = findViewById(R.id.slideViewPager)
         dotsLayout = findViewById(R.id.dotLayout)
         sliderAdapter = SliderAdapter(this)
@@ -53,7 +51,6 @@ class OnBoardingActivity : AppCompatActivity() {
         slideViewPager.adapter = sliderAdapter
 
         if(!isFirstTimeStartApp()){
-            Log.e("refer", referId.toString())
             startMainActivity()
         }
 
@@ -84,7 +81,6 @@ class OnBoardingActivity : AppCompatActivity() {
 
         //addDotsIndicator(0)
         btnSkip.setOnClickListener {
-            Log.e("refer", referId.toString())
             startMainActivity()
         }
 
@@ -102,7 +98,6 @@ class OnBoardingActivity : AppCompatActivity() {
         setFirstTimeStartStatus(false)
         var intent = Intent(this, SignInActivity::class.java)
         intent.putExtra("ReferId", referId)
-        Log.e("ReferId", referId)
         startActivity(intent)
         finish()
     }

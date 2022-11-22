@@ -44,7 +44,6 @@ class UsersDao {
                 auth.currentUser?.uid?.let { updateUser(user, it) }
             }
         }
-
     }
 
     fun addUser(user: Users?, id: String) {
@@ -80,6 +79,8 @@ class UsersDao {
             }.addOnFailureListener{
                 Toast.makeText(context, "Uploading Failed...", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            addUser(user, id)
         }
     }
 
@@ -100,7 +101,7 @@ class UsersDao {
     }
 
     fun uploadResume(resumeUri: Uri, user: Users, context: Context, id: String): Users {
-        if(resumeUri.toString().isNotBlank()){
+        if(resumeUri.toString().isNotBlank() && resumeUri.toString().trim() != "null"){
             var fileRef: StorageReference = storageReference.child("users/"+auth.currentUser?.uid+"/"+user.displayName+"Resume."+getFileExtension(resumeUri, context))
             fileRef.putFile(resumeUri).addOnSuccessListener {
                 fileRef.downloadUrl.addOnSuccessListener {
@@ -112,6 +113,8 @@ class UsersDao {
             }.addOnFailureListener{
                 Toast.makeText(context, "Uploading Failed...", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            addUser(user, id)
         }
 
         return user

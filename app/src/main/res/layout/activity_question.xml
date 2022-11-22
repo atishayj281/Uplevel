@@ -40,7 +40,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    app:srcCompat="@drawable/uptoskills"
+                    app:srcCompat="@drawable/ic__uptoskillslogo"
                     android:layout_gravity="right"/>
             </FrameLayout>
 
