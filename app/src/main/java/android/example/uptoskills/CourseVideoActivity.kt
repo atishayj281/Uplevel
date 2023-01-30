@@ -6,13 +6,11 @@ import android.example.uptoskills.daos.CourseDao
 import android.example.uptoskills.databinding.ActivityCourseVideoBinding
 import android.example.uptoskills.models.FreeCourse
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.pierfrancescosoffritti.youtubeplayer.player.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayer
-import com.pierfrancescosoffritti.youtubeplayer.player.YouTubePlayerInitListener
 import com.pierfrancescosoffritti.youtubeplayer.ui.PlayerUIController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -58,7 +56,7 @@ class CourseVideoActivity : AppCompatActivity(), videoItemClicked {
                 }
             }
         }
-        binding.youtubePlayerView.initialize(YouTubePlayerInitListener { initializedYouTubePlayer ->
+        binding.youtubePlayerView.initialize({ initializedYouTubePlayer ->
             initializedYouTubePlayer.addListener(object : AbstractYouTubePlayerListener() {
                 override fun onReady() {
                     mInitializedYouTubePlayer = initializedYouTubePlayer

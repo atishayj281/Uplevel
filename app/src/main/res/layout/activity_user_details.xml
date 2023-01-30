@@ -76,7 +76,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Download Profile"
-                            android:textColor="?attr/tC"
+                            android:textColor="@color/black"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -107,7 +107,7 @@
                         android:layout_marginBottom="10dp"
                         android:hint="Full Name"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
 
@@ -115,7 +115,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_person"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -127,7 +127,7 @@
                         android:hint="Mobile No."
                         app:counterMaxLength="10"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/mobile"
@@ -136,7 +136,7 @@
                             android:drawableLeft="@drawable/ic_outline_call_24"
                             android:drawablePadding="10dp"
                             android:maxLength="10"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
@@ -147,7 +147,7 @@
                         android:hint="Address"
                         app:boxStrokeColor="@color/blue"
                         android:id="@+id/address"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
 
@@ -155,7 +155,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_outline_call_24"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,7 +166,7 @@
                         android:layout_marginBottom="10dp"
                         android:hint="Highest Qualification"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/education"
@@ -174,7 +174,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_education"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -185,7 +185,7 @@
                         android:layout_marginBottom="10dp"
                         android:hint="Current Job"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/currentJob"
@@ -193,7 +193,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_job"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -203,7 +203,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Organisation"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/college"
@@ -211,7 +211,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_education"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -223,7 +223,7 @@
                         android:animateLayoutChanges="true"
                         android:hint="E-Mail"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/email"
@@ -231,7 +231,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_baseline_email_24"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
@@ -244,7 +244,7 @@
                         app:boxStrokeColor="@color/blue"
                         app:counterMaxLength="60"
                         app:counterEnabled="true"
-                        app:hintTextColor="?attr/tC"
+                        app:hintTextColor="@color/black"
                         android:id="@+id/skills">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -252,7 +252,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -273,14 +273,14 @@
                         app:boxStrokeColor="@color/blue"
                         app:counterMaxLength="50"
                         app:counterEnabled="true"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
 
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -297,14 +297,14 @@
                         android:gravity="top"
                         android:layout_marginBottom="10dp"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:gravity="top"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -325,14 +325,14 @@
                         app:boxStrokeColor="@color/blue"
                         app:counterMaxLength="50"
                         app:counterEnabled="true"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
 
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -349,14 +349,14 @@
                         android:gravity="top"
                         android:layout_marginBottom="10dp"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:gravity="top"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -381,14 +381,14 @@
                         android:gravity="top"
                         android:layout_marginBottom="10dp"
                         app:boxStrokeColor="@color/blue"
-                        app:hintTextColor="?attr/tC">
+                        app:hintTextColor="@color/black">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:gravity="top"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:drawablePadding="10dp"
-                            android:textColor="?attr/tC" />
+                            android:textColor="@color/black" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -398,7 +398,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:text="Resume"
-                        android:textColor="?attr/tC"
+                        android:textColor="@color/black"
                         android:textStyle="bold" />
 
                     <FrameLayout

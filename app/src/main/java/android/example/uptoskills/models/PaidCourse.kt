@@ -15,5 +15,6 @@ data class PaidCourse(val category: String="",
                       val price: Int=0,
                       val link: String="",
                       val time: String="",
-                      val start_time: String=""
+                      val start_time: String="",
+                        val rating: Float = 4.6f
                       )

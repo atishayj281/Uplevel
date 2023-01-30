@@ -20,9 +20,7 @@ class PaidCourseAdapter(val context: Context, val listner: paidCourseclicked, va
 ): FirestoreRecyclerAdapter<PaidCourse, PaidCourseAdapter.CourseViewholder>(options) {
     inner class CourseViewholder(itemview: View): RecyclerView.ViewHolder(itemview) {
         var courseImage: ImageView = itemview.findViewById(R.id.courseImage)
-        var courseCategory: TextView = itemview.findViewById(R.id.CourseCategory)
         var courseName: TextView = itemview.findViewById(R.id.CourseName)
-        var courseDescription: TextView = itemview.findViewById(R.id.CourseDescription)
         var course: MaterialCardView = itemview.findViewById(R.id.course)
     }
 
@@ -37,10 +35,8 @@ class PaidCourseAdapter(val context: Context, val listner: paidCourseclicked, va
     }
 
     override fun onBindViewHolder(holder: CourseViewholder, position: Int, model: PaidCourse) {
-        holder.courseCategory.text = model.category
-        holder.courseDescription.text = model.course_description
         holder.courseName.text = model.course_name
-        Glide.with(holder.courseImage.context).load(model.course_image).centerCrop().into(holder.courseImage)
+        Glide.with(holder.courseImage.context).load(model.course_image).centerInside().into(holder.courseImage)
 
     }
 }

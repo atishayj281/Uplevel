@@ -21,9 +21,7 @@ class MyPaidCourseAdapter(val context: Context, val listener: CourseItemClicked,
 
     inner class CourseViewholder(itemview: View): RecyclerView.ViewHolder(itemview) {
         var courseImage: ImageView = itemview.findViewById(R.id.courseImage)
-        var courseCategory: TextView = itemview.findViewById(R.id.CourseCategory)
         var courseName: TextView = itemview.findViewById(R.id.CourseName)
-        var courseDescription: TextView = itemview.findViewById(R.id.CourseDescription)
         var course: MaterialCardView = itemview.findViewById(R.id.course)
         val isCompleted: TextView = itemview.findViewById(R.id.isComplete)
     }
@@ -37,8 +35,6 @@ class MyPaidCourseAdapter(val context: Context, val listener: CourseItemClicked,
     }
 
     override fun onBindViewHolder(holder: CourseViewholder, position: Int) {
-        holder.courseCategory.text = courses[position].category
-        holder.courseDescription.text = courses[position].course_description
         holder.courseName.text = courses[position].course_name
         Glide.with(holder.courseImage.context).load(courses[position].course_image).centerCrop().into(holder.courseImage)
         if(curUser.paidcourses?.get(courses[position].id)?.lowercase()  != "no") {

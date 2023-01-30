@@ -15,12 +15,12 @@ repositories
         }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "android.example.uptoskills"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -93,6 +93,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation('androidx.work:work-runtime:2.7.1')
 
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
 
@@ -104,7 +106,7 @@ dependencies {
 
 
     // Razorpay
-    implementation 'com.razorpay:checkout:1.6.8'
+//    implementation 'com.razorpay:checkout:1.6.8'
 
     // searchable spinner
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'

@@ -79,7 +79,7 @@
                     android:layout_marginLeft="20dp"
                     android:text="Instructor Name: "
                     android:id="@+id/InstructorNameheading"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                     android:id="@+id/InstructorName"
                     android:layout_below="@id/courseImage"
                     android:layout_toRightOf="@id/InstructorNameheading"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:text="Atishay"
                     android:layout_marginTop="20dp"
                     />
@@ -100,7 +100,7 @@
                     android:layout_marginLeft="20dp"
                     android:text="Course Category: "
                     android:id="@+id/CourseCategoryheading"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
                     android:id="@+id/CourseCategory"
                     android:layout_below="@id/InstructorNameheading"
                     android:layout_toRightOf="@id/CourseCategoryheading"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:text="Coding"
                     android:layout_marginTop="5dp"
                     />
@@ -129,7 +129,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:textColor="?attr/tC"/>
+                    android:textColor="@color/black"/>
 
                 <View
                     android:layout_width="wrap_content"
@@ -149,7 +149,7 @@
                     android:layout_marginBottom="10dp"
                     android:text="Course Curriculum"
                     android:textStyle="bold"
-                    android:textColor="?attr/tC"/>
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -160,7 +160,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:textColor="?attr/tC"/>
+                    android:textColor="@color/black"/>
 
                 <View
                     android:layout_width="wrap_content"
@@ -174,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Language: "
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:layout_below="@id/courseCurriculum"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
@@ -188,7 +188,7 @@
                     android:layout_toRightOf="@id/languageheading"
                     android:layout_marginTop="20dp"
                     android:text="English"
-                    android:textColor="?attr/tC"/>
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -197,7 +197,7 @@
                     android:layout_below="@id/languageheading"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:id="@+id/durationHeading"/>
                 <TextView
@@ -207,7 +207,7 @@
                     android:layout_below="@id/languageheading"
                     android:layout_toRightOf="@id/durationHeading"
                     android:layout_marginTop="10dp"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:id="@+id/duration"/>
 
                 <TextView
@@ -218,7 +218,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
                     android:text="Lectures: "
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -229,7 +229,7 @@
                     android:layout_toRightOf="@id/lecturesHeading"
                     android:layout_marginTop="10dp"
                     android:text="24"
-                    android:textColor="?attr/tC"/>
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -239,7 +239,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
                     android:text="Class Time: "
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -249,7 +249,7 @@
                     android:layout_below="@id/lecturesHeading"
                     android:layout_toRightOf="@id/timeHeading"
                     android:layout_marginTop="10dp"
-                    android:textColor="?attr/tC"/>
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -259,7 +259,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
                     android:text="Certificate of Completion: "
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -270,7 +270,7 @@
                     android:layout_toRightOf="@id/certificateHeading"
                     android:layout_marginTop="10dp"
                     android:text="Yes"
-                    android:textColor="?attr/tC"/>
+                    android:textColor="@color/black"/>
 
 
                 <TextView
@@ -281,7 +281,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
                     android:text="Price: "
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -292,7 +292,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/priceheading"
                     android:text="Free"
-                    android:textColor="?attr/tC" />
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
 

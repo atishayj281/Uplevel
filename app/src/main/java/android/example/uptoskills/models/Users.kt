@@ -1,5 +1,7 @@
 package android.example.uptoskills.models
-
+/*
+* paidCourses: HashMap<CourseID, CourseStatus> i.e. if != no then certificate link
+* */
 data class Users(
     val achievements:String = "",
     val projectTitle: String = "",
@@ -23,6 +25,6 @@ data class Users(
     var referCode: String="",
     var coins: Int = 0,
     val bookmarks: HashMap<String, String>? = HashMap(),
-    val appliedJobs: HashMap<String, String>? = HashMap(),
+    val appliedJobs: HashMap<String, UserJobDetails>? = HashMap(),
     val events: ArrayList<String> = ArrayList(),
     )

@@ -2,16 +2,13 @@ package android.example.uptoskills
 
 import android.content.Intent
 import android.example.uptoskills.Adapters.CourseViewPagerAdapter
-import android.example.uptoskills.Fragment.MyFreeCourseFragment
-import android.example.uptoskills.Fragment.MyInternshipsFragment
-import android.example.uptoskills.Fragment.MyJobsFragment
-import android.example.uptoskills.Fragment.MyPaidCourseFragment
+import android.example.uptoskills.fragment.MyInternshipsFragment
+import android.example.uptoskills.fragment.MyJobsFragment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout

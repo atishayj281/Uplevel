@@ -1,6 +1,6 @@
 package android.example.uptoskills.models
 
-data class Internship (val applied: HashMap<String, String> = HashMap(),
+data class Internship (val applied: HashMap<String, JobDetails> = HashMap(),
                        var candidate_required_location: String="",
                        var category:String="",
                        var company_logo_url: String="",

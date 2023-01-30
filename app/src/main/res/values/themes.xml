@@ -47,9 +47,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="bgc">#121212</item>
-        <item name="tC">#FFFFFF</item>
-        <item name="mbgc">#1C7E48</item>
+<!--        <item name="bgc">#121212</item>-->
+<!--        <item name="tC">#FFFFFF</item>-->
+<!--        <item name="mbgc">#1C7E48</item>-->
     </style>
 
     <style name="OrangeTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -70,9 +70,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="bgc">@color/white</item>
-        <item name="tC">@color/black</item>
-        <item name="mbgc">#F8ECE7</item>
+<!--        <item name="bgc">@color/white</item>-->
+<!--        <item name="tC">@color/black</item>-->
+<!--        <item name="mbgc">#F8ECE7</item>-->
     </style>
 
     <style name="Theme.SignIn" parent="Theme.MaterialComponents.DayNight.Bridge">

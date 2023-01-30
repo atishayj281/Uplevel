@@ -41,7 +41,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="right|center_vertical"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_uplevel"
+                    app:srcCompat="@drawable/ic__uptoskillslogo"
                     />
 
             </FrameLayout>
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:text="Terms of Use"
         style="@style/TextAppearance.MaterialComponents.Headline5"
-        android:textColor="?attr/tC"
+        android:textColor="@color/black"
         android:layout_marginBottom="10dp"
         />
 
@@ -94,7 +94,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/tC"
+                android:textColor="@color/black"
                 android:text="Who May Use our Services"
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_marginBottom="10dp"/>
@@ -109,7 +109,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Our License to You"
-                android:contentDescription="?attr/tC"
                 style="@style/TextAppearance.MaterialComponents.Headline5"
                 android:layout_marginBottom="10dp"/>
 

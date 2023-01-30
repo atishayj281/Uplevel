@@ -2,7 +2,7 @@ package android.example.uptoskills
 
 import android.example.uptoskills.Adapters.CourseItemClicked
 import android.example.uptoskills.Adapters.CourseViewPagerAdapter
-import android.example.uptoskills.Fragment.*
+import android.example.uptoskills.fragment.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent

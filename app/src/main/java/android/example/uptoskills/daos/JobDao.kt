@@ -2,9 +2,8 @@ package android.example.uptoskills.daos
 
 import android.content.Context
 import android.example.uptoskills.mail.JavaMailAPI
-import android.example.uptoskills.models.FreeCourse
-import android.example.uptoskills.models.Job
-import android.example.uptoskills.models.Users
+import android.example.uptoskills.mail.Utils
+import android.example.uptoskills.models.*
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
@@ -32,7 +31,7 @@ class JobDao {
 
     private fun sendMail(job: String, context: Context, user: Users) {
         GlobalScope.launch(Dispatchers.IO) {
-            val mail: String = "hr.uptoskills@gmail.com"
+            val mail: String = Utils.toMail
             val message: String = "Name: ${user.full_name}\nCurrent Position: ${user.job}\nOrganisation: ${user.college_name}\nMobile No.: ${user.mobileNo}"+
                     "\nHighest Qualification: ${user.education}\nResume: ${user.resume}\nEmail: ${user.email}\n has been applied for " + job
             val subject: String = "${user.full_name} has been applied for " + job
@@ -71,9 +70,9 @@ class JobDao {
                 val isEnrolled = job.applied.containsKey(currentUserId)
                 if(!isEnrolled) {
                     isSuccessful = true
-                    auth.currentUser!!.email?.let { job.applied.put(currentUserId, it) }
+                    auth.currentUser!!.email?.let { job.applied.put(currentUserId, JobDetails(it, 0)) }
                     jobCollection.document(jobId).set(job)
-                    user.appliedJobs?.set(jobId, "Job")
+                    user.appliedJobs?.set(jobId, UserJobDetails("Job", 0))
                     UsersDao().addUser(user, currentUserId)
                     withContext(Dispatchers.Main) {
                         sendMail(job.title, context, user)

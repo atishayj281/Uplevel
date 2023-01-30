@@ -21,8 +21,7 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
             android:padding="3dp"
-            android:text="User message"
-            android:textColor="@color/black" />
+            android:text="User message" />
 
         <ImageView
             android:layout_width="50dp"

@@ -123,8 +123,6 @@ class CertificateActivity : AppCompatActivity(), onCertificateClicked {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onClicked(course: PaidCourse) {
         binding.progressBar.visibility = View.VISIBLE
-
-
         val url: String? = user.paidcourses?.get(course.id.trim())
         if(url != null) {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 
-class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemId: Int): RecyclerView.Adapter<MyJobAdapter.JobViewHolder>() {
+class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemId: Int, val userId: String): RecyclerView.Adapter<MyJobAdapter.JobViewHolder>() {
 
     private var jobs: ArrayList<Job> = ArrayList()
 
@@ -25,6 +25,7 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemI
         var comapny_name = itemview.findViewById<TextView>(R.id.companyname)
         var jobLocation = itemview.findViewById<TextView>(R.id.jobLoc)
         var job_box = itemview.findViewById<MaterialCardView>(R.id.job_container)
+        val jobStatus = itemview.findViewById<TextView>(R.id.jobStatus)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
@@ -40,6 +41,14 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemI
         holder.jobLocation.text = jobs[position].candidate_required_location
         holder.job_type.text = jobs[position].job_type
         holder.jobtitle.text = jobs[position].title
+        val jobStatus: Int? = jobs[position].applied[userId]?.selectionStatus
+        if(jobStatus != null) {
+            when (jobStatus) {
+                1 -> holder.jobStatus.text = "Selected"
+                0 -> holder.jobStatus.text = "Pending"
+                -1 -> holder.jobStatus.text = "Rejected"
+            }
+        }
         Glide.with(holder.company_logo.context).load(jobs[position].company_logo_url)
             .circleCrop().into(holder.company_logo)
 

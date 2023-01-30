@@ -50,7 +50,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="My Jobs"
-                            android:textColor="?attr/tC"
+                            android:textColor="@color/black"
                             android:textStyle="bold"/>
 
                         <EditText
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             app:tabIndicatorColor="#00BEA3"
-            app:tabSelectedTextColor="?attr/tC">
+            app:tabSelectedTextColor="@color/black">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"

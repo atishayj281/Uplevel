@@ -22,7 +22,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-import com.razorpay.Checkout
+//import com.razorpay.Checkout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -64,8 +64,8 @@ class UserDetailsActivity : AppCompatActivity() {
 
         userDetailsLayout = binding.userDetailsLayout
 
-        Checkout.preload(applicationContext)
-        Checkout.clearUserData(this)
+//        Checkout.preload(applicationContext)
+//        Checkout.clearUserData(this)
         auth = FirebaseAuth.getInstance()
 
         userDao = UsersDao()

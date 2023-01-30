@@ -57,11 +57,11 @@ class CourseEnquiryActivity : AppCompatActivity() {
         binding.submit.setOnClickListener {
             if(binding.query.text.toString().trim().isNotEmpty()
                 && binding.contactNo.text.toString().trim().isNotEmpty()) {
-                val emailsend: String = "atishayj281@gmail.com"
+                val emailsend: String = "hr.uptoskills@gmail.com"
                 val emailsubject: String = "App Query"
 
                 val emailbody: String =
-                    binding.query.text.toString() + "\nContact No: " + binding.contactNo.text.toString() + "\nMail Id: " + FirebaseAuth.getInstance().currentUser?.email
+                    binding.query.text.toString() + "\nContact No: " + binding.contactNo.text.toString() + "\nMail Id: " + binding.email.text.toString()
 
                 val javaMailAPI = JavaMailAPI(this, emailsend, emailsubject, emailbody)
                 javaMailAPI.sendMail()

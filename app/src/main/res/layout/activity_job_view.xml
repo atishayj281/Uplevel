@@ -98,7 +98,7 @@
                     android:id="@+id/title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/isBookmarked"
@@ -130,7 +130,7 @@
                     android:layout_below="@id/titleLayout"
                     android:layout_margin="10dp"
                     android:layout_toRightOf="@id/logo"
-                    android:textColor="?attr/tC" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/location"
@@ -139,7 +139,7 @@
                     android:layout_below="@id/companyname"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@id/logo"
-                    android:textColor="?attr/tC" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/totalAppliedheading"
@@ -150,7 +150,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:text="Applied: "
-                    android:textColor="?attr/tC" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/totalApplied"
@@ -159,7 +159,7 @@
                     android:layout_below="@id/logo"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/totalAppliedheading"
-                    android:textColor="?attr/tC" />
+                    android:textColor="@color/black" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -207,7 +207,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Job Description"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -216,14 +216,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:textColor="?attr/tC" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="Basic Qualifications"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <TextView
@@ -234,14 +234,14 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="10dp"
-                    android:textColor="?attr/tC" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="Preferred Qualifications"
-                    android:textColor="?attr/tC"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
                 <TextView
@@ -252,7 +252,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="10dp"
-                    android:textColor="?attr/tC" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
         </LinearLayout>

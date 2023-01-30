@@ -42,6 +42,8 @@ import com.cashfree.pg.CFPaymentService.PARAM_ORDER_ID
 import com.cashfree.pg.CFPaymentService.PARAM_APP_ID
 
 import android.example.uptoskills.models.*
+import android.net.Uri
+import android.view.View
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -74,6 +76,12 @@ class CourseViewActivity : AppCompatActivity() {
         }
 
         courseId = intent.getStringExtra("courseId").toString()
+        if(courseId.trim().isEmpty() || courseId.equals("null")) {
+            val uri: Uri? = intent.data
+            if(uri != null) {
+                Log.e("URi", uri.toString())
+            }
+        }
         courseDao = CourseDao()
         val isFree: Boolean = intent.getStringExtra("courseCategory") == "free"
             if (isFree) {
@@ -84,13 +92,16 @@ class CourseViewActivity : AppCompatActivity() {
                         binding.CourseCategory.text = course.category
                         binding.CourseDescription.text = course.course_description
                         binding.InstructorName.text = course.mentor_name
-                        binding.certificate.text = if (course.certificate) "Yes" else "No"
+                        binding.certificate.text = if (course.price == 0) "Yes" else "No"
+                        binding.certificatePreview.visibility = View.GONE
                         binding.duration.text = course.course_duration
                         binding.language.text = course.language
                         binding.lectures.text = course.lectures.toString()
                         binding.price.text =
                             if (course.price == 0) "Free" else course.price.toString()
+                        binding.courseName.text = course.course_name
                         binding.courseCurriculum.text = String.format(course.curriculum)
+                        binding.courseRatings.text = course.rating.toString()
                         Glide.with(this@CourseViewActivity).load(course.course_image).centerCrop()
                             .into(binding.courseImage)
                     }
@@ -100,6 +111,7 @@ class CourseViewActivity : AppCompatActivity() {
                     paidCourse =
                         PaidCourseDao().getCoursebyId(courseId).await().toObject(PaidCourse::class.java)!!
                 withContext(Dispatchers.Main) {
+                    binding.courseName.text = paidCourse.course_name
                     binding.CourseCategory.text = paidCourse.category
                     binding.CourseDescription.text = paidCourse.course_description
                     binding.InstructorName.text = paidCourse.mentor_name
@@ -112,6 +124,7 @@ class CourseViewActivity : AppCompatActivity() {
                     binding.courseCurriculum.text = String.format(paidCourse.curriculum)
                     Glide.with(this@CourseViewActivity).load(paidCourse.course_image).centerCrop()
                         .into(binding.courseImage)
+                    binding.courseRatings.text = paidCourse.rating.toString()
                 }
 
             }
@@ -182,7 +195,7 @@ class CourseViewActivity : AppCompatActivity() {
         } else {
             var price = paidCourse.price
 
-            if(curUser.coins >= 100) {
+            if(curUser.coins >= 100 && price >= 100) {
                 price -= 100
                 isCoinsUsed = true
             }
@@ -190,6 +203,7 @@ class CourseViewActivity : AppCompatActivity() {
             if(price == 0) {
                 PaidCourseDao().EnrollStudents(courseId, this, curUser)
             } else {
+                Log.e("Course Price", price.toString())
                 price *= 100
                 if(price > 0) {
                     /*val activity: Activity = this

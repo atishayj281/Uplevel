@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="My Courses"
                 android:layout_marginLeft="10dp"
-                android:textColor="?attr/tC"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"/>
 
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             app:tabIndicatorColor="#00BEA3"
-            app:tabSelectedTextColor="?attr/tC">
+            app:tabSelectedTextColor="@color/black">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"

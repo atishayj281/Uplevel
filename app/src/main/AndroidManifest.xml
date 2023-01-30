@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -60,11 +61,34 @@
         <activity android:name=".BookmarkActivity" />
         <activity android:name=".CertificateActivity" />
         <activity android:name=".CourseEnquiryActivity" />
-        <activity android:name=".JobViewActivity" />
+        <activity
+            android:name=".JobViewActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="www.uptoskills.com/jobs/{id}" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MyCourseActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".CourseViewActivity" />
+        <activity
+            android:name=".CourseViewActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="www.uptoskills.com" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".PrivacyPolicyActivity"
             android:parentActivityName=".MainActivity" />
@@ -80,7 +104,8 @@
         <activity android:name=".OnBoardingActivity" />
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -117,7 +142,8 @@
 
         <service
             android:name=".services.MyNotifications"
-            android:stopWithTask="false">
+            android:stopWithTask="false"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -128,7 +154,9 @@
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="upi" android:host="pay"/>
+            <data
+                android:scheme="upi"
+                android:host="pay" />
         </intent>
         <package android:name="com.android.chrome" />
     </queries>

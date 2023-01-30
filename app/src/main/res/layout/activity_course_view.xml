@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CourseViewActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".CourseViewActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarlayout"
@@ -30,19 +30,18 @@
 
 
                 <ImageView
+                    android:id="@+id/back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_action_back"
-                    android:id="@+id/back"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/ic_action_back" />
 
                 <ImageView
                     android:layout_width="152dp"
                     android:layout_height="50dp"
                     android:layout_gravity="right|center_vertical"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic__uptoskillslogo"
-                    />
+                    app:srcCompat="@drawable/ic__uptoskillslogo" />
 
             </FrameLayout>
 
@@ -50,11 +49,6 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
 
     <ScrollView
         android:layout_width="match_parent"
@@ -65,65 +59,122 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/courseImage"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:id="@+id/courseImage"
-                android:scaleType="centerInside"/>
+                android:scaleType="centerInside" />
 
             <TextView
+                android:id="@+id/courseName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/courseImage"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
                 android:text="Instructor Name: "
-                android:id="@+id/InstructorNameheading"
                 android:textColor="?attr/tC"
-                android:textStyle="bold"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/InstructorName"
-                android:layout_below="@id/courseImage"
-                android:layout_toRightOf="@id/InstructorNameheading"
-                android:textColor="?attr/tC"
-                android:text="Atishay"
-                android:layout_marginTop="20dp"
-                />
+                android:textStyle="bold"
+                android:textSize="20sp"/>
 
             <TextView
+                android:id="@+id/InstructorNameheading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/InstructorNameheading"
-                android:layout_marginTop="5dp"
+                android:layout_below="@id/courseName"
                 android:layout_marginLeft="20dp"
-                android:text="Course Category: "
-                android:id="@+id/CourseCategoryheading"
+                android:layout_marginTop="10dp"
+                android:text="Instructor Name: "
                 android:textColor="?attr/tC"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <TextView
+                android:id="@+id/InstructorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/CourseCategory"
+                android:layout_below="@id/courseName"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/InstructorNameheading"
+                android:text="Atishay"
+                android:textColor="?attr/tC"/>
+
+            <TextView
+                android:id="@+id/CourseCategoryheading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/InstructorNameheading"
-                android:layout_toRightOf="@id/CourseCategoryheading"
-                android:textColor="?attr/tC"
-                android:text="Coding"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="5dp"
-                />
+                android:text="Course Category: "
+                android:textColor="?attr/tC"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/courseRatings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/CourseCategoryheading"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:text="4.6"
+                android:textColor="?attr/tC"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/CourseCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/InstructorNameheading"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/CourseCategoryheading"
+                android:text="Coding"
+                android:textColor="?attr/tC" />
 
             <View
+                android:id="@+id/t1"
+                android:layout_below="@id/courseRatings"
                 android:layout_width="wrap_content"
-                android:layout_height="1dp"
+                android:layout_height="20dp"
                 android:layout_marginTop="6.3dp"
-                android:layout_below="@id/CourseCategory"
-                android:background="#d5d5d5" />
+                android:background="#F5F5F5" />
 
             <TextView
                 android:id="@+id/CourseDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/CourseCategory"
+                android:layout_below="@id/t1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:textColor="?attr/tC" />
+
+            <View
+                android:id="@+id/t2"
+                android:layout_width="wrap_content"
+                android:layout_below="@id/CourseDescription"
+                android:layout_height="30dp"
+                android:layout_marginTop="6.3dp"
+                android:background="#F5F5F5" />
+
+            <TextView
+                android:id="@+id/courseCurriculumheading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/t2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="Course Curriculum"
+                android:textColor="?attr/tC"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/courseCurriculum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/courseCurriculumheading"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
@@ -131,184 +182,141 @@
                 android:textColor="?attr/tC" />
 
             <View
+                android:id="@+id/t3"
                 android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:layout_marginTop="6.3dp"
-                android:layout_below="@id/CourseDescription"
-                android:background="#d5d5d5" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/courseCurriculumheading"
-                android:layout_below="@id/CourseDescription"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:text="Course Curriculum"
-                android:textStyle="bold"
-                android:textColor="?attr/tC"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/courseCurriculum"
-                android:layout_below="@id/courseCurriculumheading"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:textColor="?attr/tC"/>
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:layout_marginTop="6.3dp"
+                android:layout_height="30dp"
                 android:layout_below="@id/courseCurriculum"
-                android:background="#d5d5d5" />
+                android:layout_marginTop="6.3dp"
+                android:background="#F5F5F5" />
 
             <TextView
                 android:id="@+id/languageheading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/t3"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
                 android:text="Language: "
                 android:textColor="?attr/tC"
-                android:layout_below="@id/courseCurriculum"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/language"
-                android:layout_below="@id/courseCurriculum"
-                android:layout_toRightOf="@id/languageheading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/t3"
                 android:layout_marginTop="20dp"
+                android:layout_toRightOf="@id/languageheading"
                 android:text="English"
-                android:textColor="?attr/tC"/>
+                android:textColor="?attr/tC" />
 
             <TextView
+                android:id="@+id/durationHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/languageheading"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Duration: "
-                android:layout_below="@id/languageheading"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:textColor="?attr/tC"
-                android:textStyle="bold"
-                android:id="@+id/durationHeading"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2 Months"
-                android:layout_below="@id/languageheading"
-                android:layout_toRightOf="@id/durationHeading"
-                android:layout_marginTop="10dp"
-                android:textColor="?attr/tC"
-                android:id="@+id/duration"/>
+                android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/lecturesHeading"
-                android:layout_below="@id/durationHeading"
+                android:layout_below="@id/languageheading"
                 android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/durationHeading"
+                android:text="2 Months"
+                android:textColor="?attr/tC" />
+
+            <TextView
+                android:id="@+id/lecturesHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/durationHeading"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Lectures: "
                 android:textColor="?attr/tC"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/lectures"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/durationHeading"
+                android:layout_marginTop="10dp"
                 android:layout_toRightOf="@id/lecturesHeading"
-                android:layout_marginTop="10dp"
                 android:text="24"
-                android:textColor="?attr/tC"/>
+                android:textColor="?attr/tC" />
+
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/QuizHeading"
-                android:layout_below="@id/lecturesHeading"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="Quizes: "
-                android:textColor="?attr/tC"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/Quiz"
-                android:layout_below="@id/lecturesHeading"
-                android:layout_toRightOf="@id/QuizHeading"
-                android:layout_marginTop="10dp"
-                android:text="4"
-                android:textColor="?attr/tC"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/certificateHeading"
-                android:layout_below="@id/QuizHeading"
-                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lectures"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Certificate of Completion: "
                 android:textColor="?attr/tC"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/certificate"
-                android:layout_below="@id/QuizHeading"
-                android:layout_toRightOf="@id/certificateHeading"
-                android:layout_marginTop="10dp"
-                android:text="Yes"
-                android:textColor="?attr/tC"/>
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/priceheading"
-                android:layout_below="@id/certificateHeading"
+                android:layout_below="@id/lectures"
                 android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/certificateHeading"
+                android:text="Yes"
+                android:textColor="?attr/tC" />
+
+            <TextView
+                android:id="@+id/priceheading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/certificateHeading"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Price: "
                 android:textColor="?attr/tC"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/price"
                 android:layout_below="@id/certificateHeading"
-                android:layout_toRightOf="@id/priceheading"
                 android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/priceheading"
                 android:text="Free"
-                android:textColor="?attr/tC"/>
+                android:textColor="?attr/tC" />
+
+            <ImageView
+                android:id="@+id/certificate_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/price"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/course_certificate_preview" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/enroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/certificate_preview"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_margin="20dp"
+                android:backgroundTint="#2142BF"
+                android:elevation="4dp"
+                android:text="Enroll"
+                android:textColor="@color/white" />
 
         </RelativeLayout>
 
     </ScrollView>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/enroll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#2196F3"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_margin="20dp"
-        android:elevation="4dp"
-        android:textColor="@color/white"
-        android:text="Enroll"/>
-
-
-    </FrameLayout>
 </LinearLayout>

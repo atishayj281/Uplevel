@@ -26,7 +26,8 @@ class JavaMailAPI(val mContext: Context,val mEmail: String,val mSubject: String,
             props.put("mail.smtp.socketFactory.port", "465")
             props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory")
             props.put("mail.smtp.auth", "true")
-            props.put("mail.smtp.port", "465")
+            props.put("mail.smtp.port", "587")
+            props.put("mail.smtp.starttls.enable", "true");
 
             //Creating a new session
             mSession = Session.getDefaultInstance(props,
@@ -50,26 +51,6 @@ class JavaMailAPI(val mContext: Context,val mEmail: String,val mSubject: String,
                 mm.setText(mMessage)
                 //Sending email
                 Transport.send(mm)
-
-//            BodyPart messageBodyPart = new MimeBodyPart();
-//
-//            messageBodyPart.setText(message);
-//
-//            Multipart multipart = new MimeMultipart();
-//
-//            multipart.addBodyPart(messageBodyPart);
-//
-//            messageBodyPart = new MimeBodyPart();
-//
-//            DataSource source = new FileDataSource(filePath);
-//
-//            messageBodyPart.setDataHandler(new DataHandler(source));
-//
-//            messageBodyPart.setFileName(filePath);
-//
-//            multipart.addBodyPart(messageBodyPart);
-
-//            mm.setContent(multipart);
             } catch (e: MessagingException) {
                 e.printStackTrace()
             }

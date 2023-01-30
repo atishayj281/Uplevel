@@ -3,6 +3,8 @@ package android.example.uptoskills.daos
 import android.content.Context
 import android.example.uptoskills.mail.JavaMailAPI
 import android.example.uptoskills.models.Job
+import android.example.uptoskills.models.JobDetails
+import android.example.uptoskills.models.UserJobDetails
 import android.example.uptoskills.models.Users
 import android.util.Log
 import android.widget.Toast
@@ -52,9 +54,9 @@ class InternshipDao {
                 val isEnrolled = job.applied.containsKey(currentUserId)
                 if(!isEnrolled) {
                     isSuccessful = true
-                    auth.currentUser!!.email?.let { job.applied.put(currentUserId, it) }
+                    auth.currentUser!!.email?.let { job.applied.put(currentUserId, JobDetails(it, 0)) }
                     jobCollection.document(jobId).set(job)
-                    user.appliedJobs?.put(jobId, "Internship")
+                    user.appliedJobs?.put(jobId, UserJobDetails("Internship", 0))
                     UsersDao().addUser(user, currentUserId)
                     withContext(Dispatchers.Main){
                         sendMail(job.title, context, user)

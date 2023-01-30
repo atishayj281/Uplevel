@@ -6,19 +6,28 @@
         <entry key="..\:/GetWork/app/src/main/res/drawable-anydpi/ic_action_back.xml" value="0.19814814814814816" />
         <entry key="..\:/GetWork/app/src/main/res/drawable-anydpi/ic_launcher.xml" value="0.19814814814814816" />
         <entry key="..\:/GetWork/app/src/main/res/drawable-v24/edittext_round_shape.xml" value="0.19166666666666668" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/bg_free_course_video_lessons.xml" value="0.173" />
         <entry key="..\:/GetWork/app/src/main/res/drawable/ic__uptoskillslogo.xml" value="0.203125" />
         <entry key="..\:/GetWork/app/src/main/res/drawable/ic_about_us.xml" value="0.19166666666666668" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/ic_baseline_email_24.xml" value="0.1" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/ic_certificate.xml" value="0.173" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/ic_certificate_preview.xml" value="0.173" />
         <entry key="..\:/GetWork/app/src/main/res/drawable/ic_danger.xml" value="0.203125" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/ic_education.xml" value="0.1" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/ic_frame_16.xml" value="0.173" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/ic_job.xml" value="0.1" />
         <entry key="..\:/GetWork/app/src/main/res/drawable/ic_menu.xml" value="0.19947916666666668" />
         <entry key="..\:/GetWork/app/src/main/res/drawable/ic_messenger.xml" value="0.11302083333333333" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/ic_outline_call_24.xml" value="0.1" />
         <entry key="..\:/GetWork/app/src/main/res/drawable/ic_person.xml" value="0.203125" />
+        <entry key="..\:/GetWork/app/src/main/res/drawable/ic_rewards.xml" value="0.173" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_blog_view.xml" value="0.18333333333333332" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_bookmark.xml" value="0.1712962962962963" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_certificate.xml" value="0.15648148148148147" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_chatbot.xml" value="0.2" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_course_enquiry.xml" value="0.18051282051282053" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_course_video.xml" value="0.17407407407407408" />
-        <entry key="..\:/GetWork/app/src/main/res/layout/activity_course_view.xml" value="0.18051282051282053" />
+        <entry key="..\:/GetWork/app/src/main/res/layout/activity_course_view.xml" value="0.25" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_create_account.xml" value="0.18333333333333332" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_event_view.xml" value="0.22" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_job_view.xml" value="0.2" />
@@ -35,7 +44,7 @@
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_sign_up.xml" value="0.1685185185185185" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_splash_screen.xml" value="0.18333333333333332" />
         <entry key="..\:/GetWork/app/src/main/res/layout/activity_terms_and_condition.xml" value="0.18333333333333332" />
-        <entry key="..\:/GetWork/app/src/main/res/layout/activity_user_details.xml" value="0.25" />
+        <entry key="..\:/GetWork/app/src/main/res/layout/activity_user_details.xml" value="0.1" />
         <entry key="..\:/GetWork/app/src/main/res/layout/blog_item.xml" value="0.12407407407407407" />
         <entry key="..\:/GetWork/app/src/main/res/layout/bot_msg.xml" value="0.18697916666666667" />
         <entry key="..\:/GetWork/app/src/main/res/layout/certificate_item.xml" value="0.18333333333333332" />
@@ -44,7 +53,7 @@
         <entry key="..\:/GetWork/app/src/main/res/layout/fragment_course.xml" value="0.18333333333333332" />
         <entry key="..\:/GetWork/app/src/main/res/layout/fragment_event.xml" value="0.22" />
         <entry key="..\:/GetWork/app/src/main/res/layout/fragment_free_course.xml" value="0.17407407407407408" />
-        <entry key="..\:/GetWork/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/GetWork/app/src/main/res/layout/fragment_home.xml" value="0.409375" />
         <entry key="..\:/GetWork/app/src/main/res/layout/fragment_internship.xml" value="0.17407407407407408" />
         <entry key="..\:/GetWork/app/src/main/res/layout/fragment_job.xml" value="0.18333333333333332" />
         <entry key="..\:/GetWork/app/src/main/res/layout/fragment_my_free_course.xml" value="0.17407407407407408" />
@@ -54,15 +63,16 @@
         <entry key="..\:/GetWork/app/src/main/res/layout/fragment_only_jobs.xml" value="0.17407407407407408" />
         <entry key="..\:/GetWork/app/src/main/res/layout/fragment_paid_course.xml" value="0.17407407407407408" />
         <entry key="..\:/GetWork/app/src/main/res/layout/home_blog_item.xml" value="0.18333333333333332" />
-        <entry key="..\:/GetWork/app/src/main/res/layout/home_course_item.xml" value="0.13055555555555556" />
+        <entry key="..\:/GetWork/app/src/main/res/layout/home_course_item.xml" value="1.1" />
         <entry key="..\:/GetWork/app/src/main/res/layout/home_job_item.xml" value="0.1712962962962963" />
         <entry key="..\:/GetWork/app/src/main/res/layout/home_navigation_header_layout.xml" value="0.25" />
         <entry key="..\:/GetWork/app/src/main/res/layout/internship_item.xml" value="0.1984375" />
-        <entry key="..\:/GetWork/app/src/main/res/layout/item_course.xml" value="0.2" />
-        <entry key="..\:/GetWork/app/src/main/res/layout/job_item.xml" value="0.18333333333333332" />
+        <entry key="..\:/GetWork/app/src/main/res/layout/item_course.xml" value="0.27906976744186046" />
+        <entry key="..\:/GetWork/app/src/main/res/layout/job_item.xml" value="0.5" />
         <entry key="..\:/GetWork/app/src/main/res/layout/qfill_item.xml" value="0.18697916666666667" />
         <entry key="..\:/GetWork/app/src/main/res/layout/ques_item.xml" value="0.1638888888888889" />
-        <entry key="..\:/GetWork/app/src/main/res/layout/user_msg.xml" value="0.18697916666666667" />
+        <entry key="..\:/GetWork/app/src/main/res/layout/slide_layout.xml" value="0.2046875" />
+        <entry key="..\:/GetWork/app/src/main/res/layout/user_msg.xml" value="0.5" />
         <entry key="..\:/GetWork/app/src/main/res/layout/video.xml" value="0.16944444444444445" />
         <entry key="..\:/GetWork/app/src/main/res/menu/home_menu_items.xml" value="0.17314814814814813" />
         <entry key="..\:/GetWork/app/src/main/res/menu/menu_items.xml" value="0.18333333333333332" />
@@ -71,7 +81,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

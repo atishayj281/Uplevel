@@ -2,10 +2,11 @@ package android.example.uptoskills
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.example.uptoskills.Fragment.*
+import android.example.uptoskills.fragment.*
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityMainBinding
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -62,7 +63,13 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener{
         }
     }
 
+    private var backPressed = 2
+
     override fun onBackPressed() {
+        if(backPressed > 1) {
+            Toast.makeText(this, "Press back one more time to exit", Toast.LENGTH_SHORT).show()
+            backPressed--
+        }
         if(binding.bottomNavigation.selectedItemId == R.id.home){
             super.onBackPressed()
         } else {
