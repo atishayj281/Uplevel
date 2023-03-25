@@ -45,9 +45,9 @@ class JobViewActivity : AppCompatActivity() {
         userDao = UsersDao()
         auth = FirebaseAuth.getInstance()
         jobDao = JobDao()
-        if(!isJob) {
-            binding.isBookmarked.visibility = View.GONE
-        }
+//        if(!isJob) {
+//            binding.isBookmarked.visibility = View.GONE
+//        }
         GlobalScope.launch(Dispatchers.IO) {
             curUser = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }!!
 
@@ -59,7 +59,7 @@ class JobViewActivity : AppCompatActivity() {
                     binding.alreadyApplied.visibility = View.GONE
                     binding.Applybtn.visibility = View.VISIBLE
                 }
-                if(curUser.bookmarks?.containsKey(jobId) == true) {
+                if(curUser.bookmarks?.containsKey(jobId) == true && curUser.bookmarks!![jobId] == intent.getStringExtra("category")) {
                     binding.isBookmarked.setImageDrawable(ContextCompat.getDrawable(binding.isBookmarked.context, R.drawable.ic_bookmarked))
                 } else {
                     binding.isBookmarked.setImageDrawable(ContextCompat.getDrawable(binding.isBookmarked.context, R.drawable.ic_unbookmark))
@@ -87,15 +87,38 @@ class JobViewActivity : AppCompatActivity() {
         }
 
         binding.isBookmarked.setOnClickListener {
-            if(curUser.bookmarks?.containsKey(jobId) == true) {
-                binding.isBookmarked.setImageDrawable(ContextCompat.getDrawable(binding.isBookmarked.context, R.drawable.ic_unbookmark))
-                curUser.bookmarks?.remove(jobId, intent.getStringExtra("category").toString().trim())
-            } else {
-                binding.isBookmarked.setImageDrawable(ContextCompat.getDrawable(binding.isBookmarked.context, R.drawable.ic_bookmarked))
+            Log.e(jobId, isJob.toString())
+            Log.e("isJob", isJob.toString())
+            if(isJob) {
+                if (curUser.bookmarks?.containsKey(jobId) == true && curUser.bookmarks!![jobId] == intent.getStringExtra("category")) {
+                    binding.isBookmarked.setImageDrawable(ContextCompat.getDrawable(binding.isBookmarked.context,
+                        R.drawable.ic_unbookmark))
+                    curUser.bookmarks?.remove(jobId,
+                        intent.getStringExtra("category").toString().trim())
+                } else {
+                    binding.isBookmarked.setImageDrawable(ContextCompat.getDrawable(binding.isBookmarked.context,
+                        R.drawable.ic_bookmarked))
 
-                curUser.bookmarks?.set(jobId, intent.getStringExtra("category").toString().trim())
+                    curUser.bookmarks?.set(jobId,
+                        intent.getStringExtra("category").toString().trim())
+                }
+
+                jobDao.addbookmark(jobId)
+            } else {
+                if (curUser.bookmarks?.containsKey(jobId) == true && curUser.bookmarks!![jobId] == intent.getStringExtra("category")) {
+                    binding.isBookmarked.setImageDrawable(ContextCompat.getDrawable(binding.isBookmarked.context,
+                        R.drawable.ic_unbookmark))
+                    curUser.bookmarks?.remove(jobId,
+                        "internship")
+                } else {
+                    binding.isBookmarked.setImageDrawable(ContextCompat.getDrawable(binding.isBookmarked.context,
+                        R.drawable.ic_bookmarked))
+
+                    curUser.bookmarks?.set(jobId,
+                        "internship")
+                }
+                InternshipDao().addbookmark(jobId)
             }
-            jobDao.addbookmark(jobId)
             auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }
         }
 

@@ -44,16 +44,10 @@
             android:elevation="2dp">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 app:srcCompat="@drawable/ic_menu"
                 android:id="@+id/menuBar"/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                app:srcCompat="@drawable/ic__uptoskillslogo"
-                />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -88,10 +82,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:background="?attr/bgc"
             app:headerLayout="@layout/home_navigation_header_layout"
-            app:itemIconTint="@color/black"
-            app:itemTextColor="@color/black"
-            app:menu="@menu/home_menu_items" />
+            app:menu="@menu/home_menu_items"/>
     </androidx.drawerlayout.widget.DrawerLayout>
 
 

@@ -14,7 +14,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout"
-            style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+            style="@style/Widget.Material3.AppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
@@ -25,7 +25,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/hometoolBar"
-                style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
+                style="@style/Widget.Material3.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -83,9 +83,7 @@
             android:id="@+id/courseTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:tabIndicatorColor="#00BEA3"
-            app:tabSelectedTextColor="@color/black">
+            android:background="@android:color/transparent">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"

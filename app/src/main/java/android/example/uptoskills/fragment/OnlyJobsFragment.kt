@@ -14,6 +14,7 @@ import android.example.uptoskills.daos.JobDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.Job
 import android.example.uptoskills.models.Users
+import android.net.Uri
 import android.os.Build
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -87,7 +89,7 @@ class OnlyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
         if(filter.isEmpty()) {
             query = jobCollection.orderBy("id", Query.Direction.DESCENDING).limitToLast(30)
             val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Job>().setQuery(query, Job::class.java).build()
-            adapter = JobAdapter(recyclerViewOptions, this, R.layout.job_item)
+            adapter = JobAdapter(view.context, recyclerViewOptions, this, R.layout.job_item)
         } else {
             query = jobCollection
                 .whereEqualTo("category", filter)
@@ -138,15 +140,60 @@ class OnlyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onbookmarkCLick(itemId: String, itemtype: String) {
-        if(curUser.bookmarks?.containsKey(itemId) == true) {
+    override fun onbookmarkCLick(itemId: String, itemtype: String): Boolean {
+        var idBookmarked = true
+        if(curUser.bookmarks?.containsKey(itemId) == true && curUser.bookmarks!![itemId] == itemtype) {
+            idBookmarked = false
             curUser.bookmarks!!.remove(itemId, itemtype)
         } else {
             curUser.bookmarks?.set(itemId, itemtype)
         }
         jobDao.addbookmark(itemId)
         auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }
+        return idBookmarked
     }
+
+    override fun shareJob(itemId: String, itemtype: String) {
+        createReferLink(curUser.id, "${itemtype}#${itemId}")
+    }
+
+    private fun createReferLink(uId: String, productId: String) {
+        var link: String = "https://uptoskill.page.link/?"+
+                "link=https://www.uptoskill.com/myrefer.php?uId="+uId+"-"+productId+
+                "&apn="+activity?.packageName+
+                "&st=Join me on UptoSkills"+
+                "&sd=Reward UsCash 250"+
+                "&si=https://www.uptoskills.com/wp-content/uploads/2019/10/logo-dark.png"
+
+        // shorten the link
+
+        val shortLinkTask = activity?.let {
+            FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse(link))
+                .setDomainUriPrefix("https://uptoskills.page.link") // Set parameters
+                .buildShortDynamicLink()
+                .addOnCompleteListener(it
+                ) { task ->
+                    if (task.isSuccessful) {
+                        // Short link created
+                        val shortLink = task.result.shortLink
+                        val flowchartLink = task.result.previewLink
+
+                        val intent = Intent()
+                        intent.action = Intent.ACTION_SEND
+                        intent.putExtra(Intent.EXTRA_TEXT, shortLink.toString())
+                        intent.type = "text/plain"
+                        startActivity(intent)
+                        // ------ click -> link -> google play store -> installed/not ---------
+
+                    } else {
+                        // Error
+                        // ...
+                    }
+                }
+        }
+    }
+
 
     override fun updateRecyclerView(query: String) {
 

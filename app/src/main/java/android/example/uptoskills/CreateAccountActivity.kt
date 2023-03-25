@@ -37,56 +37,7 @@ class CreateAccountActivity : AppCompatActivity() {
 
         binding.crtaccount.setOnClickListener {
             binding.createAccountProgressBar.visibility = View.VISIBLE
-            if(binding.crtemail.text.toString().trim().isNotBlank() && binding.crtpass.text.toString().trim()
-                    .isNotBlank() && binding.crtUsername.text.trim().isNotBlank()
-            ){
-                auth.createUserWithEmailAndPassword(binding.crtemail.text.toString(), binding.crtpass.text.toString()).addOnCompleteListener {
-                    if(it.isSuccessful){
-                        changeAuth()
-                        binding.createAccountProgressBar.visibility = View.GONE
 
-                        //adding user to db
-                        val user: Users = Users("","", "", "", "", "", "", hashMapOf(), hashMapOf(),binding.crtUsername.text.toString(), binding.crtUsername.text.toString(),
-                        binding.crtemail.text.toString(), "", "", "", "", "",
-                            it.result.user?.uid!!, "", referId, 250)
-                        val userDao = UsersDao()
-
-
-                        GlobalScope.launch(Dispatchers.IO) {
-                            var referer: Users? = null
-                            if(referId.trim().isNotBlank() && referId.trim().lowercase() == "null") {
-
-                                referer =
-                                    userDao.getUserById(referId).await().toObject(Users::class.java)
-                                if (referer != null) {
-                                    referer.coins += 250
-                                    userDao.updateUser(referer, referId)
-                                }
-
-                            }
-                            userDao.addUser(user, it.result.user?.uid.toString())
-                        }
-                        val id: String? = it.result.user?.uid
-                        val intent = Intent(this, UserDetailsActivity::class.java)
-                        intent.putExtra("username", binding.crtUsername.text.toString())
-                        intent.putExtra("email", binding.crtemail.text.toString())
-                        intent.putExtra("id", id)
-                        intent.putExtra("userImage", "")
-                        intent.putExtra("Activity", "NewUser")
-                        startActivity(intent)
-                        finish()
-                    }
-                    else {
-                        binding.createAccountProgressBar.visibility = View.GONE
-                        Toast.makeText(this, it.exception?.message.toString(),
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } else {
-                binding.createAccountProgressBar.visibility = View.GONE
-                Toast.makeText(this, "Please Fill the required details",
-                    Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

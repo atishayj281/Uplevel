@@ -4,22 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.example.uptoskills.Adapters.SliderAdapter
-import android.graphics.Color
-import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
-import com.google.firebase.ktx.Firebase
 import java.lang.Exception
 
 class OnBoardingActivity : AppCompatActivity() {
@@ -42,7 +36,7 @@ class OnBoardingActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        referId = intent.getStringExtra("referId").toString()
+        referId = intent.getStringExtra("ReferId").toString()
         slideViewPager = findViewById(R.id.slideViewPager)
         dotsLayout = findViewById(R.id.dotLayout)
         sliderAdapter = SliderAdapter(this)

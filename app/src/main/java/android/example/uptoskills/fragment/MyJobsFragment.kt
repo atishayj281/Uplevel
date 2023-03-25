@@ -113,25 +113,6 @@ class MyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
         }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyJobsFragment.
-         */
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyJobsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
     override fun onJobCLick(jobId: String) {
         val intent = Intent(view?.context, JobViewActivity::class.java)
         intent.putExtra("jobId", jobId)
@@ -140,7 +121,11 @@ class MyJobsFragment : Fragment(), JobItemClicked, onJobSearch {
         startActivity(intent)
     }
 
-    override fun onbookmarkCLick(itemId: String, itemtype: String) {
+    override fun onbookmarkCLick(itemId: String, itemtype: String): Boolean {
+        return false
+    }
+
+    override fun shareJob(itemId: String, itemtype: String) {
 
     }
 

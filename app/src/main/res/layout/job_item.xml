@@ -4,94 +4,94 @@
     android:id="@+id/job_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
     android:layout_marginLeft="15dp"
     android:layout_marginTop="10dp"
     android:layout_marginRight="15dp"
     android:layout_marginBottom="10dp"
-    app:cardElevation="1dp"
-    >
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="?attr/bgc"
         android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/company_image"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_margin="10dp"
+            android:layout_alignParentTop="true"
+            android:clipToOutline="true"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <FrameLayout
-            android:id="@+id/jobTypeLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            app:layout_constraintStart_toEndOf="@id/company_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        <TextView
-            android:id="@+id/jobtype"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Full Time Job" />
-
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/jobStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textSize="16sp"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/jobname"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:text="Android Developer"
-            android:textColor="?attr/tC"
+            android:textColor="@color/orange"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/company_image"
-            app:layout_constraintTop_toBottomOf="@id/jobTypeLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:maxLines="2"
-            android:ellipsize="end"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/companyname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Growagro"
-            android:textColor="?attr/tC"
-            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:text="HBC"
             app:layout_constraintStart_toEndOf="@id/company_image"
             app:layout_constraintTop_toBottomOf="@id/jobname" />
 
         <TextView
+            android:id="@+id/rupee_symbol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="₹"
+            app:layout_constraintStart_toEndOf="@id/company_image"
+            app:layout_constraintTop_toBottomOf="@id/companyname" />
+
+        <TextView
+            android:id="@+id/salary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="45,000"
+            app:layout_constraintStart_toEndOf="@id/rupee_symbol"
+            app:layout_constraintTop_toBottomOf="@id/companyname" />
+
+        <TextView
             android:id="@+id/jobLoc"
-            app:layout_constraintTop_toBottomOf="@id/jobname"
-            app:layout_constraintStart_toEndOf="@id/companyname"
-            android:text="Hydrabad"
-            android:layout_margin="10dp"
-            android:textColor="?attr/tC"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Noida, UP"
+            app:layout_constraintStart_toEndOf="@id/company_image"
+            app:layout_constraintTop_toBottomOf="@id/salary" />
+
+        <ImageView
+            android:id="@+id/share_btn"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:src="@drawable/ic_share_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/bookmark_btn"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:src="@drawable/ic_bookmarked"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/share_btn"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </FrameLayout>
-
 
 </com.google.android.material.card.MaterialCardView>

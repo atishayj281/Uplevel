@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/video"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:strokeWidth="0dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="?attr/bgc"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?attr/bgc">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

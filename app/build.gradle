@@ -6,17 +6,9 @@ plugins {
     id 'com.google.gms.google-services'
 }
 apply plugin: 'com.google.firebase.crashlytics'
-repositories
-        {
-            maven
-                    {
-                        url 'https://maven.cashfree.com/release'
-                    }
-        }
 
 android {
     compileSdkVersion 33
-
     defaultConfig {
         applicationId "android.example.uptoskills"
         minSdkVersion 21
@@ -57,7 +49,7 @@ dependencies {
 
     // UI
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
-    implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation 'com.google.android.material:material:1.6.0'
 
     /* coroutines support for firebase operations */
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
@@ -77,6 +69,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:20.0.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation("io.grpc:grpc-okhttp:1.32.2")
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
     implementation 'android.arch.paging:runtime:1.0.1'
     implementation 'com.google.firebase:firebase-dynamic-links:20.1.0'
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
@@ -96,23 +93,18 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
     implementation('androidx.work:work-runtime:2.7.1')
 
-    implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
+    implementation 'com.facebook.android:facebook-android-sdk:12.3.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.browser:browser:1.3.0"
     implementation("com.android.volley:volley:1.2.1")
 
-    implementation 'com.github.scottyab:showhidepasswordedittext:0.8'
-
-
     // Razorpay
-//    implementation 'com.razorpay:checkout:1.6.8'
-
+    implementation 'com.razorpay:checkout:1.6.26'
+    implementation "com.razorpay:razorpay-java:1.4.3"
     // searchable spinner
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:2.0'
 
-    // Youtube Api
-    implementation 'com.github.PierfrancescoSoffritti:AndroidYouTubePlayer:7.0.1'
 
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
@@ -120,11 +112,8 @@ dependencies {
 
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
 
-    implementation 'uk.co.samuelwall:material-tap-target-prompt:3.3.0'
     implementation "androidx.browser:browser:1.3.0"
 
-    // CashFree
-    implementation 'com.cashfree.pg:android-sdk:1.7.14'
-
-
+    // Android auto image slider
+    implementation 'com.github.smarteist:autoimageslider:1.4.0'
 }

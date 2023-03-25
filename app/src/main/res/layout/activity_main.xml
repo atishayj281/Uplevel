@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgc"
     tools:context=".MainActivity">
 
     <FrameLayout
@@ -19,14 +20,18 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:itemIconTint="#00BEA3"
-        app:itemRippleColor="#00BEA3"
-        app:itemTextColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_items" />
+        android:fitsSystemWindows="true"
+        app:labelVisibilityMode="labeled"
+        app:itemRippleColor="@color/orange"
+        style="@style/Widget.Material3.BottomNavigationView"
+        app:menu="@menu/menu_items"
+        app:itemIconTint="@drawable/icon_selector"
+        android:background="?attr/bgc"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

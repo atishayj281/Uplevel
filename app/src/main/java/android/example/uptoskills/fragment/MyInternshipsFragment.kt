@@ -15,8 +15,10 @@ import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.Job
 import android.example.uptoskills.models.UserJobDetails
 import android.example.uptoskills.models.Users
+import android.os.Build
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -141,7 +143,21 @@ class MyInternshipsFragment : Fragment(), JobItemClicked, onJobSearch {
         startActivity(intent)
     }
 
-    override fun onbookmarkCLick(itemId: String, itemtype: String) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onbookmarkCLick(itemId: String, itemtype: String): Boolean {
+        var idBookmarked = true
+        if(curUser.bookmarks?.containsKey(itemId) == true) {
+            idBookmarked = false
+            curUser.bookmarks!!.remove(itemId, itemtype)
+        } else {
+            curUser.bookmarks?.set(itemId, itemtype)
+        }
+        jobDao.addbookmark(itemId)
+        auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }
+        return idBookmarked
+    }
+
+    override fun shareJob(itemId: String, itemtype: String) {
 
     }
 

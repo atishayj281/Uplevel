@@ -29,7 +29,7 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemI
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
-        val viewholder = JobViewHolder(LayoutInflater.from(parent.context).inflate(itemId, parent, false))
+        val viewholder = JobViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.my_job_item, parent, false))
         viewholder.job_box.setOnClickListener {
             listener.onJobCLick(jobs[viewholder.adapterPosition].id)
         }
@@ -46,7 +46,7 @@ class MyJobAdapter(val context: Context, val listener: JobItemClicked, val itemI
             when (jobStatus) {
                 1 -> holder.jobStatus.text = "Selected"
                 0 -> holder.jobStatus.text = "Pending"
-                -1 -> holder.jobStatus.text = "Rejected"
+                -1 -> holder.jobStatus.text = "Not Selected"
             }
         }
         Glide.with(holder.company_logo.context).load(jobs[position].company_logo_url)

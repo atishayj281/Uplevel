@@ -9,7 +9,6 @@
     android:layout_marginRight="15dp"
     android:layout_marginBottom="10dp"
     app:cardElevation="1dp"
-    app:cardBackgroundColor="?attr/bgc"
     android:id="@+id/question">
 
     <LinearLayout

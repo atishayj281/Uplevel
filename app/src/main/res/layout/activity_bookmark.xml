@@ -4,87 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BookmarkActivity"
-    android:orientation="vertical">
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarlayout"
-        style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:liftOnScroll="true">
+    android:orientation="vertical"
+    tools:context=".MyJobsActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/hometoolBar"
-            style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbarlayout"
+            style="@style/Widget.Material3.AppBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:liftOnScroll="true">
 
-            <FrameLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/hometoolBar"
+                style="@style/Widget.Material3.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_action_back"
-                    android:id="@+id/back"
-                    android:layout_gravity="center_vertical"/>
-
-                <ImageView
-                    android:layout_width="152dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic__uptoskillslogo"
-                    />
-
-            </FrameLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
 
 
-        </com.google.android.material.appbar.MaterialToolbar>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_action_back"
+                            android:id="@+id/back"
+                            android:layout_gravity="center_vertical"/>
 
-    </com.google.android.material.appbar.AppBarLayout>
+                        <TextView
+                            android:layout_marginStart="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bookmarks"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
 
 
+                </FrameLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/swiperefresh">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            </com.google.android.material.appbar.MaterialToolbar>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/recycler_view"/>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <ProgressBar
-            android:layout_width="wrap_content"
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/grey_cursor_color"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/courseTabLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/progress_bar"
-            android:visibility="visible"
-            android:indeterminateTint="@color/black"
-            android:layout_gravity="center"/>
+            android:background="@android:color/transparent">
 
-        <TextView
-            android:id="@+id/noBookmark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No Bookmark"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="JOBS"/>
 
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Internships"/>
 
-    </FrameLayout>
+        </com.google.android.material.tabs.TabLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/courseViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
 
 </LinearLayout>

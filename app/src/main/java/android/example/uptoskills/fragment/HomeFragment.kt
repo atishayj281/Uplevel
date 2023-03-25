@@ -36,6 +36,7 @@ import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.firestore.Query
+import com.smarteist.autoimageslider.SliderView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -55,11 +56,15 @@ private const val ARG_PARAM2 = "param2"
 
 
 interface onMenuItemSelectedListener{
-    fun onItemSelected(itemId: Int)
+    fun onItemSelected(itemId: Int, data: String)
+}
+
+interface onNavDrawerListener {
+    fun onDrawerVisible(isVisible: Boolean)
 }
 
 class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicked, paidCourseclicked,
-    IQueslistener {
+    IQueslistener, CategoriesRVListener {
     private var param1: String? = null
     private var param2: String? = null
 
@@ -78,7 +83,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     private lateinit var courseRecyclerView: RecyclerView
     private lateinit var courseAdapter: CourseAdapter
     private lateinit var jobRecyclerView: RecyclerView
-    private lateinit var jobAdapter: JobAdapter
+    private lateinit var jobAdapter: HomeJobRCAdapter
     private lateinit var progressBar: ProgressBar
     private lateinit var userDao: UsersDao
     var menuItemSelectedId: Int = -1
@@ -103,9 +108,10 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     private lateinit var homeNavigationView: NavigationView
     private var displayName: String = ""
     private lateinit var menuBar: ImageView
-    private lateinit var interViewQuesRecyclerView: RecyclerView
-    private lateinit var interViewQuesAdapter: InterviewQuesAdapter
+//    private lateinit var interViewQuesRecyclerView: RecyclerView
+//    private lateinit var interViewQuesAdapter: InterviewQuesAdapter
     private lateinit var chatbot: ImageView
+    private lateinit var onNavDrawerListener: onNavDrawerListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -114,6 +120,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
             if (context is Activity) {
                 parent = context
                 menuItemSelectedListener = parent as onMenuItemSelectedListener
+                onNavDrawerListener = parent as onNavDrawerListener
             }
         } catch (e: Exception) {
 
@@ -124,6 +131,70 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     private lateinit var bannerDate: TextView
     private lateinit var bannerLink: MaterialCardView
     private lateinit var banner: Banner
+    var url1 = R.drawable.onboarding1
+    var url2 = R.drawable.onboarding2
+    var url3 = R.drawable.onboarding3
+    var url4 = R.drawable.onboarding4
+    var url5 = R.drawable.onboarding5
+
+    private fun setUpSlider(view: View){
+        val sliderDataArrayList: java.util.ArrayList<SliderData> = java.util.ArrayList()
+
+        // initializing the slider view.
+
+        // initializing the slider view.
+        val sliderView = view.findViewById<SliderView>(R.id.imageSlider)
+
+        // adding the urls inside array list
+
+        // adding the urls inside array list
+        sliderDataArrayList.add(SliderData(url1))
+        sliderDataArrayList.add(SliderData(url2))
+        sliderDataArrayList.add(SliderData(url3))
+        sliderDataArrayList.add(SliderData(url4))
+        sliderDataArrayList.add(SliderData(url5))
+
+        // passing this array list inside our adapter class.
+
+        // passing this array list inside our adapter class.
+        val adapter = view.context?.let { SignInSlider(it, sliderDataArrayList) }
+
+        // below method is used to set auto cycle direction in left to
+        // right direction you can change according to requirement.
+
+        // below method is used to set auto cycle direction in left to
+        // right direction you can change according to requirement.
+        sliderView.autoCycleDirection = SliderView.LAYOUT_DIRECTION_LTR
+
+        // below method is used to
+        // setadapter to sliderview.
+
+        // below method is used to
+        // setadapter to sliderview.
+        if (adapter != null) {
+            sliderView.setSliderAdapter(adapter)
+        }
+
+        // below method is use to set
+        // scroll time in seconds.
+
+        // below method is use to set
+        // scroll time in seconds.
+        sliderView.scrollTimeInSec = 3
+
+        // to set it scrollable automatically
+        // we use below method.
+
+        // to set it scrollable automatically
+        // we use below method.
+        sliderView.isAutoCycle = true
+
+        // to start autocycle below method is used.
+
+        // to start autocycle below method is used.
+        sliderView.startAutoCycle()
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -132,8 +203,8 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-
-
+        setUpSlider(view)
+        CONSTANTS.getInstance(view.context)
         bannerTitle = view.findViewById(R.id.banner_title)
         bannerDate = view.findViewById(R.id.banner_date)
         bannerLink = view.findViewById(R.id.popUpKnowMore)
@@ -141,7 +212,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         homedrawerLayout = view.findViewById(R.id.homedrawerLayout)
         homeNavigationView = view.findViewById(R.id.homeNavigationView)
         menuBar = view.findViewById(R.id.menuBar)
-        chatbot = view.findViewById(R.id.chatbot)
+//        chatbot = view.findViewById(R.id.chatbot)
 
 
         courseEnqClosebtn = view.findViewById(R.id.delNotification)
@@ -165,18 +236,21 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         recyclerView = view.findViewById(R.id.blogrecyclerview)
         progressBar = view.findViewById(R.id.homeProgressbar)
         jobRecyclerView = view.findViewById(R.id.HomeJobrecyclerview)
-        interViewQuesRecyclerView = view.findViewById(R.id.InterviewQuestionsrecyclerview)
+        //interViewQuesRecyclerView = view.findViewById(R.id.InterviewQuestionsrecyclerview)
 
         progressBar.visibility = View.VISIBLE
         menuBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
+            onNavDrawerListener.onDrawerVisible(true)
         }
+        setUpCategories(view)
+        setUpNavigationDrawerListener()
         setUpBanner(view)
         setUpJobRecyclerView(view)
         setUpBlogRecyclerView()
         setUpcourses(view)
         setUppaidCourses(view)
-        setUpInterviewQuestions(view)
+        //setUpInterviewQuestions(view)
 
 
         // Initialising "view All" textViews
@@ -187,22 +261,22 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
 
         // Set OnClickListeners
         allFreeCourses.setOnClickListener {
-            menuItemSelectedListener.onItemSelected(R.id.courses)
+            menuItemSelectedListener.onItemSelected(R.id.courses, "")
         }
         allPaidCourses.setOnClickListener {
-            menuItemSelectedListener.onItemSelected(R.id.courses)
+            menuItemSelectedListener.onItemSelected(R.id.courses, "")
         }
         allBlogs.setOnClickListener {
-            menuItemSelectedListener.onItemSelected(R.id.Blog)
+            menuItemSelectedListener.onItemSelected(R.id.Blog, "")
         }
         allJobs.setOnClickListener {
-            menuItemSelectedListener.onItemSelected(R.id.Job)
+            menuItemSelectedListener.onItemSelected(R.id.Job, "")
         }
-        chatbot.setOnClickListener {
-            val intent = Intent(view.context, ChatbotActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
-        }
+//        chatbot.setOnClickListener {
+//            val intent = Intent(view.context, ChatbotActivity::class.java)
+//            startActivity(intent)
+//            activity?.finish()
+//        }
 
         // Refreshing fragment
         refreshLayout.setOnRefreshListener {
@@ -329,6 +403,24 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         return view
     }
 
+    private fun setUpNavigationDrawerListener() {
+        homedrawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                onNavDrawerListener.onDrawerVisible(true)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                onNavDrawerListener.onDrawerVisible(false)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+        })
+    }
+
     private fun setUpBanner(view: View?) {
         val bannerDao = BannerDao()
         GlobalScope.launch(Dispatchers.IO) {
@@ -340,13 +432,13 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         }
     }
 
-    private fun setUpInterviewQuestions(view: View?) {
-        if (view != null) {
-            interViewQuesAdapter = InterviewQuesAdapter(view.context, this)
-            interViewQuesRecyclerView.adapter = interViewQuesAdapter
-            interViewQuesRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
-        }
-    }
+//    private fun setUpInterviewQuestions(view: View?) {
+//        if (view != null) {
+//            interViewQuesAdapter = InterviewQuesAdapter(view.context, this)
+//            interViewQuesRecyclerView.adapter = interViewQuesAdapter
+//            interViewQuesRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+//        }
+//    }
 
     private fun startIntrodution(view: View){
 
@@ -360,14 +452,12 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
         val coins: TextView = headerView.findViewById(R.id.coins)
         val profileCompleted: TextView = headerView.findViewById(R.id.profileCompleted)
+        setDetails(username, email)
 
         GlobalScope.launch(Dispatchers.IO) {
             val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
             if(temp != null) {
                 withContext(Dispatchers.Main) {
-                    username.text = temp.displayName
-                    displayName = temp.displayName.toString()
-                    email.text = temp.email
                     coins.text = temp.coins.toString()
                     val profilePrecentage: String = (profileComplete(temp)*10).toString() + "%"
                     profileCompleted.text = profilePrecentage
@@ -380,6 +470,11 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
                 }
             }
         }
+    }
+
+    private fun setDetails(username: TextView, email: TextView) {
+        username.text = CONSTANTS.getUsername()
+        email.text = CONSTANTS.getEmail()
     }
 
     // Calculating Profile Completeness
@@ -415,8 +510,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         val shortLinkTask = activity?.let {
             FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse(link))
-                .setDomainUriPrefix("https://uptoskill.page.link") // Set parameters
-                // ...
+                .setDomainUriPrefix("https://uptoskills.page.link") // Set parameters
                 .buildShortDynamicLink()
                 .addOnCompleteListener(it
                 ) { task ->
@@ -440,6 +534,29 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         }
     }
 
+    private fun setUpCategories(view: View) {
+        val recyclerView = view.findViewById<RecyclerView>(R.id.categories_recycler_view)
+        val categoryItems = arrayListOf<String>()
+        categoryItems.add("Website & App Development");
+        categoryItems.add("Artificial Intelligence & Machine Learning");
+        categoryItems.add("Banking and Finance");
+        categoryItems.add("Digital Marketing");
+        categoryItems.add("Core Engineering");
+        categoryItems.add("UI UX Design");
+        categoryItems.add("Data Science & Business Analytics");
+        val background = arrayListOf<Int>()
+        background.add(R.drawable.categories_bg_1)
+        background.add(R.drawable.categories_bg_2)
+        background.add(R.drawable.categories_bg_3)
+        background.add(R.drawable.categories_bg_4)
+        background.add(R.drawable.categories_bg_5)
+        background.add(R.drawable.categories_bg_6)
+        background.add(R.drawable.categories_bg_1)
+        val adapter = CategoriesRVAdapter(view.context, categoryItems, background, this)
+        recyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.adapter = adapter
+    }
+
     private fun setUpcourses(view: View) {
         courseDao = CourseDao()
         courseRecyclerView = view.findViewById(R.id.FreeCourserecyclerview)
@@ -459,7 +576,7 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         val query = jobCollection.limitToLast(10).orderBy("id", Query.Direction.DESCENDING)
         val recyclerViewOptions = FirestoreRecyclerOptions.Builder<Job>().setQuery(query, Job::class.java).build()
 
-        jobAdapter = JobAdapter(recyclerViewOptions, this, R.layout.home_job_item)
+        jobAdapter = HomeJobRCAdapter(recyclerViewOptions, this, R.layout.home_job_item)
 
         jobRecyclerView.adapter =jobAdapter
         jobRecyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
@@ -538,14 +655,12 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    override fun onbookmarkCLick(itemId: String, itemtype: String) {
-        if(curUser.bookmarks?.containsKey(itemId) == true) {
-            curUser.bookmarks!!.remove(itemId, itemtype)
-        } else {
-            curUser.bookmarks?.set(itemId, itemtype)
-        }
-        jobDao.addbookmark(itemId)
-        auth.currentUser?.let { userDao.updateUser(curUser, it.uid) }
+    override fun onbookmarkCLick(itemId: String, itemtype: String): Boolean {
+        return false
+    }
+
+    override fun shareJob(itemId: String, itemtype: String) {
+        TODO("Not yet implemented")
     }
 
     override fun onpaidCourseClicked(courseId: String) {
@@ -561,6 +676,10 @@ class  HomeFragment : Fragment(), IBlogAdapter, CourseItemClicked, JobItemClicke
         val intent = Intent(view?.context, QuestionActivity::class.java)
         intent.putExtra("ques", bundle)
         startActivity(intent)
+    }
+
+    override fun onCategorySelect(category: String) {
+        menuItemSelectedListener.onItemSelected(R.id.courses, category)
     }
 }
 

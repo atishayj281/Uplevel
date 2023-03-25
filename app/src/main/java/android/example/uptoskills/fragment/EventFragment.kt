@@ -1,6 +1,7 @@
 package android.example.uptoskills.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.example.uptoskills.*
 import android.example.uptoskills.Adapters.EventsAdapter
@@ -69,6 +70,21 @@ class EventFragment : Fragment(), IEventClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var postDao: BlogDao
+    private lateinit var onNavDrawerListener: onNavDrawerListener
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            var parent: Activity
+            if (context is Activity) {
+                parent = context
+                onNavDrawerListener = parent as onNavDrawerListener
+            }
+        } catch (e: Exception) {
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +113,7 @@ class EventFragment : Fragment(), IEventClickListener {
         progressBar.visibility = View.VISIBLE
         menuBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
+            onNavDrawerListener.onDrawerVisible(true)
         }
 
 
@@ -190,9 +207,28 @@ class EventFragment : Fragment(), IEventClickListener {
             intent.putExtra("parent", "MoreFragment")
             startActivity(intent)
         }
-
+        setUpNavigationDrawerListener()
         setUpRecyclerView()
         return view
+    }
+
+
+    private fun setUpNavigationDrawerListener() {
+        homedrawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                onNavDrawerListener.onDrawerVisible(true)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                onNavDrawerListener.onDrawerVisible(false)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+        })
     }
 
     private fun setUpNavigationViewHeader(activity: Activity) {
@@ -204,13 +240,11 @@ class EventFragment : Fragment(), IEventClickListener {
         val coins: TextView = headerView.findViewById(R.id.coins)
         val profileCompleted: TextView = headerView.findViewById(R.id.profileCompleted)
 
+        setDetails(username, email)
         GlobalScope.launch(Dispatchers.IO) {
             val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
             if(temp != null) {
                 withContext(Dispatchers.Main) {
-                    username.text = temp.displayName
-                    displayName = temp.displayName.toString()
-                    email.text = temp.email
                     coins.text = temp.coins.toString()
                     val profilePrecentage: String = (profileComplete(temp)*10).toString() + "%"
                     profileCompleted.text = profilePrecentage
@@ -223,6 +257,11 @@ class EventFragment : Fragment(), IEventClickListener {
                 }
             }
         }
+    }
+
+    private fun setDetails(username: TextView, email: TextView) {
+        username.text = CONSTANTS.getUsername()
+        email.text = CONSTANTS.getEmail()
     }
 
     // Calculating Profile Completeness

@@ -2,6 +2,7 @@ package android.example.uptoskills.fragment
 
 import `in`.galaxyofandroid.spinerdialog.SpinnerDialog
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.example.uptoskills.*
 import android.example.uptoskills.Adapters.CourseViewPagerAdapter
@@ -9,6 +10,7 @@ import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.Users
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,6 +58,21 @@ class CourseFragment: Fragment() {
     private lateinit var search: TextView
     private val categoryItems = ArrayList<String>()
     private lateinit var spinnerDialog: SpinnerDialog
+    private lateinit var onNavDrawerListener: onNavDrawerListener
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            var parent: Activity
+            if (context is Activity) {
+                parent = context
+                onNavDrawerListener = parent as onNavDrawerListener
+            }
+        } catch (e: Exception) {
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +127,7 @@ class CourseFragment: Fragment() {
 
         hometoolBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
+            onNavDrawerListener.onDrawerVisible(true)
         }
 
         homeNavigationView.setNavigationItemSelectedListener { menuItem ->
@@ -192,21 +210,30 @@ class CourseFragment: Fragment() {
             intent.putExtra("parent", "MoreFragment")
             startActivity(intent)
         }
-
+        if(MainActivity.selectedItemData.isNotEmpty()) {
+            search.text = MainActivity.selectedItemData
+        }
         val freeCourse = FreeCourseFragment()
+        freeCourse.updateRecyclerView(MainActivity.selectedItemData)
         val paidCourse = PaidCourseFragment()
+
+        // if category selected from home fragement
+        paidCourse.updateRecyclerView(MainActivity.selectedItemData)
         var adapter = CourseViewPagerAdapter(parentFragmentManager, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
         adapter.addFragment(freeCourse, "Free")
         adapter.addFragment(paidCourse, "Paid")
         viewPager.adapter = adapter
 
+
+
         // Adding the category items
-        categoryItems.add("Software Development");
-        categoryItems.add("Coding");
-        categoryItems.add("Design");
-        categoryItems.add("Competitive Programming");
-        categoryItems.add("Android Development");
-        categoryItems.add("Google");
+        categoryItems.add("Website & App Development")
+        categoryItems.add("Artificial Intelligence & Machine Learning")
+        categoryItems.add("Banking and Finance")
+        categoryItems.add("Digital Marketing")
+        categoryItems.add("Core Engineering")
+        categoryItems.add("UI UX Design")
+        categoryItems.add("Data Science & Business Analytics")
 
         spinnerDialog =
             SpinnerDialog(activity,categoryItems,"Select or Search Category",R.style.DialogAnimations_SmileWindow,"Close")
@@ -215,6 +242,7 @@ class CourseFragment: Fragment() {
         spinnerDialog.setShowKeyboard(false);// for open keyboard by default
 
         spinnerDialog.bindOnSpinerListener { item, position ->
+            Log.e("category", item)
             freeCourse.updateRecyclerView(item)
             paidCourse.updateRecyclerView(item)
             search.text = item
@@ -224,8 +252,29 @@ class CourseFragment: Fragment() {
             spinnerDialog.showSpinerDialog()
         }
 
+        setUpNavigationDrawerListener()
         return view
     }
+
+
+    private fun setUpNavigationDrawerListener() {
+        homedrawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                onNavDrawerListener.onDrawerVisible(true)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                onNavDrawerListener.onDrawerVisible(false)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+        })
+    }
+
 
 
     private fun setUpNavigationViewHeader(activity: Activity) {
@@ -236,14 +285,12 @@ class CourseFragment: Fragment() {
         var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
         val coins: TextView = headerView.findViewById(R.id.coins)
         val profileCompleted: TextView = headerView.findViewById(R.id.profileCompleted)
+        setDetails(username, email)
 
         GlobalScope.launch(Dispatchers.IO) {
             val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
             if(temp != null) {
                 withContext(Dispatchers.Main) {
-                    username.text = temp.displayName
-                    displayName = temp.displayName.toString()
-                    email.text = temp.email
                     coins.text = temp.coins.toString()
                     val profilePrecentage: String = (profileComplete(temp)*10).toString() + "%"
                     profileCompleted.text = profilePrecentage
@@ -256,6 +303,11 @@ class CourseFragment: Fragment() {
                 }
             }
         }
+    }
+
+    private fun setDetails(username: TextView, email: TextView) {
+        username.text = CONSTANTS.getUsername()
+        email.text = CONSTANTS.getEmail()
     }
 
     // Calculating Profile Completeness

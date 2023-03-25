@@ -103,7 +103,8 @@
         android:layout_marginLeft="35dp"
         android:layout_marginRight="35dp"
         app:cardElevation="2dp"
-        app:cardBackgroundColor="@color/blue"
+        app:strokeWidth="0dp"
+        app:cardBackgroundColor="@color/orange"
         >
 
         <TextView
@@ -135,7 +136,8 @@
         android:layout_marginRight="30dp"
         android:layout_marginBottom="30dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="5dp">
+        app:strokeWidth="0dp"
+        app:cardElevation="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"

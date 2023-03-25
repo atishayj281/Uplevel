@@ -4,6 +4,7 @@ import android.content.Intent
 import android.example.uptoskills.Adapters.PaidCourseAdapter
 import android.example.uptoskills.Adapters.paidCourseclicked
 import android.example.uptoskills.CourseViewActivity
+import android.example.uptoskills.MainActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -55,7 +56,7 @@ class PaidCourseFragment : Fragment(), paidCourseclicked, onJobSearch {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_paid_course, container, false)
 
-        setUpcourses(view, "")
+        setUpcourses(view, MainActivity.selectedItemData)
 
         return view
     }
@@ -93,10 +94,11 @@ class PaidCourseFragment : Fragment(), paidCourseclicked, onJobSearch {
         } else {
             query = courseCollection.whereEqualTo("category", filter)
             val recyclerViewOptions = FirestoreRecyclerOptions.Builder<PaidCourse>().setQuery(query, PaidCourse::class.java).build()
-            courseAdapter.updateOptions(recyclerViewOptions)
+            courseAdapter = PaidCourseAdapter(view.context,this, R.layout.item_course, recyclerViewOptions)
         }
         courseRecyclerView.adapter = courseAdapter
         courseRecyclerView.layoutManager = LinearLayoutManager(view.context)
+        MainActivity.selectedItemData = ""
     }
 
     override fun onStart() {

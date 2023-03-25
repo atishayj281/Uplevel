@@ -1,8 +1,10 @@
 package android.example.uptoskills
 
 import android.content.Intent
+import android.example.uptoskills.Adapters.SignInSlider
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivitySignInBinding
+import android.example.uptoskills.models.SliderData
 import android.example.uptoskills.models.Users
 import android.graphics.Color
 import android.os.Bundle
@@ -22,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.*
+import com.smarteist.autoimageslider.SliderView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -40,6 +43,73 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var userDao: UsersDao
     private lateinit var authStateChangeListener: FirebaseAuth.AuthStateListener
+    private final val PRODUCT = "1"
+
+
+    var url1 = R.drawable.onboarding1
+    var url2 = R.drawable.onboarding2
+    var url3 = R.drawable.onboarding3
+    var url4 = R.drawable.onboarding4
+    var url5 = R.drawable.onboarding5
+
+    private fun setUpSlider(){
+        val sliderDataArrayList: ArrayList<SliderData> = ArrayList()
+
+        // initializing the slider view.
+
+        // initializing the slider view.
+        val sliderView = findViewById<SliderView>(R.id.imageSlider)
+
+        // adding the urls inside array list
+
+        // adding the urls inside array list
+        sliderDataArrayList.add(SliderData(url1))
+        sliderDataArrayList.add(SliderData(url2))
+        sliderDataArrayList.add(SliderData(url3))
+        sliderDataArrayList.add(SliderData(url4))
+        sliderDataArrayList.add(SliderData(url5))
+
+        // passing this array list inside our adapter class.
+
+        // passing this array list inside our adapter class.
+        val adapter = SignInSlider(this, sliderDataArrayList)
+
+        // below method is used to set auto cycle direction in left to
+        // right direction you can change according to requirement.
+
+        // below method is used to set auto cycle direction in left to
+        // right direction you can change according to requirement.
+        sliderView.autoCycleDirection = SliderView.LAYOUT_DIRECTION_LTR
+
+        // below method is used to
+        // setadapter to sliderview.
+
+        // below method is used to
+        // setadapter to sliderview.
+        sliderView.setSliderAdapter(adapter)
+
+        // below method is use to set
+        // scroll time in seconds.
+
+        // below method is use to set
+        // scroll time in seconds.
+        sliderView.scrollTimeInSec = 3
+
+        // to set it scrollable automatically
+        // we use below method.
+
+        // to set it scrollable automatically
+        // we use below method.
+        sliderView.isAutoCycle = true
+
+        // to start autocycle below method is used.
+
+        // to start autocycle below method is used.
+        sliderView.startAutoCycle()
+
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +127,10 @@ class SignInActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = FirebaseAuth.getInstance()
 
-        binding.createAccount.setOnClickListener {
-            var signUpintent = Intent(this, SignUpActivity::class.java)
+        setUpSlider()
 
+        binding.createAccount.setOnClickListener {
+            val signUpintent = Intent(this, SignUpActivity::class.java)
             signUpintent.putExtra("ReferId", intent.getStringExtra("ReferId"))
             startActivity(signUpintent)
             finish()
@@ -81,15 +152,6 @@ class SignInActivity : AppCompatActivity() {
                 }
             } else {
                 binding.signInprogressbar.visibility = View.GONE
-                if(binding.emailHeading.text.isBlank()){
-                    binding.emailHeading.text = "Email*"
-                    binding.emailHeading.setTextColor(Color.parseColor("#A30000"))
-                }
-
-                if(binding.emailHeading.text.isBlank()){
-                    binding.passwordheading.text = "Password*"
-                    binding.passwordheading.setTextColor(Color.parseColor("#A30000"))
-                }
                 Toast.makeText(this, "Please fill the required details", Toast.LENGTH_SHORT).show()
             }
 
@@ -177,6 +239,7 @@ class SignInActivity : AppCompatActivity() {
 
     private fun resetPassword() {
         binding.signInprogressbar.visibility = View.VISIBLE
+        Log.e("email", binding.passwordResetEmail.text.toString().trim())
         if(binding.passwordResetEmail.text.toString().trim().isNotEmpty() && binding.passwordResetEmail.text.toString().trim() != "null") {
             FirebaseAuth.getInstance()
                 .sendPasswordResetEmail(binding.passwordResetEmail.text.toString())
@@ -195,8 +258,9 @@ class SignInActivity : AppCompatActivity() {
         }
     }
     private fun startMainActivity(){
-        var intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        var Mainintent = Intent(this, MainActivity::class.java)
+        Mainintent.putExtra(PRODUCT, intent.getStringExtra(PRODUCT))
+        startActivity(Mainintent)
         binding.signInprogressbar.visibility = View.GONE
         finish()
     }
@@ -273,6 +337,9 @@ class SignInActivity : AppCompatActivity() {
                     }
                 }
                 withContext(Dispatchers.Main) {
+                    CONSTANTS.getInstance(this@SignInActivity)
+                    CONSTANTS.setEmail(user.email.toString())
+                    CONSTANTS.setUsername(user.displayName.toString())
                     startMainActivity()
                 }
             }

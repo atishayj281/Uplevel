@@ -68,7 +68,7 @@ class FreeCourseFragment : Fragment(), CourseItemClicked, onJobSearch {
         } else {
             query = courseCollection.whereEqualTo("category", filter)
             val recyclerViewOptions = FirestoreRecyclerOptions.Builder<FreeCourse>().setQuery(query, FreeCourse::class.java).build()
-            courseAdapter.updateOptions(recyclerViewOptions)
+            courseAdapter = CourseAdapter(view.context,this, R.layout.item_course, recyclerViewOptions)
         }
 
         courseRecyclerView.adapter = courseAdapter

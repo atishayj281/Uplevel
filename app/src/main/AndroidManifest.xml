@@ -11,13 +11,22 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <queries>
         <package android:name="com.facebook.katana" />
+    </queries>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+
+            <data
+                android:host="pay"
+                android:scheme="upi" />
+        </intent>
+
+        <package android:name="com.android.chrome" />
     </queries>
 
     <application
@@ -28,7 +37,10 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GetWork">
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MyCVActivity"
+            android:exported="false" />
         <activity
             android:name=".MyEventsActivity"
             android:exported="true" />
@@ -66,10 +78,12 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="http"
-                    android:host="www.uptoskills.com/jobs/{id}" />
+                    android:host="www.uptoskills.com/jobs/{id}"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity
@@ -85,8 +99,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="http"
-                    android:host="www.uptoskills.com" />
+                    android:host="www.uptoskills.com"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity
@@ -104,8 +118,8 @@
         <activity android:name=".OnBoardingActivity" />
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -117,7 +131,6 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -142,23 +155,22 @@
 
         <service
             android:name=".services.MyNotifications"
-            android:stopWithTask="false"
-            android:exported="false">
+            android:exported="false"
+            android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.freshdesk.helpdesk.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path"/>
+        </provider>
     </application>
-
-    <queries>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data
-                android:scheme="upi"
-                android:host="pay" />
-        </intent>
-        <package android:name="com.android.chrome" />
-    </queries>
 
 </manifest>

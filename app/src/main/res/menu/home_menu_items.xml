@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
     <group
-
         android:id="@+id/navItems"
         android:checkableBehavior="single"
         >
@@ -12,30 +9,29 @@
         <item
             android:id="@+id/MyCourses"
             android:title="My Courses"
-            android:icon="@drawable/ic_article"
+            android:icon="@drawable/ic_my_courses"
             />
 
         <item
             android:id="@+id/appliedJobs"
             android:title="My Jobs and Internships"
-            android:icon="@drawable/ic_job"/>
+            android:icon="@drawable/ic_my_job"/>
 
 
         <item
             android:id="@+id/myevents"
             android:title="My Events"
-            android:icon="@drawable/ic_events"/>
+            android:icon="@drawable/ic_my_events"/>
 
         <item
             android:id="@+id/certificate"
             android:title="Certificates"
-            android:icon="@drawable/ic_certificate"/>
+            android:icon="@drawable/ic_my_certificate"/>
 
         <item
             android:id="@+id/bookmark"
             android:title="Bookmarks"
-            android:icon="@drawable/ic_bookmarked"/>
-
+            android:icon="@drawable/ic_my_bookmarks"/>
 
     </group>
 
@@ -46,37 +42,34 @@
         <item
             android:id="@+id/faq"
             android:title="FAQ"
-            android:icon="@drawable/ic_faq"
-            android:iconTint="@color/com_facebook_blue"/>
+            android:icon="@drawable/ic_faq"/>
 
 
         <item
             android:id="@+id/help"
             android:title="Help Center"
-            android:icon="@drawable/ic_help_center"/>
+            android:icon="@drawable/ic_help_"/>
 
 
         <item
             android:id="@+id/share"
             android:title="Refer and Earn"
-            android:icon="@drawable/ic_share"/>
+            android:icon="@drawable/ic_share_"/>
 
         <item
             android:id="@+id/privacyPolicy"
             android:title="Privacy Policy"
-            android:icon="@drawable/ic_privacy_policy"
-            android:iconTint="@color/com_facebook_blue"/>
+            android:icon="@drawable/ic_clipboard"/>
 
         <item
             android:id="@+id/TermsCondition"
             android:title="Terms and condition"
             android:icon="@drawable/ic_terms"
-            android:iconTint="@color/com_facebook_blue"
             />
 
         <item
             android:id="@+id/LogOut"
-            android:icon="@drawable/ic__exit"
+            android:icon="@drawable/ic_log_out"
             android:title="LogOut"
             />
 

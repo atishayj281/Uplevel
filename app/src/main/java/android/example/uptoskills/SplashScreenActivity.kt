@@ -21,6 +21,7 @@ class SplashScreenActivity : AppCompatActivity() {
     private var referId: String = ""
     private lateinit var logoAnimation: Animation
     private lateinit var logo: ImageView
+    private final val PRODUCT = "1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +33,6 @@ class SplashScreenActivity : AppCompatActivity() {
 
 
         Handler(Looper.getMainLooper()).postDelayed(Runnable(){
-              if(auth.currentUser != null) {
-                  val intent = Intent(this, MainActivity::class.java)
-                  startActivity(intent)
-                  finish()
-              } else {
-
                   FirebaseDynamicLinks.getInstance()
                       .getDynamicLink(intent)
                       .addOnSuccessListener(this) { pendingDynamicLinkData ->
@@ -52,10 +47,18 @@ class SplashScreenActivity : AppCompatActivity() {
                                   referId = referralLink.substring(0, referralLink.indexOf("-"))
 
                                   val productId: String = referralLink.substring(referralLink.indexOf("-")+1)
-                                  val intent = Intent(this, OnBoardingActivity::class.java)
-                                  intent.putExtra("referId", referId)
-                                  startActivity(intent)
-                                  finish()
+                                  if(auth.currentUser != null) {
+                                      val intent = Intent(this, MainActivity::class.java)
+                                      intent.putExtra(PRODUCT, productId)
+                                      startActivity(intent)
+                                      finish()
+                                  } else {
+                                      val intent = Intent(this, SignInActivity::class.java)
+                                      intent.putExtra("ReferId", referId)
+                                      intent.putExtra(PRODUCT, productId)
+                                      startActivity(intent)
+                                      finish()
+                                  }
 
                               } catch (e: Exception) {
                               }
@@ -68,13 +71,10 @@ class SplashScreenActivity : AppCompatActivity() {
                       .addOnFailureListener(this) {
                               e -> Log.w("starting Activity", "getDynamicLink:onFailure", e)
                               }
-                  val intent = Intent(this, OnBoardingActivity::class.java)
+                  val intent = Intent(this, SignInActivity::class.java)
 
                   startActivity(intent)
                   finish()
-
-
-              }
         }, 2500)
 
     }

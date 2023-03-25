@@ -50,8 +50,8 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             app:srcCompat="@drawable/ic_menu"
                             android:id="@+id/menuBar"/>
 
@@ -86,9 +86,7 @@
                     android:id="@+id/courseTabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    app:tabIndicatorColor="#00BEA3"
-                    app:tabSelectedTextColor="@color/black">
+                    android:background="@android:color/transparent">
 
                     <com.google.android.material.tabs.TabItem
                         android:layout_width="wrap_content"
@@ -115,9 +113,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:background="?attr/bgc"
             app:headerLayout="@layout/home_navigation_header_layout"
-            app:itemIconTint="@color/black"
-            app:itemTextColor="@color/black"
             app:menu="@menu/home_menu_items" />
     </androidx.drawerlayout.widget.DrawerLayout>
 

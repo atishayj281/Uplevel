@@ -2,10 +2,7 @@ package android.example.uptoskills.daos
 
 import android.content.Context
 import android.example.uptoskills.mail.JavaMailAPI
-import android.example.uptoskills.models.Job
-import android.example.uptoskills.models.JobDetails
-import android.example.uptoskills.models.UserJobDetails
-import android.example.uptoskills.models.Users
+import android.example.uptoskills.models.*
 import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
@@ -24,6 +21,22 @@ class InternshipDao {
     private val db = FirebaseFirestore.getInstance()
     val jobCollection = db.collection("internships")
     val auth = Firebase.auth
+
+    fun addbookmark(jobId: String) {
+        if(jobId.isNotBlank()) {
+            GlobalScope.launch(Dispatchers.IO) {
+                val currentUserId = auth.currentUser!!.uid
+                val job = getJobbyId(jobId).await().toObject(Internship::class.java)!!
+                val isBookmarked = job.bookmark.contains(currentUserId)
+                if(isBookmarked) {
+                    job.bookmark.remove(currentUserId)
+                } else {
+                    job.bookmark.add(currentUserId)
+                }
+                jobCollection.document(jobId).set(job)
+            }
+        }
+    }
 
     fun getJobbyId(jobId: String): Task<DocumentSnapshot> {
         return jobCollection.document(jobId).get()

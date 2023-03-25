@@ -8,7 +8,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarlayout"
-        style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+        style="@style/Widget.Material3.AppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -19,7 +19,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/hometoolBar"
-            style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
+            style="@style/Widget.Material3.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -36,11 +36,11 @@
                     android:layout_gravity="center_vertical"/>
 
                 <ImageView
-                    android:layout_width="152dp"
-                    android:layout_height="50dp"
+                    android:layout_width="110dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="right|center_vertical"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic__uptoskillslogo"
+                    app:srcCompat="@drawable/uptoskills_logo"
                     />
 
             </FrameLayout>
@@ -50,32 +50,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:layout_below="@id/appbarlayout"
-        android:id="@+id/blogHeadingParent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="7dp">
-
-        <TextView
-            android:id="@+id/blogHeading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_horizontal"
-            android:textColor="@color/black"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-    </LinearLayout>
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/blogHeadingParent">
+        android:layout_below="@id/appbarlayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -92,14 +72,26 @@
                 android:scaleType="fitXY"/>
 
             <TextView
+                android:id="@+id/blogHeading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black"
+                android:textSize="25sp"
+                app:layout_constraintTop_toBottomOf="@id/creatorImage"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/creatorName"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:gravity="center_vertical"
-                android:textColor="@color/black"
+                android:textColor="#9C1212"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/creatorImage"
@@ -126,7 +118,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:indeterminate="true"
-        android:indeterminateTint="@color/black"
+        android:indeterminateTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

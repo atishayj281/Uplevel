@@ -57,6 +57,7 @@ class UserDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        CONSTANTS.getInstance(this)
         binding.userDetailsProgressBar.visibility = View.VISIBLE
         if(intent.getStringExtra("parent") == "jobActivity") {
             Toast.makeText(this, "Please Verify your Details...", Toast.LENGTH_SHORT).show()
@@ -159,9 +160,13 @@ class UserDetailsActivity : AppCompatActivity() {
                             }
                         }
                         else if(intent.getStringExtra("parent") == "course") {
+                            CONSTANTS.setUsername(usr.full_name)
+                            CONSTANTS.setEmail(usr.email)
                             Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully, Now Enroll...", Toast.LENGTH_SHORT).show()
                             finish()
                         } else {
+                            CONSTANTS.setUsername(usr.full_name)
+                            CONSTANTS.setEmail(usr.email)
                             Toast.makeText(this@UserDetailsActivity, "Profile Updated Successfully", Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -202,6 +207,7 @@ class UserDetailsActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray,
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(requestCode == READ_EXTERNAL_STORAGE_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             resumeChooser()
         }

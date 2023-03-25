@@ -54,6 +54,7 @@ class PaidCourseViewActivity : AppCompatActivity() {
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
         }
         binding.join.setOnClickListener {
+            Log.e("link", paidCourse.link)
             val intent = Intent()
             intent.setData(Uri.parse(paidCourse.link.trim()))
             intent.action = Intent.ACTION_VIEW

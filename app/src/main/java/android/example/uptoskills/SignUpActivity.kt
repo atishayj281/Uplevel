@@ -1,15 +1,18 @@
 package android.example.uptoskills
 
 import android.content.Intent
+import android.example.uptoskills.Adapters.SignInSlider
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivitySignUpBinding
+import android.example.uptoskills.models.SliderData
 import android.example.uptoskills.models.Users
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -18,9 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.*
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.smarteist.autoimageslider.SliderView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,7 +34,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var callbackManager: CallbackManager
     private val RC_SIGN_IN: Int = 123
-    private lateinit var createAccount: Button
+    private lateinit var createAccount: CardView
     private lateinit var binding: ActivitySignUpBinding
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
@@ -41,6 +42,72 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var userDao: UsersDao
     private lateinit var authStateChangeListener: FirebaseAuth.AuthStateListener
     private lateinit var referId: String
+    private lateinit var SignIn: TextView
+
+
+    var url1 = R.drawable.onboarding1
+    var url2 = R.drawable.onboarding2
+    var url3 = R.drawable.onboarding3
+    var url4 = R.drawable.onboarding4
+    var url5 = R.drawable.onboarding5
+
+    private fun setUpSlider(){
+        val sliderDataArrayList: ArrayList<SliderData> = ArrayList()
+
+        // initializing the slider view.
+
+        // initializing the slider view.
+        val sliderView = findViewById<SliderView>(R.id.imageSlider)
+
+        // adding the urls inside array list
+
+        // adding the urls inside array list
+        sliderDataArrayList.add(SliderData(url1))
+        sliderDataArrayList.add(SliderData(url2))
+        sliderDataArrayList.add(SliderData(url3))
+        sliderDataArrayList.add(SliderData(url4))
+        sliderDataArrayList.add(SliderData(url5))
+
+        // passing this array list inside our adapter class.
+
+        // passing this array list inside our adapter class.
+        val adapter = SignInSlider(this, sliderDataArrayList)
+
+        // below method is used to set auto cycle direction in left to
+        // right direction you can change according to requirement.
+
+        // below method is used to set auto cycle direction in left to
+        // right direction you can change according to requirement.
+        sliderView.autoCycleDirection = SliderView.LAYOUT_DIRECTION_LTR
+
+        // below method is used to
+        // setadapter to sliderview.
+
+        // below method is used to
+        // setadapter to sliderview.
+        sliderView.setSliderAdapter(adapter)
+
+        // below method is use to set
+        // scroll time in seconds.
+
+        // below method is use to set
+        // scroll time in seconds.
+        sliderView.scrollTimeInSec = 3
+
+        // to set it scrollable automatically
+        // we use below method.
+
+        // to set it scrollable automatically
+        // we use below method.
+        sliderView.isAutoCycle = true
+
+        // to start autocycle below method is used.
+
+        // to start autocycle below method is used.
+        sliderView.startAutoCycle()
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,18 +128,15 @@ class SignUpActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         createAccount = findViewById(R.id.SignUpWithEmail)
 
-        binding.SignIn.setOnClickListener {
-            var intent = Intent(this, SignInActivity::class.java)
-            intent.putExtra("ReferId", referId)
-            startActivity(intent)
-            finish()
-        }
+//        binding.SignIn.setOnClickListener {
+//            var intent = Intent(this, SignInActivity::class.java)
+//            intent.putExtra("ReferId", referId)
+//            startActivity(intent)
+//            finish()
+//        }
 
         createAccount.setOnClickListener {
-            var crtintent = Intent(this, CreateAccountActivity::class.java)
-            crtintent.putExtra("ReferId", referId)
-            startActivity(crtintent)
-
+            CreateAccountWithEmail()
         }
 
         binding.SignUpWithGoogle.setOnClickListener {
@@ -131,6 +195,15 @@ class SignUpActivity : AppCompatActivity() {
                 updateUI(user)
             }
         }
+
+        binding.back.setOnClickListener {
+            val signUpintent = Intent(this, SignInActivity::class.java)
+            signUpintent.putExtra("ReferId", referId)
+            startActivity(signUpintent)
+            finish()
+        }
+
+        setUpSlider()
     }
 
     private fun handelFacebookToken(accessToken: AccessToken?) {
@@ -143,6 +216,71 @@ class SignUpActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, it.exception?.message, Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+
+    private fun changeAuth() {
+        val user = FirebaseAuth.getInstance().currentUser
+
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(binding.crtUsername.text.toString()).build()
+        user!!.updateProfile(profileUpdates)
+    }
+
+    private fun CreateAccountWithEmail(){
+        binding.signUpProgressBar.visibility = View.VISIBLE
+        if(binding.crtemail.text.toString().trim().isNotBlank() && binding.crtpass.text.toString().trim()
+                .isNotBlank() && binding.crtUsername.text.toString().trim().isNotBlank() &&
+                    binding.mobileNo.text.toString().trim().isNotBlank()
+        ){
+            auth.createUserWithEmailAndPassword(binding.crtemail.text.toString(), binding.crtpass.text.toString()).addOnCompleteListener {
+                if(it.isSuccessful){
+                    changeAuth()
+                    binding.signUpProgressBar.visibility = View.GONE
+
+                    //adding user to db
+                    val user: Users = Users("","", "", "", "", "", "", hashMapOf(), hashMapOf(),binding.crtUsername.text.toString(), binding.crtUsername.text.toString(),
+                        binding.crtemail.text.toString(), "", "", "", "", binding.mobileNo.text.toString().trim(),
+                        it.result.user?.uid!!, "", referId, 250)
+                    val userDao = UsersDao()
+
+
+                    GlobalScope.launch(Dispatchers.IO) {
+                        var referer: Users? = null
+                        if(referId.trim().isNotBlank() && referId.trim().lowercase() == "null") {
+
+                            referer =
+                                userDao.getUserById(referId).await().toObject(Users::class.java)
+                            if (referer != null) {
+                                referer.coins += 250
+                                userDao.updateUser(referer, referId)
+                            }
+
+                        }
+                        userDao.addUser(user, it.result.user?.uid.toString())
+                    }
+                    val id: String? = it.result.user?.uid
+//                    val intent = Intent(this, UserDetailsActivity::class.java)
+//                    intent.putExtra("username", binding.crtUsername.text.toString())
+//                    intent.putExtra("email", binding.crtemail.text.toString())
+//                    intent.putExtra("id", id)
+//                    intent.putExtra("userImage", "")
+//                    intent.putExtra("Activity", "NewUser")
+//                    startActivity(intent)
+                    startMainActivity()
+                    finish()
+                }
+                else {
+                    binding.signUpProgressBar.visibility = View.GONE
+                    Toast.makeText(this, it.exception?.message.toString(),
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            binding.signUpProgressBar.visibility = View.GONE
+            Toast.makeText(this, "Please Fill the required details",
+                Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -219,14 +357,19 @@ class SignUpActivity : AppCompatActivity() {
                     }
                 }
                 withContext(Dispatchers.Main) {
+                    CONSTANTS.getInstance(this@SignUpActivity)
+                    CONSTANTS.setEmail(user.email.toString())
+                    if(binding.crtUsername.text.toString().isEmpty())
+                        CONSTANTS.setUsername(user.displayName.toString())
+                    else CONSTANTS.setUsername(binding.crtUsername.text.toString())
                     startMainActivity()
                 }
             }
         }
     }
 
-    fun startMainActivity() {
-        var intent = Intent(this, MainActivity::class.java)
+    private fun startMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         binding.signUpProgressBar.visibility = View.GONE
         finish()

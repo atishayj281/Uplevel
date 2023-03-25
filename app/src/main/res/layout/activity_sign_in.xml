@@ -1,112 +1,297 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
     android:orientation="vertical"
     tools:context=".SignInActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15.7dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="15.7dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <FrameLayout
+        <LinearLayout
+            android:id="@+id/login_layout"
             android:layout_width="match_parent"
-            android:layout_height="480dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="444dp"
-                android:background="@drawable/white_cueve_bg" />
+                android:id="@+id/back"
+                android:layout_width="110dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/uptoskills_logo" />
 
-            <LinearLayout
-                android:id="@+id/linear"
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/login"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="20.7dp">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:hint="Enter Your Email ID"
+                app:boxStrokeColor="@color/orange"
+                app:hintTextColor="@color/black">
 
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
+                    android:drawablePadding="10dp"
+                    android:textColor="@color/black" />
 
-                    <TextView
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:hint="Enter Your Password"
+                app:boxStrokeColor="@color/orange"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="@color/black">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="10dp"
+                    android:inputType="textPassword"
+                    android:textColor="@color/black" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/forgetPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:text="@string/forget_pass"
+                android:textColor="@color/orange"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/SignInWithGoogle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    app:backgroundTint="@color/white"
+                    app:cardElevation="4dp">
+
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="57.7dp"
-                        android:text="LOGIN"
-                        android:textColor="@color/black"
-                        android:textSize="31.3sp"
-                        android:textStyle="bold" />
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_icons_google" />
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <FrameLayout
+                    android:id="@+id/facebookButtonContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1">
+
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/facebook_login_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
 
                     <com.google.android.material.card.MaterialCardView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/SignInWithFaceBook"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="80dp"
-                        android:layout_marginTop="57.7dp"
-                        android:id="@+id/SignInWithGoogle"
-                        app:cardCornerRadius="20dp"
-                        >
+                        android:layout_marginTop="10dp"
+                        app:backgroundTint="@color/white"
+                        app:cardElevation="4dp">
 
                         <ImageView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            app:srcCompat="@drawable/ic_icons_google" />
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:src="@drawable/ic_icons_facebook" />
                     </com.google.android.material.card.MaterialCardView>
 
-                    <FrameLayout
+                </FrameLayout>
+            </LinearLayout>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/SignInWithEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="15dp"
+                app:cardBackgroundColor="@color/orange"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/login"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </androidx.cardview.widget.CardView>
+
+            <include layout="@layout/sign_up_ui" />
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_layout"
+            android:layout_alignParentBottom="true"
+            android:elevation="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
+
+            <TextView
+                android:id="@+id/newUserTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="New User?"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/newUserTitle"
+                android:text="Create An account"
+                android:textSize="13sp" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/createAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                app:backgroundTint="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeColor="@color/orange"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Register"
+                    android:textColor="@color/orange" />
+            </com.google.android.material.card.MaterialCardView>
+
+        </RelativeLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/passwordresetlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginRight="30dp"
+            android:visibility="gone"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="6dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="222dp"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Reset Password"
+                        android:textColor="@color/black"
+                        android:textSize="31.3sp" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/resetCloseBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="29dp"
-                        android:layout_marginTop="57.7dp">
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="20dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            app:srcCompat="@drawable/ic_closebutton" />
+                    </com.google.android.material.card.MaterialCardView>
 
 
-                        <com.facebook.login.widget.LoginButton
-                            android:id="@+id/facebook_login_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone" />
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/SignInWithFaceBook"
-                            app:cardCornerRadius="20dp">
-                            <ImageView
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                app:srcCompat="@drawable/ic_icons_facebook"
-                                />
-                        </com.google.android.material.card.MaterialCardView>
-
-                    </FrameLayout>
-
-                </LinearLayout>
+                </FrameLayout>
 
 
                 <TextView
-                    android:id="@+id/emailHeading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
-                    android:text="Email *"
-                    android:textColor="@color/black"
-                    android:textSize="13.3sp" />
-
-                <EditText
-                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Please Enter the valid Registered Email below to get the reset password link via Email"
+                    android:textColor="#797979" />
+
+                <EditText
+                    android:id="@+id/passwordResetEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="44.3dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/back"
+                    android:layout_marginRight="44.3dp"
                     android:maxLines="1"
                     android:textCursorDrawable="@drawable/grey_cursor_color"
                     android:textSize="15sp" />
@@ -114,222 +299,36 @@
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="1dp"
+                    android:layout_marginLeft="44.3dp"
                     android:layout_marginTop="6.3dp"
                     android:layout_marginRight="44.3dp"
                     android:background="#d5d5d5" />
 
-                <TextView
-                    android:id="@+id/passwordheading"
+                <Button
+                    android:id="@+id/resetButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30.3dp"
-                    android:text="Password *"
-                    android:textSize="13.3sp"
-                    android:textColor="@color/black"/>
-
-                <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="11.7dp"
-                    android:background="@drawable/back"
-                    android:maxLines="1"
-                    android:paddingRight="44.3dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
-                    android:textCursorDrawable="@drawable/grey_cursor_color"
-                    android:textSize="15sp"
-                    app:drawable_hide="@drawable/hide1"
-                    app:drawable_show="@drawable/show"
-                    app:tint_color="#d5d5d5" />
-
-                <View
-                    android:layout_width="wrap_content"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="6.3dp"
-                    android:layout_marginRight="44.3dp"
-                    android:background="#d5d5d5" />
-
-                <TextView
-                    android:id="@+id/forgetPass"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginTop="17.3dp"
-                    android:layout_marginRight="44.3dp"
-                    android:text="Forgot Password?"
-                    android:textColor="@color/com_facebook_blue"
-                    android:textStyle="bold"
-                    android:textSize="12.3sp" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="21dp"
+                    android:backgroundTint="@color/orange"
+                    android:text="Reset"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="horizontal"
-                android:paddingLeft="30dp">
+        </androidx.cardview.widget.CardView>
 
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="100dp"
-                    android:layout_weight="1"
-
-                    android:gravity="end"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/SignInWithEmail"
-                        android:layout_width="18.7dp"
-                        android:layout_height="15.3dp"
-                        android:layout_marginRight="40dp"
-                        android:src="@drawable/black_arrow" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ProgressBar
+            android:id="@+id/signInprogressbar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Don't have an account?"
-                android:textColor="@color/black"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/createAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
-                android:gravity="center_horizontal"
-                android:text="Create One"
-                android:textColor="@color/white"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/passwordresetlayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginRight="30dp"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="6dp"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="222dp"
-            android:background="@drawable/back"
-            android:orientation="vertical"
-            >
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="Reset Password"
-                    android:textColor="@color/black"
-                    android:textSize="31.3sp"
-                    />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/resetCloseBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginRight="20dp">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        app:srcCompat="@drawable/ic_closebutton"
-                        />
-                </com.google.android.material.card.MaterialCardView>
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/orange"
+            android:visibility="gone" />
 
 
-
-            </FrameLayout>
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Please Enter the valid Registered Email below to get the reset password link via Email"
-                android:textColor="#797979" />
-
-            <EditText
-                android:id="@+id/passwordResetEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="44.3dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="44.3dp"
-                android:background="@drawable/back"
-                android:maxLines="1"
-                android:textCursorDrawable="@drawable/grey_cursor_color"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:layout_marginLeft="44.3dp"
-                android:layout_marginTop="6.3dp"
-                android:layout_marginRight="44.3dp"
-                android:background="#d5d5d5" />
-
-            <Button
-                android:id="@+id/resetButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="21dp"
-                android:backgroundTint="@color/AndroidGreen"
-                android:text="Reset"
-                />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 
 
-    <ProgressBar
-        android:id="@+id/signInprogressbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminateTint="@color/AndroidGreen"
-        android:visibility="gone" />
-
-</RelativeLayout>
+</ScrollView>

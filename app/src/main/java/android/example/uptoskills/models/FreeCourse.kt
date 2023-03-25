@@ -15,5 +15,6 @@ data class FreeCourse (
     val mentor_name: String="",
     val price: Int=0,
     val videos: ArrayList<Video> = ArrayList(),
-    val rating: Float = 4.6f
+    val rating: Float = 4.6f,
+    val other_details: String = ""
 )

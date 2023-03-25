@@ -2,6 +2,7 @@ package android.example.uptoskills.Adapters;
 
 import android.content.Context;
 import android.example.uptoskills.R;
+import android.example.uptoskills.models.SliderData
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.viewpager.widget.PagerAdapter;
+import java.util.ArrayList
 
 class SliderAdapter(private val context: Context) : PagerAdapter() {
 

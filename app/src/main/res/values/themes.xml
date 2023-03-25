@@ -1,26 +1,37 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.GetWork" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryVariant">@color/colorTransparentWhite</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="colorOnBackground">@color/black</item>
-        <item name="colorOnSurface">@color/black</item>
-        <item name="colorSurface">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+<resources>
+    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/fade_white</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+        <item name="colorSecondary">@color/fade_white</item>
         <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="fontFamily">@font/inter_variablefont_sin</item>
+        <item name="colorSecondaryContainer">@color/fade_white</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+        <item name="colorTertiary">@color/md_theme_light_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_light_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/fade_white</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_light_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_light_error</item>
+        <item name="colorErrorContainer">@color/md_theme_light_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_light_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_light_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_light_background</item>
+        <item name="colorOnBackground">@color/md_theme_light_onBackground</item>
+        <item name="colorSurface">@color/fade_white</item>
+        <item name="colorOnSurface">@color/md_theme_light_onSurface</item>
+        <item name="colorSurfaceVariant">@color/orange</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_onSurfaceVariant</item>
+        <item name="colorOutline">@color/orange</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/fade_white</item>
+        <item name="fontFamily">@font/poppins_light</item>
+        <item name="colorOnPrimarySurface">@color/fade_white</item>
         <item name="bgc">#FFFFFF</item>
         <item name="tC">#000000</item>
-        <item name="mbgc">#E3F2FD</item>
-
     </style>
+
 
 
     <style name="DialogAnimations" />
@@ -29,74 +40,8 @@
         <item name="android:windowExitAnimation">@anim/slide_out_top</item>
     </style>
 
-    <style name="DarkTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">#121212</item>
-        <item name="colorPrimaryVariant">#121212</item>
-        <item name="colorOnPrimary">@color/colorAccent</item>
-        <item name="backgroundColor">#121212</item>
-        <item name="colorOnSurface">@color/white</item>
-        <item name="colorSurface">@color/black</item>
-        <item name="colorOnBackground">@color/white</item>
-        <item name="android:colorBackground">#121212</item>
 
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/colorAccent</item>
-        <item name="colorSecondaryVariant">#AE1448</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-<!--        <item name="bgc">#121212</item>-->
-<!--        <item name="tC">#FFFFFF</item>-->
-<!--        <item name="mbgc">#1C7E48</item>-->
-    </style>
 
-    <style name="OrangeTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">#F4CDBE</item>
-        <item name="colorPrimaryVariant">#ff6d34</item>
-        <item name="colorOnPrimary">@color/colorAccent</item>
-        <item name="backgroundColor">#F4CDBE</item>
-        <item name="colorOnSurface">#F4CDBE</item>
-        <item name="colorSurface">#F4CDBE</item>
-        <item name="colorOnBackground">@color/white</item>
-        <item name="android:colorBackground">#F4CDBE</item>
-
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/colorAccent</item>
-        <item name="colorSecondaryVariant">#AE1448</item>
-        <item name="colorOnSecondary">#F4CDBE</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-<!--        <item name="bgc">@color/white</item>-->
-<!--        <item name="tC">@color/black</item>-->
-<!--        <item name="mbgc">#F8ECE7</item>-->
-    </style>
-
-    <style name="Theme.SignIn" parent="Theme.MaterialComponents.DayNight.Bridge">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">#3cd395</item>
-        <item name="colorPrimaryVariant">@color/colorTransparentWhite</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="android:textColorPrimary">@color/white</item>
-    </style>
-
-    <style name="Theme.App" parent="Theme.MaterialComponents">
-        ...
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorSurface">@color/white</item>
-        <item name="colorOnSurface">@color/white</item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
-    </style>
 
     <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">cut</item>
@@ -107,4 +52,5 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">12sp</item>
     </style>
+
 </resources>

@@ -2,6 +2,7 @@ package android.example.uptoskills.fragment
 
 import `in`.galaxyofandroid.spinerdialog.SpinnerDialog
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.example.uptoskills.*
 import android.example.uptoskills.Adapters.CourseViewPagerAdapter
@@ -78,6 +79,21 @@ class JobFragment : Fragment() {
     private val categoryItems = ArrayList<String>()
     private lateinit var spinnerDialog: SpinnerDialog
     private lateinit var menuBar: ImageView
+    private lateinit var onNavDrawerListener: onNavDrawerListener
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            var parent: Activity
+            if (context is Activity) {
+                parent = context
+                onNavDrawerListener = parent as onNavDrawerListener
+            }
+        } catch (e: Exception) {
+
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,6 +125,7 @@ class JobFragment : Fragment() {
 
         menuBar.setOnClickListener {
             homedrawerLayout.openDrawer(GravityCompat.START)
+            onNavDrawerListener.onDrawerVisible(true)
         }
 
         homeNavigationView.setNavigationItemSelectedListener { menuItem ->
@@ -226,7 +243,28 @@ class JobFragment : Fragment() {
         search.setOnClickListener {
             spinnerDialog.showSpinerDialog()
         }
+
+        setUpNavigationDrawerListener()
         return view
+    }
+
+
+    private fun setUpNavigationDrawerListener() {
+        homedrawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                onNavDrawerListener.onDrawerVisible(true)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                onNavDrawerListener.onDrawerVisible(false)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+        })
     }
 
     private fun setUpNavigationViewHeader(activity: Activity) {
@@ -237,30 +275,29 @@ class JobFragment : Fragment() {
         var profile: ImageView = headerView.findViewById(R.id.headerProfileImage)
         val coins: TextView = headerView.findViewById(R.id.coins)
         val profileCompleted: TextView = headerView.findViewById(R.id.profileCompleted)
+        setDetails(username, email)
 
         GlobalScope.launch(Dispatchers.IO) {
-            val temp = auth.currentUser?.let {
-                userDao.getUserById(it.uid).await().toObject(Users::class.java)
-            }
-            if (temp != null) {
+            val temp = auth.currentUser?.let { userDao.getUserById(it.uid).await().toObject(Users::class.java) }
+            if(temp != null) {
                 withContext(Dispatchers.Main) {
-                    username.text = temp.displayName
-                    displayName = temp.displayName.toString()
-                    email.text = temp.email
                     coins.text = temp.coins.toString()
-                    val profilePrecentage: String = (profileComplete(temp) * 10).toString() + "%"
+                    val profilePrecentage: String = (profileComplete(temp)*10).toString() + "%"
                     profileCompleted.text = profilePrecentage
                     val profileImage = temp.userImage
-                    if (profileImage.trim().isNotBlank() && profileImage != "null") {
+                    if(profileImage.trim().isNotBlank() && profileImage != "null") {
                         profile.setImageResource(R.drawable.image_circle)
-                        view?.context?.let {
-                            Glide.with(it).load(profileImage).circleCrop().into(profile)
-                        }
+                        view?.context?.let { Glide.with(it).load(profileImage).circleCrop().into(profile) }
                     }
 
                 }
             }
         }
+    }
+
+    private fun setDetails(username: TextView, email: TextView) {
+        username.text = CONSTANTS.getUsername()
+        email.text = CONSTANTS.getEmail()
     }
 
     // Calculating Profile Completeness
@@ -317,7 +354,7 @@ class JobFragment : Fragment() {
         val shortLinkTask = activity?.let {
             FirebaseDynamicLinks.getInstance().createDynamicLink()
                 .setLink(Uri.parse(link))
-                .setDomainUriPrefix("https://uptoskills.page.link") // Set parameters
+                .setDomainUriPrefix("https://uptoskill.page.link") // Set parameters
                 // ...
                 .buildShortDynamicLink()
                 .addOnCompleteListener(it
@@ -345,6 +382,11 @@ class JobFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        activity?.let { setUpNavigationViewHeader(it) }
+    }
+
+    override fun onResume() {
+        super.onResume()
         activity?.let { setUpNavigationViewHeader(it) }
     }
 

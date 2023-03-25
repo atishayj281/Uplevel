@@ -27,4 +27,5 @@ data class Users(
     val bookmarks: HashMap<String, String>? = HashMap(),
     val appliedJobs: HashMap<String, UserJobDetails>? = HashMap(),
     val events: ArrayList<String> = ArrayList(),
+    var summary: String = ""
     )

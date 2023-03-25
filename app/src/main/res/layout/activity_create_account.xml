@@ -109,22 +109,22 @@
                     android:textColor="@color/black"
                     />
 
-                <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
-                    android:id="@+id/crtpass"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="11.7dp"
-                    android:background="@drawable/back"
-                    android:maxLines="1"
-                    android:maxLength="10"
-                    android:paddingRight="44.3dp"
-                    android:textColor="#000000"
-                    android:textColorHint="#000000"
-                    android:textCursorDrawable="@drawable/grey_cursor_color"
-                    android:textSize="15sp"
-                    app:drawable_hide="@drawable/hide1"
-                    app:drawable_show="@drawable/show"
-                    app:tint_color="#d5d5d5"/>
+<!--                <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText-->
+<!--                    android:id="@+id/crtpass"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="11.7dp"-->
+<!--                    android:background="@drawable/back"-->
+<!--                    android:maxLines="1"-->
+<!--                    android:maxLength="10"-->
+<!--                    android:paddingRight="44.3dp"-->
+<!--                    android:textColor="#000000"-->
+<!--                    android:textColorHint="#000000"-->
+<!--                    android:textCursorDrawable="@drawable/grey_cursor_color"-->
+<!--                    android:textSize="15sp"-->
+<!--                    app:drawable_hide="@drawable/hide1"-->
+<!--                    app:drawable_show="@drawable/show"-->
+<!--                    app:tint_color="#d5d5d5"/>-->
 
                 <View
                     android:layout_width="wrap_content"

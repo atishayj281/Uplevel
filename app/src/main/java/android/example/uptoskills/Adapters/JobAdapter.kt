@@ -1,5 +1,6 @@
 package android.example.uptoskills.Adapters
 
+import android.content.Context
 import android.example.uptoskills.R
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.models.Job
@@ -9,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -20,7 +23,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
-class JobAdapter(options: FirestoreRecyclerOptions<Job>, val listener: JobItemClicked, val itemId: Int) : FirestoreRecyclerAdapter<Job, JobAdapter.JobViewholder>(
+class JobAdapter(val context: Context, options: FirestoreRecyclerOptions<Job>, val listener: JobItemClicked, val itemId: Int) : FirestoreRecyclerAdapter<Job, JobAdapter.JobViewholder>(
     options
 ){
     inner class JobViewholder(itemview: View): RecyclerView.ViewHolder(itemview) {
@@ -30,6 +33,10 @@ class JobAdapter(options: FirestoreRecyclerOptions<Job>, val listener: JobItemCl
         var comapny_name = itemview.findViewById<TextView>(R.id.companyname)
         var jobLocation = itemview.findViewById<TextView>(R.id.jobLoc)
         var job_box = itemview.findViewById<MaterialCardView>(R.id.job_container)
+        var salary: TextView = itemView.findViewById(R.id.salary)
+        var salarySymbol: TextView = itemview.findViewById(R.id.rupee_symbol)
+        val shareBtn: ImageView = itemview.findViewById(R.id.share_btn);
+        val bookmarked = itemview.findViewById<ImageView>(R.id.bookmark_btn);
     }
 
 
@@ -39,14 +46,31 @@ class JobAdapter(options: FirestoreRecyclerOptions<Job>, val listener: JobItemCl
         viewHolder.job_box.setOnClickListener {
             listener.onJobCLick(snapshots.getSnapshot(viewHolder.adapterPosition).id)
         }
+        viewHolder.bookmarked.setOnClickListener {
+            val result = listener.onbookmarkCLick(snapshots.getSnapshot(viewHolder.adapterPosition).id, "job");
+            if(result) {
+                Toast.makeText(context, "Job Bookmarked Successfully", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Job Bookmark Removed", Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewHolder.shareBtn.setOnClickListener {
+            listener.shareJob(snapshots.getSnapshot(viewHolder.adapterPosition).id, "job")
+        }
         return viewHolder
     }
 
     override fun onBindViewHolder(holder: JobViewholder, position: Int, model: Job) {
         holder.comapny_name.text = model.company_name
         holder.jobLocation.text = model.candidate_required_location
-        holder.job_type.text = model.job_type
+//        holder.job_type.text = model.job_type
         holder.jobtitle.text = model.title
+        if(model.salary.trim().isEmpty()) {
+            holder.salary.isVisible=false
+            holder.salarySymbol.isVisible=false
+        } else {
+            holder.salary.text = model.salary.trim()
+        }
         Glide.with(holder.company_logo.context).load(model.company_logo_url)
             .circleCrop().into(holder.company_logo)
     }
@@ -56,5 +80,6 @@ class JobAdapter(options: FirestoreRecyclerOptions<Job>, val listener: JobItemCl
 
 interface JobItemClicked{
     fun onJobCLick(jobId: String)
-    fun onbookmarkCLick(itemId: String, itemtype: String)
+    fun onbookmarkCLick(itemId: String, itemtype: String): Boolean
+    fun shareJob(itemId: String, itemtype: String)
 }

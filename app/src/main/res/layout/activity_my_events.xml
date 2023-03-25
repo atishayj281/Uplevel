@@ -14,7 +14,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbarlayout"
-            style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+            style="@style/Widget.Material3.AppBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
@@ -25,7 +25,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/hometoolBar"
-                style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
+                style="@style/Widget.Material3.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -50,7 +50,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="My Events"
-                            android:textColor="@color/black"
+                            android:textColor="?attr/tC"
                             android:layout_marginStart="20dp"
                             android:textStyle="bold"/>
 

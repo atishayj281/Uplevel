@@ -12,5 +12,6 @@ data class Job (val applied: HashMap<String, JobDetails> = HashMap(),
                 val basic_requirements: String="",
                 val preferred_requirements: String="",
                 var title: String="",
-                val bookmark: ArrayList<String> = ArrayList()
+                val bookmark: ArrayList<String> = ArrayList(),
+                val salary: String = ""
                 )

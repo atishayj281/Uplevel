@@ -7,9 +7,10 @@
     tools:context=".TermsAndConditionActivity"
     android:orientation="vertical">
 
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarlayout"
-        style="@style/Widget.MaterialComponents.AppBarLayout.PrimarySurface"
+        style="@style/Widget.Material3.AppBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -20,7 +21,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/hometoolBar"
-            style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
+            style="@style/Widget.Material3.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -37,11 +38,11 @@
                     android:layout_gravity="center_vertical"/>
 
                 <ImageView
-                    android:layout_width="152dp"
-                    android:layout_height="50dp"
+                    android:layout_width="110dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="right|center_vertical"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic__uptoskillslogo"
+                    app:srcCompat="@drawable/uptoskills_logo"
                     />
 
             </FrameLayout>

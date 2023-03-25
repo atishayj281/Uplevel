@@ -1,5 +1,6 @@
 package android.example.uptoskills
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,14 +9,23 @@ import android.example.uptoskills.daos.PaidCourseDao
 import android.example.uptoskills.daos.UsersDao
 import android.example.uptoskills.databinding.ActivityCourseViewBinding
 import android.example.uptoskills.mail.JavaMailAPI
-import androidx.appcompat.app.AppCompatActivity
+import android.example.uptoskills.models.FreeCourse
+import android.example.uptoskills.models.PaidCourse
+import android.example.uptoskills.models.Users
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.firebase.auth.FirebaseAuth
+import com.razorpay.Checkout
+import com.razorpay.PaymentResultListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,35 +33,8 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-import com.cashfree.pg.CFPaymentService
 
-import com.cashfree.pg.CFPaymentService.PARAM_ORDER_CURRENCY
-
-import com.cashfree.pg.CFPaymentService.PARAM_CUSTOMER_EMAIL
-
-import com.cashfree.pg.CFPaymentService.PARAM_CUSTOMER_PHONE
-
-import com.cashfree.pg.CFPaymentService.PARAM_CUSTOMER_NAME
-
-import com.cashfree.pg.CFPaymentService.PARAM_ORDER_NOTE
-
-import com.cashfree.pg.CFPaymentService.PARAM_ORDER_AMOUNT
-
-import com.cashfree.pg.CFPaymentService.PARAM_ORDER_ID
-
-import com.cashfree.pg.CFPaymentService.PARAM_APP_ID
-
-import android.example.uptoskills.models.*
-import android.net.Uri
-import android.view.View
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
-
-
-
-class CourseViewActivity : AppCompatActivity() {
+class CourseViewActivity : AppCompatActivity(), PaymentResultListener {
 
     private lateinit var binding: ActivityCourseViewBinding
     private lateinit var courseId: String
@@ -61,18 +44,39 @@ class CourseViewActivity : AppCompatActivity() {
     private var curUser: Users = Users()
     private lateinit var userDao: UsersDao
     private lateinit var auth: FirebaseAuth
+    private lateinit var toggleButton: MaterialButtonToggleGroup
     private val READ_SMS_CODE: Int = 1
+    private lateinit var mActivity: Activity
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCourseViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        mActivity = this
+        Checkout.preload(applicationContext)
 
         userDao = UsersDao()
         auth = FirebaseAuth.getInstance()
         binding.back.setOnClickListener {
             finish()
+        }
+        binding.toggleButton.check(R.id.curriculum_btn)
+
+        binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if(isChecked) {
+                when(checkedId) {
+                    R.id.curriculum_btn -> {
+                        binding.courseCurriculum.isVisible = true
+                        binding.download.isVisible = false;
+                    }
+                    R.id.other_docs -> {
+                        binding.courseCurriculum.isVisible = false
+                        binding.download.isVisible = true
+                    }
+                }
+            }
         }
 
         courseId = intent.getStringExtra("courseId").toString()
@@ -92,7 +96,7 @@ class CourseViewActivity : AppCompatActivity() {
                         binding.CourseCategory.text = course.category
                         binding.CourseDescription.text = course.course_description
                         binding.InstructorName.text = course.mentor_name
-                        binding.certificate.text = if (course.price == 0) "Yes" else "No"
+                        binding.certificate.text = if (course.certificate) "Yes" else "No"
                         binding.certificatePreview.visibility = View.GONE
                         binding.duration.text = course.course_duration
                         binding.language.text = course.language
@@ -104,8 +108,12 @@ class CourseViewActivity : AppCompatActivity() {
                         binding.courseRatings.text = course.rating.toString()
                         Glide.with(this@CourseViewActivity).load(course.course_image).centerCrop()
                             .into(binding.courseImage)
+                        binding.download.setOnClickListener {
+                            downloadFile(course.other_details)
+                        }
                     }
                 }
+
             } else {
                 GlobalScope.launch(Dispatchers.IO) {
                     paidCourse =
@@ -125,6 +133,9 @@ class CourseViewActivity : AppCompatActivity() {
                     Glide.with(this@CourseViewActivity).load(paidCourse.course_image).centerCrop()
                         .into(binding.courseImage)
                     binding.courseRatings.text = paidCourse.rating.toString()
+                    binding.download.setOnClickListener {
+                        downloadFile(paidCourse.other_details)
+                    }
                 }
 
             }
@@ -141,8 +152,9 @@ class CourseViewActivity : AppCompatActivity() {
         binding.enroll.setOnClickListener {
             val isFree: Boolean = intent.getStringExtra("courseCategory") == "free"
             if (isFree) {
-                courseDao.EnrollStudents(courseId, this@CourseViewActivity, curUser)
-
+                courseDao.EnrollStudents(courseId, this, curUser)
+                sendMail(course.course_name, this)
+                startCourseVideActivity()
             } else {
                 if(curUser.full_name.trim().isEmpty() || curUser.job.trim().isEmpty()
                     || curUser.education.trim().isEmpty() || curUser.mobileNo.trim().isEmpty()
@@ -158,6 +170,19 @@ class CourseViewActivity : AppCompatActivity() {
         }
     }
 
+    fun downloadFile(url: String) {
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
+        startActivity(i)
+//        Log.e("URL", "URL is: $url")
+//        val manager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+//        val uri =
+//            Uri.parse(url)
+//        val request = DownloadManager.Request(uri)
+//        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+//        val reference: Long = manager.enqueue(request)
+//        manager.openDownloadedFile(reference)
+    }
 
     // checking if Student is Already Enrolled in the course
     private fun isEnrolled(email: String, phoneNo:String, wallet: Int){
@@ -188,6 +213,7 @@ class CourseViewActivity : AppCompatActivity() {
 
     // Starting Payment
     var isCoinsUsed: Boolean = false
+
     private fun startpayment(email: String, contact: String, wallet: Int){
 
         if(email.isBlank() && contact.isBlank()){
@@ -206,8 +232,12 @@ class CourseViewActivity : AppCompatActivity() {
                 Log.e("Course Price", price.toString())
                 price *= 100
                 if(price > 0) {
-                    /*val activity: Activity = this
-                    val checkout = Checkout()
+                    val activity: Activity = this
+
+                    val co = Checkout()
+                    // apart from setting it in AndroidManifest.xml, keyId can also be set
+                    // programmatically during runtime
+                    co.setKeyID(getString(R.string.razorpay_api_key))
                     try {
                         val orderRequest = JSONObject()
                         orderRequest.put("name", "UptoSkills")
@@ -217,34 +247,50 @@ class CourseViewActivity : AppCompatActivity() {
                         orderRequest.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png")
                         orderRequest.put("prefill.email", email);
                         orderRequest.put("prefill.contact",contact);
-
-                        checkout.open(activity, orderRequest)
+//                        var razorpay: RazorpayClient = RazorpayClient(getString(R.string.razorpay_api_key), getString(R.string.razorpay_secret_key));
+//
+//
+//                        var order: Order = razorpay.orders.create(orderRequest)
+//                        val jsonObject = JSONObject(order.toString())
+//                        val order_Id = jsonObject.getString("id")
+//                        Log.e("OrderId", order_Id);
+                        co.open(activity, orderRequest)
                     } catch (e: Exception){
-                        Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-                    }*/
+                        e.printStackTrace()
+                    }
                     //initiatepayment(price)
-                    pay(price.toFloat())
+                    //pay(price.toFloat())
                 }
             }
         }
 
     }
 
-/*    override fun onPaymentSuccess(p0: String?) {
+    override fun onPaymentSuccess(p0: String?) {
 
         Toast.makeText(this, "Successful Payment Id: $p0", Toast.LENGTH_SHORT).show()
         PaidCourseDao().EnrollStudents(courseId, this, curUser)
         if(isCoinsUsed) {
             curUser.coins -= 100
-            userDao.updateUser(curUser, auth.currentUser?.uid!!)
+            auth.currentUser?.uid?.let { userDao.updateUser(curUser, it) }
+            sendMail(paidCourse.course_name, this)
+
         }
 
     }
 
+
+
+    private fun startCourseVideActivity() {
+        val intent = Intent(this, CourseVideoActivity::class.java)
+        intent.putExtra("courseId", courseId)
+        startActivity(intent)
+    }
+
     override fun onPaymentError(p0: Int, p1: String?) {
         Toast.makeText(this, "Something Went Wrong", Toast.LENGTH_SHORT).show()
-        Log.d("Payment", p0.toString())
-    }*/
+        Log.d("Payment", p1.toString())
+    }
 
     override fun onBackPressed() {
         if(parent == null) {
@@ -261,21 +307,21 @@ class CourseViewActivity : AppCompatActivity() {
 
         //Same request code for all payment APIs.
 //        Log.d(TAG, "ReqCode : " + CFPaymentService.REQ_CODE);
-        Log.d("m", "API Response : ")
+//        Log.d("m", "API Response : ")
         //Prints all extras. Replace with app logic.
-        if (data != null) {
-            val bundle = data.extras
+//        if (data != null) {
+//            val bundle = data.extras
             // checking the course payment is successful or not
-            if(bundle?.getString("orderId") == paidCourse.id+curUser.id &&
-                    bundle.getString("txStatus") == "SUCCESS") {
-                Toast.makeText(this, "Successful Payment Id: ${bundle.getString("referenceId")}", Toast.LENGTH_SHORT).show()
-                PaidCourseDao().EnrollStudents(courseId.trim(), this, curUser)
-                if(isCoinsUsed) {
-                    curUser.coins -= 100
-                    userDao.updateUser(curUser, auth.currentUser?.uid!!)
-                }
-            }
-        }
+//            if(bundle?.getString("orderId") == paidCourse.id+curUser.id &&
+//                    bundle.getString("txStatus") == "SUCCESS") {
+//                Toast.makeText(this, "Successful Payment Id: ${bundle.getString("referenceId")}", Toast.LENGTH_SHORT).show()
+//                PaidCourseDao().EnrollStudents(courseId.trim(), this, curUser)
+//                if(isCoinsUsed) {
+//                    curUser.coins -= 100
+//                    userDao.updateUser(curUser, auth.currentUser?.uid!!)
+//                }
+//            }
+//        }
     }
 
     // Sending payment mail to the user
@@ -290,63 +336,63 @@ class CourseViewActivity : AppCompatActivity() {
     }
 
     // Initiate payment
-    private fun pay(price: Float) {
-
-        var updated_price = price/100
-
-        val url = "https://test.cashfree.com/api/v2/cftoken/order"
-
-        // creating a variable for our request queue.
-        val queue: RequestQueue = Volley.newRequestQueue(this)
-        val params: MutableMap<Any?, Any?> = hashMapOf()
-        params["orderId"] = paidCourse.id + curUser.id
-        params["orderAmount"] = updated_price.toString()
-        params["orderCurrency"] = "INR"
-
-        val jsonObject: JSONObject? = JSONObject(params)
-        val jsonObjectRequest = object : JsonObjectRequest(Request.Method.POST, url, jsonObject, {
-            val token: String? = it.get("cftoken").toString()
-
-            val params: MutableMap<String, String> = HashMap()
-            params[PARAM_APP_ID] = "112410ac1c8939c6b304e44069014211"
-            params[PARAM_ORDER_ID] = paidCourse.id + curUser.id
-            params[PARAM_ORDER_AMOUNT] = updated_price.toString()
-            params[PARAM_ORDER_NOTE] = "Order for Course"
-            params[PARAM_CUSTOMER_NAME] = curUser.full_name
-            params[PARAM_CUSTOMER_PHONE] = curUser.mobileNo
-            params[PARAM_CUSTOMER_EMAIL] = curUser.email
-            params[PARAM_ORDER_CURRENCY] = "INR"
-            for ((key, value) in params) {
-                Log.d("CFSKDSample", "$key $value")
-            }
-            val cfPaymentService = CFPaymentService.getCFPaymentServiceInstance()
-            cfPaymentService.setOrientation(0)
-            cfPaymentService.doPayment(this@CourseViewActivity,
-                params,
-                token,
-                "TEST",
-                "#F8A31A",
-                "#FFFFFF",
-                true)
-
-        }, {
-            Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
-        } ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                var params: MutableMap<String, String> = HashMap<String, String>(super.getHeaders())
-
-
-                params.put("x-client-id", "112410ac1c8939c6b304e44069014211")
-                params.put("x-client-secret", "55cbb6e6d718db755f9051d03220b6fa0832f9d6")
-                //..add other headers
-
-                return params
-            }
-        }
-        // on below line we are making a json object request for a get request and passing our url .
-
-        // at last adding json object
-        // request to our queue.
-        queue.add(jsonObjectRequest)
-    }
+//    private fun pay(price: Float) {
+//
+//        var updated_price = price/100
+//
+//        val url = "https://test.cashfree.com/api/v2/cftoken/order"
+//
+//        // creating a variable for our request queue.
+//        val queue: RequestQueue = Volley.newRequestQueue(this)
+//        val params: MutableMap<Any?, Any?> = hashMapOf()
+//        params["orderId"] = paidCourse.id + curUser.id
+//        params["orderAmount"] = updated_price.toString()
+//        params["orderCurrency"] = "INR"
+//
+//        val jsonObject: JSONObject? = JSONObject(params)
+//        val jsonObjectRequest = object : JsonObjectRequest(Request.Method.POST, url, jsonObject, {
+//            val token: String? = it.get("cftoken").toString()
+//
+//            val params: MutableMap<String, String> = HashMap()
+//            params[PARAM_APP_ID] = "112410ac1c8939c6b304e44069014211"
+//            params[PARAM_ORDER_ID] = paidCourse.id + curUser.id
+//            params[PARAM_ORDER_AMOUNT] = updated_price.toString()
+//            params[PARAM_ORDER_NOTE] = "Order for Course"
+//            params[PARAM_CUSTOMER_NAME] = curUser.full_name
+//            params[PARAM_CUSTOMER_PHONE] = curUser.mobileNo
+//            params[PARAM_CUSTOMER_EMAIL] = curUser.email
+//            params[PARAM_ORDER_CURRENCY] = "INR"
+//            for ((key, value) in params) {
+//                Log.d("CFSKDSample", "$key $value")
+//            }
+//            val cfPaymentService = CFPaymentService.getCFPaymentServiceInstance()
+//            cfPaymentService.setOrientation(0)
+//            cfPaymentService.doPayment(this@CourseViewActivity,
+//                params,
+//                token,
+//                "TEST",
+//                "#F8A31A",
+//                "#FFFFFF",
+//                true)
+//
+//        }, {
+//            Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+//        } ) {
+//            override fun getHeaders(): MutableMap<String, String> {
+//                var params: MutableMap<String, String> = HashMap<String, String>(super.getHeaders())
+//
+//
+//                params.put("x-client-id", "112410ac1c8939c6b304e44069014211")
+//                params.put("x-client-secret", "55cbb6e6d718db755f9051d03220b6fa0832f9d6")
+//                //..add other headers
+//
+//                return params
+//            }
+//        }
+//        // on below line we are making a json object request for a get request and passing our url .
+//
+//        // at last adding json object
+//        // request to our queue.
+//        queue.add(jsonObjectRequest)
+//    }
 }
