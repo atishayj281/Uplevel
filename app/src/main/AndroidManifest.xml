@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="android.example.uptoskills">
 
-    <uses-permission android:name="android.permission.INTERNET " />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -30,14 +30,14 @@
     </queries>
 
     <application
-        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:targetApi="31">
         <activity
             android:name=".MyCVActivity"
             android:exported="false" />
@@ -88,7 +88,8 @@
         </activity>
         <activity
             android:name=".MyCourseActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:exported="true"/>
         <activity
             android:name=".CourseViewActivity"
             android:exported="true">
@@ -105,17 +106,24 @@
         </activity>
         <activity
             android:name=".PrivacyPolicyActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:exported="true"/>
         <activity
             android:name=".UserDetailsActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".BlogViewActivity" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:exported="true"/>
+        <activity android:name=".BlogViewActivity"
+            android:exported="true"/>
         <activity
             android:name=".CreateAccountActivity"
-            android:parentActivityName=".SignUpActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".OnBoardingActivity" />
+            android:parentActivityName=".SignUpActivity"
+            android:exported="true"/>
+        <activity android:name=".SignUpActivity"
+            android:exported="true"/>
+        <activity android:name=".SignInActivity"
+            android:exported="true"/>
+        <activity android:name=".OnBoardingActivity"
+            android:exported="true"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -138,8 +146,7 @@
 
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">

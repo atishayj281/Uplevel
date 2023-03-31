@@ -1,23 +1,26 @@
 plugins {
-    id 'com.onesignal.androidsdk.onesignal-gradle-plugin'
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
-apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 33
+    namespace "android.example.uptoskills"
+    compileSdk 33
+    viewBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "android.example.uptoskills"
-        minSdkVersion 21
-        targetSdkVersion 33
+        minSdk 24
+        targetSdk 33
         versionCode 1
         versionName "1.0"
-        vectorDrawables.useSupportLibrary = true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
     }
 
     buildTypes {
@@ -25,10 +28,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-    buildFeatures{
-        viewBinding=true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -42,8 +41,8 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    kapt 'com.android.databinding:compiler:1.0-rc4'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
 
@@ -52,7 +51,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.0'
 
     /* coroutines support for firebase operations */
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4'
 
 
     // Import the BoM for the Firebase platform
@@ -88,15 +87,15 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$rootProject.androidxJunitVersion"
 
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.preference:preference-ktx:1.1.1'
-    implementation 'androidx.work:work-runtime-ktx:2.7.1'
-    implementation('androidx.work:work-runtime:2.7.1')
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+    implementation('androidx.work:work-runtime:2.8.1')
 
     implementation 'com.facebook.android:facebook-android-sdk:12.3.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.browser:browser:1.3.0"
+    implementation "androidx.browser:browser:1.5.0"
     implementation("com.android.volley:volley:1.2.1")
 
     // Razorpay
@@ -112,7 +111,6 @@ dependencies {
 
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
 
-    implementation "androidx.browser:browser:1.3.0"
 
     // Android auto image slider
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
