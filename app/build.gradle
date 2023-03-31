@@ -41,6 +41,7 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation 'androidx.core:core-ktx:1.9.0'
     kapt 'com.android.databinding:compiler:1.0-rc4'
 
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"

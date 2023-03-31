@@ -20,7 +20,6 @@
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
-
             <data
                 android:host="pay"
                 android:scheme="upi" />
@@ -68,11 +67,11 @@
         <activity
             android:name=".TermsAndConditionActivity"
             android:exported="true" />
-        <activity android:name=".CourseVideoActivity" />
-        <activity android:name=".MyJobsActivity" />
-        <activity android:name=".BookmarkActivity" />
-        <activity android:name=".CertificateActivity" />
-        <activity android:name=".CourseEnquiryActivity" />
+        <activity android:exported="false" android:name=".CourseVideoActivity" />
+        <activity android:exported="false" android:name=".MyJobsActivity" />
+        <activity android:exported="false" android:name=".BookmarkActivity" />
+        <activity android:exported="false"  android:name=".CertificateActivity" />
+        <activity android:exported="false" android:name=".CourseEnquiryActivity" />
         <activity
             android:name=".JobViewActivity"
             android:exported="true">
@@ -145,6 +144,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity
+            android:exported="false"
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
         <activity
