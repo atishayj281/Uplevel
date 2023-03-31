@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
+import android.net.Uri
 
 
 class MainActivity : AppCompatActivity(), onMenuItemSelectedListener, onNavDrawerListener{
@@ -70,6 +71,10 @@ class MainActivity : AppCompatActivity(), onMenuItemSelectedListener, onNavDrawe
             transaction.commit()
             true
         }
+        // ATTENTION: This was auto-generated to handle app links.
+        val appLinkIntent: Intent = intent
+        val appLinkAction: String? = appLinkIntent.action
+        val appLinkData: Uri? = appLinkIntent.data
     }
 
     private fun setJOB() {

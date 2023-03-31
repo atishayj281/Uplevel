@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "805497522425",
+    "firebase_url": "https://uptoskills-d8b32-default-rtdb.firebaseio.com",
     "project_id": "uptoskills-d8b32",
     "storage_bucket": "uptoskills-d8b32.appspot.com"
   },
@@ -18,6 +19,109 @@
           "client_type": 1,
           "android_info": {
             "package_name": "android.example.uptoskills",
+            "certificate_hash": "4cced577b4eea025a62fabf4403a830bf3de7cf8"
+          }
+        },
+        {
+          "client_id": "805497522425-bl70i3fu9j8rm3odr90t4tk71l9lhvq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDzzZJ2d2zm9f6LYshH-K8c07VHdvpE4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805497522425-bl70i3fu9j8rm3odr90t4tk71l9lhvq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805497522425:android:2b0eaf4c0c5cb3aedafa28",
+        "android_client_info": {
+          "package_name": "android.example.uptoskillsAdmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805497522425-uifa5pdopuaa36cus8vfplph3gf247tf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "android.example.uptoskillsAdmin",
+            "certificate_hash": "4cced577b4eea025a62fabf4403a830bf3de7cf8"
+          }
+        },
+        {
+          "client_id": "805497522425-bl70i3fu9j8rm3odr90t4tk71l9lhvq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDzzZJ2d2zm9f6LYshH-K8c07VHdvpE4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805497522425-bl70i3fu9j8rm3odr90t4tk71l9lhvq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805497522425:android:e48f541cb5bb033adafa28",
+        "android_client_info": {
+          "package_name": "android.example.uptoskillsadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805497522425-bl70i3fu9j8rm3odr90t4tk71l9lhvq8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDzzZJ2d2zm9f6LYshH-K8c07VHdvpE4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805497522425-bl70i3fu9j8rm3odr90t4tk71l9lhvq8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805497522425:android:c72bcfd3de2774cedafa28",
+        "android_client_info": {
+          "package_name": "com.uptoskills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805497522425-2rdbo6f6nqec67nbto31seh7rqskt5p0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uptoskills",
             "certificate_hash": "4cced577b4eea025a62fabf4403a830bf3de7cf8"
           }
         },

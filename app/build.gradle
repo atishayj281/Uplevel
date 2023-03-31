@@ -14,7 +14,7 @@ android {
         enabled = true
     }
     defaultConfig {
-        applicationId "android.example.uptoskills"
+        applicationId "com.uptoskills"
         minSdk 24
         targetSdk 33
         versionCode 1

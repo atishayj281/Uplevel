@@ -88,36 +88,36 @@ class CourseViewActivity : AppCompatActivity(), PaymentResultListener {
         }
         courseDao = CourseDao()
         val isFree: Boolean = intent.getStringExtra("courseCategory") == "free"
-            if (isFree) {
-                GlobalScope.launch(Dispatchers.IO) {
-                    course =
-                        courseDao.getCoursebyId(courseId).await().toObject(FreeCourse::class.java)!!
-                    withContext(Dispatchers.Main) {
-                        binding.CourseCategory.text = course.category
-                        binding.CourseDescription.text = course.course_description
-                        binding.InstructorName.text = course.mentor_name
-                        binding.certificate.text = if (course.certificate) "Yes" else "No"
-                        binding.certificatePreview.visibility = View.GONE
-                        binding.duration.text = course.course_duration
-                        binding.language.text = course.language
-                        binding.lectures.text = course.lectures.toString()
-                        binding.price.text =
-                            if (course.price == 0) "Free" else course.price.toString()
-                        binding.courseName.text = course.course_name
-                        binding.courseCurriculum.text = String.format(course.curriculum)
-                        binding.courseRatings.text = course.rating.toString()
-                        Glide.with(this@CourseViewActivity).load(course.course_image).centerCrop()
-                            .into(binding.courseImage)
-                        binding.download.setOnClickListener {
-                            downloadFile(course.other_details)
-                        }
+        if (isFree) {
+            GlobalScope.launch(Dispatchers.IO) {
+                course =
+                    courseDao.getCoursebyId(courseId).await().toObject(FreeCourse::class.java)!!
+                withContext(Dispatchers.Main) {
+                    binding.CourseCategory.text = course.category
+                    binding.CourseDescription.text = course.course_description
+                    binding.InstructorName.text = course.mentor_name
+                    binding.certificate.text = if (course.certificate) "Yes" else "No"
+                    binding.certificatePreview.visibility = View.GONE
+                    binding.duration.text = course.course_duration
+                    binding.language.text = course.language
+                    binding.lectures.text = course.lectures.toString()
+                    binding.price.text =
+                        if (course.price == 0) "Free" else course.price.toString()
+                    binding.courseName.text = course.course_name
+                    binding.courseCurriculum.text = String.format(course.curriculum)
+                    binding.courseRatings.text = course.rating.toString()
+                    Glide.with(this@CourseViewActivity).load(course.course_image).centerCrop()
+                        .into(binding.courseImage)
+                    binding.download.setOnClickListener {
+                        downloadFile(course.other_details)
                     }
                 }
+            }
 
-            } else {
-                GlobalScope.launch(Dispatchers.IO) {
-                    paidCourse =
-                        PaidCourseDao().getCoursebyId(courseId).await().toObject(PaidCourse::class.java)!!
+        } else {
+            GlobalScope.launch(Dispatchers.IO) {
+                paidCourse =
+                    PaidCourseDao().getCoursebyId(courseId).await().toObject(PaidCourse::class.java)!!
                 withContext(Dispatchers.Main) {
                     binding.courseName.text = paidCourse.course_name
                     binding.CourseCategory.text = paidCourse.category
@@ -168,6 +168,10 @@ class CourseViewActivity : AppCompatActivity(), PaymentResultListener {
                 }
             }
         }
+        // ATTENTION: This was auto-generated to handle app links.
+        val appLinkIntent: Intent = intent
+        val appLinkAction: String? = appLinkIntent.action
+        val appLinkData: Uri? = appLinkIntent.data
     }
 
     fun downloadFile(url: String) {
